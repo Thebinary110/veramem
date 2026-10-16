@@ -31,6 +31,7 @@ from ..types import (
 SCHEMA = """
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
+PRAGMA secure_delete=ON;
 
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 
@@ -277,6 +278,16 @@ class SQLiteStore:
     # ------------------------------------------------------------------ utils
     def tx(self):
         return _Tx(self)
+
+    def scrub(self) -> None:
+        """Make erasure physical: rebuild FTS indexes, truncate the WAL, rewrite the file."""
+        with self._lock:
+            self.db.execute("INSERT INTO memories_fts(memories_fts) VALUES('rebuild')")
+            self.db.execute("INSERT INTO episodes_fts(episodes_fts) VALUES('rebuild')")
+            self.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+            if self.path != ":memory:":
+                self.db.execute("VACUUM")
+                self.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 
     def close(self) -> None:
         self.db.close()

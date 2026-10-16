@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 from typing import TYPE_CHECKING
 
@@ -34,7 +35,7 @@ if TYPE_CHECKING:
 
 RRF_K = 60
 POOL = 60
-UTILITY_WEIGHT = 0.6
+UTILITY_BETA = 3.0  # strength of the outcome prior
 
 _TEMPORAL = re.compile(
     r"\b(when|what (date|time|day|year|month)|how long|since|until|before|after|latest|"
@@ -237,8 +238,10 @@ class Retriever:
                 if item is None:
                     continue
                 score = s / top
-                if item.uses > 0:
-                    score *= 1 + UTILITY_WEIGHT * (item.utility - 0.5)
+                n_obs = item.successes + item.failures
+                if n_obs > 0:
+                    # confidence-weighted outcome prior: one rating nudges, repeated ones decide
+                    score *= math.exp(UTILITY_BETA * (item.utility - 0.5) * min(1.0, n_obs / 2))
                 sig[mid]["utility"] = round(item.utility, 3)
                 hits.append(
                     Hit(

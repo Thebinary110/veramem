@@ -185,6 +185,7 @@ class Sharer:
                     {"memories": n_mem, "episodes": n_ep, "shared_withdrawn": n_shared},
                     actor=actor,
                 )
+        st.scrub()
         return {"memories": n_mem, "episodes": n_ep, "shared": n_shared}
 
     def _erase_memory(self, memory_id: str) -> None:
