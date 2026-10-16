@@ -331,9 +331,7 @@ class Writer:
                 seen = {n.id for n, _ in c.neighbours}
                 if c.entities and len(c.neighbours) < NEIGHBOURS:
                     id_pos = {mid: i for i, mid in enumerate(ids)}
-                    for row in self.m.store.memories_for_entities(
-                        c.entities, where, params
-                    ):
+                    for row in self.m.store.memories_for_entities(c.entities, where, params):
                         if row["id"] in seen or row["id"] not in id_pos:
                             continue
                         n = self.m.store.get_memory(row["id"])

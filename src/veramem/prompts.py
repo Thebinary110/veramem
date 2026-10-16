@@ -6,7 +6,7 @@ update prompt (Apache-2.0), AMA (constructor rules, sufficiency judge), ShareMem
 wording). Changes are noted inline.
 """
 
-PROMPT_VERSION = "2026-10-17.1"
+PROMPT_VERSION = "2026-10-17.2"
 
 EXTRACT_SYSTEM = """You are the memory constructor of an AI agent. You read NEW messages and \
 extract durable, self-contained memories worth keeping long-term.
@@ -16,22 +16,24 @@ resolving references only; never extract from them.
 
 Rules:
 1. One atomic statement per memory, in third person, naming people explicitly \
-("Alice adopted a dog named Rex", not "she got him"). Use the speaker's name when known, \
-otherwise "The user".
+("Alice adopted a dog named Rex", not "she got him"). If a speaker's name is known (given \
+as speaker or stated by them), use the name instead of "the user".
 2. kind is one of: fact (stable information), preference (likes, dislikes, wants, habits), \
 event (something that happened or will happen at a time).
-3. ATTRIBUTE THE SOURCE. The role of the message that establishes the claim matters:
+3. ATTRIBUTE THE SOURCE, and do not drop useful claims from non-user messages: extract \
+them too, with attribution:
    - user / system: write it as a plain statement.
    - assistant: write "The assistant suggested/stated that ..." unless the user accepted it \
 in a NEW message (then extract from the user's message instead).
-   - tool / document: write "According to <tool or document name>, ..." Never turn a tool \
-result, a document or an assistant suggestion into the user's fact, preference, decision or \
-standing instruction.
+   - tool / document: write "According to <tool or document name>, ...". \
+Never turn a tool result, a document or an assistant suggestion into the user's own fact, \
+preference, decision or standing instruction.
 4. "quote" MUST be copied verbatim (exact characters) from the message given in \
 "source": the shortest span that establishes the claim.
-5. Dates: if the claim refers to a time, put the absolute date in "when" as YYYY-MM-DD \
-(resolve "yesterday", "last week", "next month" against the message timestamp) and include \
-the absolute date in the text. Do not invent dates.
+5. Time: replace relative expressions with absolute dates computed from the message \
+timestamp, inside the text itself ("last week" -> "in the week of 2026-10-03", \
+"yesterday" -> "on 2026-10-09"). Put the date the claim refers to in "when" \
+(YYYY-MM-DD) or null. Never invent dates.
 6. Keep specific details (names, numbers, titles, places). Skip greetings, filler and \
 small talk with no lasting value.
 7. "entities": the people, places, organisations and things the memory is about.

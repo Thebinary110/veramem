@@ -29,15 +29,17 @@ def test_agent_grant_revocation_is_retroactive(mem):
     mem.grant_agent("quinn", "research-bot")
     assert mem.search("project codename", user_id="quinn").hits
     mem.revoke_agent("quinn", "research-bot")
-    assert not [h for h in mem.search("project codename", user_id="quinn").hits
-                if h.memory.agent_id == "research-bot"]
+    assert not [
+        h
+        for h in mem.search("project codename", user_id="quinn").hits
+        if h.memory.agent_id == "research-bot"
+    ]
     mem.grant_agent("quinn", "research-bot")
     assert mem.search("project codename", user_id="quinn").hits
 
 
 def test_resource_grants_hide_derived_memories(mem):
-    mem.add("Rita's salary is confidential", user_id="rita", agent_id="hr-bot",
-            resources=["hr_db"])
+    mem.add("Rita's salary is confidential", user_id="rita", agent_id="hr-bot", resources=["hr_db"])
     mem.grant_resource("hr-bot", "hr_db")
     assert mem.search("salary", user_id="rita", agent_id="hr-bot").hits
     mem.revoke_resource("hr-bot", "hr_db")
@@ -52,8 +54,13 @@ def test_preferences_cannot_be_shared(mem):
 
 
 def _learn(mem, user, reward=1.0):
-    return mem.learn("book a table", ["asked party size", "confirmed booking"], reward,
-                     user_id=user, shareable=True)
+    return mem.learn(
+        "book a table",
+        ["asked party size", "confirmed booking"],
+        reward,
+        user_id=user,
+        shareable=True,
+    )
 
 
 def test_experience_sharing_to_team(mem):
@@ -68,17 +75,25 @@ def test_experience_sharing_to_team(mem):
     assert s.user_id is None and s.authority is Authority.UNENDORSED and s.evidence == []
     hits = mem.search("how to book a venue", user_id="uma").hits
     assert any(h.memory.id == shared_id and h.granularity == "shared" for h in hits)
-    assert not any(h.memory.id == shared_id for h in mem.search("book venue",
-                                                                 user_id="outsider").hits)
+    assert not any(
+        h.memory.id == shared_id for h in mem.search("book venue", user_id="outsider").hits
+    )
     assert not mem.check_action([shared_id])["allowed"]
 
 
 def test_privacy_gate_blocks_pii_and_canaries(mem):
-    mem.add("Victor's email is victor@corp.test and he lives at 12 Baker Street",
-            user_id="victor")
+    mem.add("Victor's email is victor@corp.test and he lives at 12 Baker Street", user_id="victor")
     item = mem.learner._manage_experience(
-        "## x\nApplies when: email victor@corp.test about Baker Street", None, "victor",
-        None, [], 1.0, True, __import__("veramem").Visibility.PRIVATE, None)[1]
+        "## x\nApplies when: email victor@corp.test about Baker Street",
+        None,
+        "victor",
+        None,
+        [],
+        1.0,
+        True,
+        __import__("veramem").Visibility.PRIVATE,
+        None,
+    )[1]
     rep = mem.share(user_id="victor", memory_ids=[item.id])
     assert not rep["shared"] and rep["rejected"][0]["reason"] == "privacy gate"
 

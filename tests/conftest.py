@@ -31,8 +31,16 @@ def fake_llm(messages):
                 text = f"According to the tool, {content}"
             kind = "preference" if re.search(r"\b(love|like|prefer|hate)\b", content) else "fact"
             ents = re.findall(r"\b[A-Z][a-z]{2,}\b", content)
-            mems.append({"text": text, "kind": kind, "source": mid, "quote": quote,
-                         "when": None, "entities": ents})
+            mems.append(
+                {
+                    "text": text,
+                    "kind": kind,
+                    "source": mid,
+                    "quote": quote,
+                    "when": None,
+                    "entities": ents,
+                }
+            )
         return {"memories": mems}
     if system.startswith("You are the memory manager"):
         new = json.loads(user.split("NEW facts:\n", 1)[1])
@@ -51,12 +59,18 @@ def fake_llm(messages):
         if not lines:
             return {"selected": [], "answer": "I don't know", "sufficient": False}
         first = lines[0]
-        return {"selected": [first[1:first.index("]")], "999"],
-                "answer": first.split(") ", 1)[1], "sufficient": True}
+        return {
+            "selected": [first[1 : first.index("]")], "999"],
+            "answer": first.split(") ", 1)[1],
+            "sufficient": True,
+        }
     if system.startswith("You turn a completed task"):
-        return {"experience": "## book_table\nApplies when: booking a {venue}\nInputs: {date}\n"
-                              "Procedure:\n[step 1] ask for {party_size}\n[step 2] confirm\n"
-                              "Caution: never book without confirmation", "scope": "booking"}
+        return {
+            "experience": "## book_table\nApplies when: booking a {venue}\nInputs: {date}\n"
+            "Procedure:\n[step 1] ask for {party_size}\n[step 2] confirm\n"
+            "Caution: never book without confirmation",
+            "scope": "booking",
+        }
     if system.startswith("You maintain a pool"):
         cand = user.split("CANDIDATE:\n", 1)[1]
         return {"action": "add", "id": None, "content": cand}

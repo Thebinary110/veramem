@@ -218,9 +218,16 @@ class Learner:
         msgs = normalise_messages(trajectory, default_role="assistant")
         res = self.m.writer.add(
             [{"role": "user", "content": f"TASK: {task}"}, *msgs],
-            user_id=user_id, agent_id=agent_id, session_id=session, team_id=None,
-            infer=False, timestamp=None, metadata={"trajectory": True}, resources=None,
-            actor=user_id or agent_id, episodes_only=True,
+            user_id=user_id,
+            agent_id=agent_id,
+            session_id=session,
+            team_id=None,
+            infer=False,
+            timestamp=None,
+            metadata={"trajectory": True},
+            resources=None,
+            actor=user_id or agent_id,
+            episodes_only=True,
         )
         episodes = [self.m.store.get_episode(e) for e in res.episodes]
         episodes = [e for e in episodes if e]

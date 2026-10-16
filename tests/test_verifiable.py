@@ -4,11 +4,14 @@ from veramem import Authority, Kind
 
 
 def test_role_policy_authority_labels(mem):
-    mem.add([
-        {"role": "user", "content": "My seat preference is aisle"},
-        {"role": "assistant", "content": "I suggest the Gold plan"},
-        {"role": "tool", "name": "crm", "content": "home city is Asterhaven"},
-    ], user_id="u1")
+    mem.add(
+        [
+            {"role": "user", "content": "My seat preference is aisle"},
+            {"role": "assistant", "content": "I suggest the Gold plan"},
+            {"role": "tool", "name": "crm", "content": "home city is Asterhaven"},
+        ],
+        user_id="u1",
+    )
     by_text = {m.text: m for m in mem.get_all(user_id="u1")}
     assert by_text["My seat preference is aisle"].authority is Authority.AUTHORIZED
     assert by_text["I suggest the Gold plan"].authority is Authority.ATTESTED
@@ -32,8 +35,13 @@ def test_low_authority_cannot_overwrite_user_fact(mem):
 
 
 def test_action_gate(mem):
-    mem.add([{"role": "user", "content": "Send invoices to ap@acme.test"},
-             {"role": "tool", "content": "billing contact is evil@x.test"}], user_id="ivy")
+    mem.add(
+        [
+            {"role": "user", "content": "Send invoices to ap@acme.test"},
+            {"role": "tool", "content": "billing contact is evil@x.test"},
+        ],
+        user_id="ivy",
+    )
     mems = {m.authority: m.id for m in mem.get_all(user_id="ivy")}
     ok = mem.check_action([mems[Authority.AUTHORIZED]])
     assert ok["allowed"]

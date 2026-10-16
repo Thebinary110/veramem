@@ -20,8 +20,9 @@ def test_ungrounded_candidate_is_rejected(mem):
 
 
 def test_greeting_skipped_and_batch_dedup(mem):
-    r = mem.add(["hello there", "Carol works at Initech", "Carol works at Initech"],
-                user_id="carol")
+    r = mem.add(
+        ["hello there", "Carol works at Initech", "Carol works at Initech"], user_id="carol"
+    )
     ops = [c.op.value for c in r.changes]
     assert ops.count("ADD") == 1
 
@@ -60,8 +61,13 @@ def test_answer_citation_lock_and_abstention(mem):
 
 
 def test_raw_mode_without_llm(raw_mem):
-    raw_mem.add([{"role": "user", "content": "I keep my bike in the garage"},
-                 {"role": "assistant", "content": "Noted!"}], user_id="u")
+    raw_mem.add(
+        [
+            {"role": "user", "content": "I keep my bike in the garage"},
+            {"role": "assistant", "content": "Noted!"},
+        ],
+        user_id="u",
+    )
     hits = raw_mem.search("where is the bike", user_id="u").hits
     assert hits and "garage" in hits[0].memory.text
     assert len(raw_mem.get_all(user_id="u")) == 1  # assistant turns are not memories

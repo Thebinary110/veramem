@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeraMem</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e4e4df;
+  --accent: #2f6b4f; --accent-ink: #ffffff;
+  --auth: #2f6b4f; --att: #8a6d1d; --unend: #9b3b3b; --shared: #3f5e8c;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #151514; --panel: #1e1e1c; --ink: #ecece8; --muted: #9a9a93; --line: #31312e;
+          --accent: #6fbf95; --accent-ink: #0d1a13; --auth: #6fbf95; --att: #d9b65a;
+          --unend: #e08585; --shared: #8fb0e0; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+       font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { display: flex; align-items: center; gap: 16px; padding: 14px 20px;
+         border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
+header h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
+header .sub { color: var(--muted); font-size: 13px; }
+header .grow { flex: 1; }
+.pill { font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line);
+        color: var(--muted); white-space: nowrap; }
+.pill.ok { color: var(--auth); border-color: var(--auth); }
+.pill.bad { color: var(--unend); border-color: var(--unend); }
+main { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 16px; padding: 16px 20px;
+       max-width: 1400px; margin: 0 auto; }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 16px; } }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted);
+             margin: 0 0 10px; font-weight: 600; }
+.stack > * + * { margin-top: 12px; }
+label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+input, textarea, select { width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+       border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; }
+textarea { min-height: 70px; resize: vertical; }
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+button { font: inherit; border: 1px solid var(--accent); background: var(--accent);
+         color: var(--accent-ink); border-radius: 7px; padding: 7px 14px; cursor: pointer; }
+button.ghost { background: transparent; color: var(--accent); }
+button:disabled { opacity: .5; cursor: wait; }
+.mem { border-top: 1px solid var(--line); padding: 10px 0; }
+.mem:first-child { border-top: 0; }
+.mem .text { margin: 2px 0 4px; }
+.meta { font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.badge { font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid currentColor; }
+.authorized { color: var(--auth); } .attested { color: var(--att); }
+.unendorsed { color: var(--unend); } .shared { color: var(--shared); }
+.link { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.drawer { margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 7px;
+          font-size: 13px; border: 1px solid var(--line); }
+.drawer code, .mono { font-family: var(--mono); font-size: 12px; word-break: break-all; }
+.answer { font-size: 17px; margin: 4px 0 6px; }
+.empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.toolbar .grow { flex: 1; }
+.err { color: var(--unend); font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>VeraMem</h1>
+  <span class="sub" id="model">connecting...</span>
+  <span class="grow"></span>
+  <span class="pill" id="stats">-</span>
+  <span class="pill" id="ledger" title="Hash-chained audit ledger">ledger: -</span>
+  <button class="ghost" id="verifyBtn">Verify</button>
+</header>
+<main>
+  <div class="stack">
+    <section class="stack">
+      <h2>Who</h2>
+      <div class="row">
+        <div><label for="user">User</label><input id="user" value="default"></div>
+        <div><label for="agent">Agent (optional)</label><input id="agent" placeholder="any"></div>
+      </div>
+      <div><label for="apikey">API key (if the server requires one)</label>
+        <input id="apikey" type="password" autocomplete="off"></div>
+    </section>
+    <section class="stack">
+      <h2>Remember</h2>
+      <div class="row">
+        <div style="flex:0 0 120px"><label for="role">Said by</label>
+          <select id="role"><option>user</option><option>assistant</option><option>tool</option>
+          <option>document</option></select></div>
+        <div><label for="session">Session (optional)</label><input id="session"></div>
+      </div>
+      <textarea id="msg" placeholder="I just moved to Lisbon and I'm allergic to peanuts."></textarea>
+      <div class="toolbar"><button id="addBtn">Add memory</button><span class="grow"></span>
+        <span id="addOut" class="meta"></span></div>
+    </section>
+    <section class="stack">
+      <h2>Ask</h2>
+      <input id="q" placeholder="Where does the user live now?">
+      <div class="toolbar"><button id="askBtn">Answer</button>
+        <button class="ghost" id="searchBtn">Search only</button></div>
+      <div id="askOut"></div>
+    </section>
+  </div>
+  <section>
+    <div class="toolbar" style="margin-bottom:6px">
+      <h2 style="margin:0">Memories</h2><span class="grow"></span>
+      <label style="margin:0;display:flex;gap:6px;align-items:center">
+        <input type="checkbox" id="inactive" style="width:auto"> show history</label>
+      <button class="ghost" id="refreshBtn">Refresh</button>
+    </div>
+    <div id="list"><div class="empty">Loading...</div></div>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const day = (t) => t ? new Date(t * 1000).toISOString().slice(0, 10) : "";
+function who() {
+  const p = new URLSearchParams();
+  if ($("user").value.trim()) p.set("user_id", $("user").value.trim());
+  if ($("agent").value.trim()) p.set("agent_id", $("agent").value.trim());
+  return p;
+}
+function whoBody() {
+  return { user_id: $("user").value.trim() || null, agent_id: $("agent").value.trim() || null };
+}
+async function api(path, opts = {}) {
+  const headers = { "Content-Type": "application/json" };
+  const key = $("apikey").value.trim();
+  if (key) headers["Authorization"] = "Bearer " + key;
+  const r = await fetch(path, { ...opts, headers });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || r.statusText);
+  return body;
+}
+function memCard(m, extra = "") {
+  const auth = m.authority;
+  return `<div class="mem" data-id="${esc(m.id)}">
+    <div class="text">${esc(m.text)}</div>
+    <div class="meta">
+      <span class="badge ${esc(auth)}" title="source authority">${esc(auth)}</span>
+      <span>${esc(m.kind)}</span><span>${day(m.valid_from || m.created_at)}</span>
+      ${m.status !== "active" ? `<span class="badge">${esc(m.status)}</span>` : ""}
+      ${m.uses ? `<span title="outcome-based utility">utility ${(((m.successes + 1) / (m.successes + m.failures + 2))).toFixed(2)}</span>` : ""}
+      ${extra}
+      <span class="link" data-act="evidence">evidence</span>
+      <span class="link" data-act="history">history</span>
+    </div><div class="slot"></div></div>`;
+}
+async function refresh() {
+  try {
+    const info = await api("/v1/info");
+    $("model").textContent = `${info.llm} · ${info.embedder}`;
+    $("stats").textContent = `${info.memories_active} memories · ${info.episodes} episodes`;
+    const p = who(); if ($("inactive").checked) p.set("include_inactive", "true");
+    const items = await api("/v1/memories?" + p.toString());
+    $("list").innerHTML = items.length ? items.map(m => memCard(m)).join("")
+      : `<div class="empty">No memories yet for this user. Add one on the left.</div>`;
+  } catch (e) { $("list").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+async function verify() {
+  try {
+    const v = await api("/v1/verify");
+    $("ledger").textContent = v.ok ? `ledger: verified (${v.ledger_entries})` : "ledger: TAMPERED";
+    $("ledger").className = "pill " + (v.ok ? "ok" : "bad");
+    $("ledger").title = "head " + v.head;
+  } catch (e) { $("ledger").textContent = "ledger: ?"; }
+}
+document.addEventListener("click", async (ev) => {
+  const act = ev.target.dataset && ev.target.dataset.act;
+  if (!act) return;
+  const card = ev.target.closest(".mem"); const slot = card.querySelector(".slot");
+  if (slot.innerHTML) { slot.innerHTML = ""; return; }
+  try {
+    if (act === "evidence") {
+      const ev2 = await api(`/v1/memories/${card.dataset.id}/evidence?` + who().toString());
+      slot.innerHTML = ev2.map(e => `<div class="drawer">
+        <div><span class="badge ${e.source === "user" ? "authorized" : e.source === "assistant" ? "attested" : "unendorsed"}">${esc(e.source)}</span>
+        ${e.intact ? "hash intact" : "<span class='err'>hash mismatch</span>"} · ${day(e.occurred_at)}</div>
+        <div>“${esc(e.quote)}”</div>
+        ${e.episode && e.episode !== e.quote ? `<div class="meta">in: ${esc(e.episode.slice(0, 400))}</div>` : ""}
+      </div>`).join("") || `<div class="drawer">no evidence (shared or imported item)</div>`;
+    } else {
+      const h = await api(`/v1/memories/${card.dataset.id}/history?` + who().toString());
+      slot.innerHTML = `<div class="drawer">` + h.map(v => `<div>
+        <span class="badge">${esc(v.status)}</span> ${esc(v.text)}
+        <span class="meta">${day(v.valid_from)}${v.valid_to ? " → " + day(v.valid_to) : ""}</span>
+        <div class="mono">${esc(v.ledger.map(l => l.op + " " + l.hash.slice(0, 12)).join(" · "))}</div></div>`).join("") + `</div>`;
+    }
+  } catch (e) { slot.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+});
+$("addBtn").onclick = async () => {
+  const text = $("msg").value.trim(); if (!text) return;
+  $("addBtn").disabled = true; $("addOut").textContent = "thinking...";
+  try {
+    const r = await api("/v1/memories", { method: "POST", body: JSON.stringify({
+      ...whoBody(), session_id: $("session").value.trim() || null,
+      messages: [{ role: $("role").value, content: text }] }) });
+    const ops = r.changes.map(c => c.op).join(", ") || "nothing new";
+    $("addOut").textContent = ops + (r.rejected.length ? ` · ${r.rejected.length} ungrounded rejected` : "");
+    $("msg").value = ""; refresh(); verify();
+  } catch (e) { $("addOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+  $("addBtn").disabled = false;
+};
+async function ask(searchOnly) {
+  const q = $("q").value.trim(); if (!q) return;
+  $("askOut").innerHTML = `<div class="empty">...</div>`;
+  try {
+    if (searchOnly) {
+      const r = await api("/v1/search", { method: "POST", body: JSON.stringify({ ...whoBody(), query: q }) });
+      $("askOut").innerHTML = `<div class="meta">route: ${esc(r.granularity)} · trace ${esc(r.trace_id)}</div>` +
+        (r.hits.map(h => memCard(h.memory, `<span class="badge ${h.granularity === "shared" ? "shared" : ""}">${esc(h.granularity)}</span><span>score ${h.score.toFixed(3)}</span>`)).join("") || `<div class="empty">no hits</div>`);
+      return;
+    }
+    const a = await api("/v1/answer", { method: "POST", body: JSON.stringify({ ...whoBody(), question: q }) });
+    $("askOut").innerHTML = `<div class="answer">${esc(a.answer)}</div>
+      <div class="meta">${a.abstained ? "abstained: not enough evidence" : a.citations.length + " citation(s)"}
+      · <span class="link" id="up">helpful</span> · <span class="link" id="down">wrong</span></div>`;
+    const fb = async (r) => { await api("/v1/feedback", { method: "POST", body: JSON.stringify({ trace_id: a.trace_id, reward: r }) }); refresh(); };
+    $("up").onclick = () => fb(1); $("down").onclick = () => fb(-1);
+  } catch (e) { $("askOut").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+$("askBtn").onclick = () => ask(false);
+$("searchBtn").onclick = () => ask(true);
+$("refreshBtn").onclick = refresh;
+$("verifyBtn").onclick = verify;
+$("inactive").onchange = refresh;
+$("user").onchange = refresh; $("agent").onchange = refresh;
+refresh(); verify();
+</script>
+</body>
+</html>

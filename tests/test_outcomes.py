@@ -12,13 +12,15 @@ def test_feedback_credits_cited_memories(mem):
 
 
 def test_negative_feedback_demotes_and_archives(mem):
-    mem.add(["Zoe's locker is number 7", "Zoe's locker combination is written on a note"],
-            user_id="zoe")
+    mem.add(
+        ["Zoe's locker is number 7", "Zoe's locker combination is written on a note"], user_id="zoe"
+    )
     bad = mem.search("Zoe locker number", user_id="zoe", limit=1).hits[0].memory.id
     for _ in range(4):
         res = mem.search("Zoe locker number", user_id="zoe", limit=1)
-        mem.store.db.execute("UPDATE traces SET memory_ids=? WHERE id=?",
-                             (json.dumps([bad]), res.trace_id))
+        mem.store.db.execute(
+            "UPDATE traces SET memory_ids=? WHERE id=?", (json.dumps([bad]), res.trace_id)
+        )
         mem.store.db.execute("UPDATE memories SET uses=uses+1 WHERE id=?", (bad,))
         mem.feedback(res.trace_id, -1.0)
     assert mem.store.get_memory(bad).utility < 0.3
@@ -33,8 +35,9 @@ def test_utility_reorders_ranking(mem):
     second = res.hits[1].memory.id
     for _ in range(5):
         r = mem.search("what tea does Ava drink", user_id="ava", limit=2)
-        mem.store.db.execute("UPDATE traces SET memory_ids=? WHERE id=?",
-                             (json.dumps([second]), r.trace_id))
+        mem.store.db.execute(
+            "UPDATE traces SET memory_ids=? WHERE id=?", (json.dumps([second]), r.trace_id)
+        )
         mem.feedback(r.trace_id, 1.0)
     assert mem.search("what tea does Ava drink", user_id="ava").hits[0].memory.id == second
 
@@ -56,8 +59,12 @@ def test_export_trajectories(mem, tmp_path):
 
 
 def test_consolidate_dedupes_and_summarizes(mem):
-    msgs = ["Cleo plays the violin", "Cleo is learning Spanish", "Cleo visited Rome",
-            "Cleo adopted a parrot"]
+    msgs = [
+        "Cleo plays the violin",
+        "Cleo is learning Spanish",
+        "Cleo visited Rome",
+        "Cleo adopted a parrot",
+    ]
     mem.add(msgs, user_id="cleo", session_id="s1")
     rep = mem.consolidate(user_id="cleo")
     assert len(rep["summaries"]) == 1

@@ -455,6 +455,40 @@ class Memory:
         self.policy.remove_from_team(user_id, team_id)
         self.ledger.append("REVOKE", f"{user_id}->{team_id}", {"kind": "team_member"})
 
+    # -------------------------------------------------------- portability
+    def export(self, *, user_id: str) -> dict[str, Any]:
+        """Portable JSON of everything stored about a user (data-subject access)."""
+        mems = self.store.memories("m.user_id IS ?", [user_id])
+        eps = self.store.episodes("e.user_id IS ?", [user_id])
+        return {
+            "format": "veramem.export.v1",
+            "user_id": user_id,
+            "exported_at": now(),
+            "episodes": [e.model_dump(mode="json") for e in eps],
+            "memories": [m.model_dump(mode="json") for m in mems],
+        }
+
+    def import_(self, data: dict[str, Any]) -> dict[str, int]:
+        """Load a `veramem.export.v1` document (ids are preserved, existing ids skipped)."""
+        if data.get("format") != "veramem.export.v1":
+            raise ValueError("unsupported export format")
+        n_ep = n_mem = 0
+        eps = [Episode(**e) for e in data.get("episodes", [])]
+        new_eps = [e for e in eps if self.store.get_episode(e.id) is None]
+        for e, v in zip(new_eps, self.embedder.embed([e.content for e in new_eps])):
+            if content_hash(e.content) != e.sha256:
+                raise ValueError(f"episode {e.id} fails its hash check")
+            self.store.put_episode(e, v)
+            self.ledger.append("IMPORT", e.id, {"sha256": e.sha256})
+            n_ep += 1
+        mems = [MemoryItem(**m) for m in data.get("memories", [])]
+        new_mems = [m for m in mems if self.store.get_memory(m.id) is None]
+        for m, v in zip(new_mems, self.embedder.embed([m.text for m in new_mems])):
+            self.store.put_memory(m, v)
+            self.ledger.append("IMPORT", m.id, {"text_sha256": content_hash(m.text)})
+            n_mem += 1
+        return {"episodes": n_ep, "memories": n_mem}
+
     # ------------------------------------------------------------- verify
     def verify(self) -> dict[str, Any]:
         """Check the ledger chain, episode hashes and memory text against the ledger."""
