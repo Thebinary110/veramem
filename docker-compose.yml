@@ -1,0 +1,26 @@
+# Fully local stack: VeraMem + Ollama. Usage:
+#   VERAMEM_API_KEY=$(openssl rand -hex 24) docker compose up -d
+#   docker compose exec ollama ollama pull qwen3:8b
+#   docker compose exec ollama ollama pull nomic-embed-text
+# then open http://localhost:8765 (enter the API key in the UI).
+services:
+  ollama:
+    image: ollama/ollama:0.40.5
+    volumes: [ollama:/root/.ollama]
+    restart: unless-stopped
+  veramem:
+    build: .
+    depends_on: [ollama]
+    ports: ["127.0.0.1:8765:8765"]
+    environment:
+      VERAMEM_API_KEY: ${VERAMEM_API_KEY:?set VERAMEM_API_KEY}
+      OLLAMA_HOST: http://ollama:11434
+      VERAMEM_LLM: ollama
+      VERAMEM_LLM_MODEL: ${VERAMEM_LLM_MODEL:-qwen3:8b}
+      VERAMEM_EMBEDDER: ollama
+      VERAMEM_EMBED_MODEL: nomic-embed-text
+    volumes: [veramem:/data]
+    restart: unless-stopped
+volumes:
+  ollama:
+  veramem:

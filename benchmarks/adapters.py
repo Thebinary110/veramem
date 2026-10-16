@@ -8,6 +8,7 @@ instead of guessing.
 
 from __future__ import annotations
 
+import contextlib
 import os
 import shutil
 import sqlite3
@@ -262,10 +263,8 @@ class Mem0System(System):
         return None  # mem0 has no source-authority model
 
     def close(self):
-        try:
+        with contextlib.suppress(Exception):
             self.mem.vector_store.client.close()
-        except Exception:  # noqa: BLE001
-            pass
 
 
 def _disable_thinking(mem0_memory: Any) -> None:

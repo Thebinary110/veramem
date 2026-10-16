@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 RRF_K = 60
 POOL = 60
 UTILITY_BETA = 3.0  # strength of the outcome prior
+RAW_WEIGHT = {"raw": 1.0, "dual": 0.85, "fact": 0.6, "summary": 0.5}
 
 _TEMPORAL = re.compile(
     r"\b(when|what (date|time|day|year|month)|how long|since|until|before|after|latest|"
@@ -182,15 +183,23 @@ class Retriever:
         return _rrf([dense, lexical, ent]), signals
 
     # ------------------------------------------------------------- episodes
-    def _episode_where(self, p: Principal) -> tuple[str, list]:
-        if p.user_id is not None:
-            return "e.user_id IS ?", [p.user_id]
-        return "e.user_id IS NULL AND e.agent_id IS ?", [p.agent_id]
+    def _episode_where(self, p: Principal, live_only: bool = False) -> tuple[str, list]:
+        where, params = self.m.policy.episode_filter(p)
+        if live_only:
+            # turns whose every derived memory was superseded, retracted or archived are
+            # history: they must not resurface an outdated or demoted value
+            where += (
+                " AND NOT (e.id IN (SELECT ev.episode_id FROM evidence ev JOIN memories mm"
+                " ON mm.id=ev.memory_id WHERE mm.status!='active')"
+                " AND e.id NOT IN (SELECT ev.episode_id FROM evidence ev JOIN memories mm"
+                " ON mm.id=ev.memory_id WHERE mm.status='active'))"
+            )
+        return where, params
 
     def _rank_episodes(
-        self, query: str, qv: np.ndarray, p: Principal, pool: int = POOL
+        self, query: str, qv: np.ndarray, p: Principal, pool: int = POOL, live_only: bool = True
     ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
-        where, params = self._episode_where(p)
+        where, params = self._episode_where(p, live_only=live_only)
         signals: dict[str, dict[str, float]] = {}
         ids, mat = self.m.store.episode_vectors(where, params)
         dense: list[str] = []
@@ -252,11 +261,16 @@ class Retriever:
                     )
                 )
 
-        if g in ("raw", "dual") and as_of is None:
-            fused, sig = self._rank_episodes(query, qv, p)
+        # Raw turns are always a channel (AMA multi-granularity): an extraction miss must
+        # never make information unfindable. They rank below facts unless routed "raw".
+        if as_of is None:
+            covered = {ev.episode_id for h in hits for ev in h.memory.evidence}
+            fused, sig = self._rank_episodes(query, qv, p, live_only=g != "raw")
             top = max(fused.values(), default=1.0)
-            weight = 1.0 if g == "raw" else 0.85
+            weight = RAW_WEIGHT.get(g, 0.6)
             for eid, s in sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 2, 20)]:
+                if eid in covered and g not in ("raw",):
+                    continue  # the fact built from this turn is already in the results
                 ep = self.m.store.get_episode(eid)
                 if ep is None:
                     continue

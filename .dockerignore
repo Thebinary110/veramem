@@ -1,0 +1,6 @@
+.venv
+.git
+benchmarks/runs
+benchmarks/data
+**/__pycache__
+*.db

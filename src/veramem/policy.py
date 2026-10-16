@@ -102,6 +102,30 @@ class Policy:
             params.append(json.dumps(sorted(allowed)))
         return where, params
 
+    def episode_filter(
+        self, p: Principal, alias: str = "e", at: float | None = None
+    ) -> tuple[str, list]:
+        """Raw episodes are always private to their owner and obey the same provenance
+        rules as memories (agent grants, resource grants)."""
+        t = at or now()
+        if p.user_id is not None:
+            where, params = f"{alias}.user_id IS ?", [p.user_id]
+        else:
+            where, params = f"{alias}.user_id IS NULL AND {alias}.agent_id IS ?", [p.agent_id]
+        if p.user_id and self.store.has_any_grants("user_agent"):
+            agents = sorted(self.store.grant_objects("user_agent", p.user_id, t))
+            if agents:
+                marks = ",".join("?" * len(agents))
+                where += f" AND ({alias}.agent_id IS NULL OR {alias}.agent_id IN ({marks}))"
+                params.extend(agents)
+            else:
+                where += f" AND {alias}.agent_id IS NULL"
+        if p.agent_id and self.store.has_any_grants("agent_resource"):
+            allowed = self.store.grant_objects("agent_resource", p.agent_id, t)
+            where += f" AND {_resources_subset_sql(alias)}"
+            params.append(json.dumps(sorted(allowed)))
+        return where, params
+
     def can_read(self, p: Principal, m: MemoryItem) -> bool:
         where, params = self.read_filter(p)
         r = self.store.db.execute(
