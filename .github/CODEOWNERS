@@ -1,0 +1,8 @@
+# Every change needs review from a maintainer. Security-sensitive paths are listed
+# explicitly so they keep requiring maintainer review if this file grows.
+*                       @Thebinary110
+/.github/               @Thebinary110
+/src/veramem/policy.py  @Thebinary110
+/src/veramem/privacy.py @Thebinary110
+/src/veramem/ledger.py  @Thebinary110
+/src/veramem/sharing.py @Thebinary110

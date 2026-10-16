@@ -72,3 +72,8 @@ addopts = "-q"
 [tool.mypy]
 python_version = "3.10"
 ignore_missing_imports = true
+
+[tool.bandit]
+# B608 (SQL built with f-strings) is a false positive here: every value is a bound "?"
+# parameter, and interpolated identifiers are checked against allowlists in store/sqlite.py.
+skips = ["B608"]

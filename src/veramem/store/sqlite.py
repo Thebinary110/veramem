@@ -132,6 +132,35 @@ CREATE TABLE IF NOT EXISTS ledger (
 );
 """
 
+# Identifiers that may be interpolated into SQL. Values are always bound parameters;
+# WHERE fragments come only from internal code (policy.read_filter etc.), never users.
+_ORDERS = {"created_at", "created_at DESC", "updated_at DESC", "valid_from"}
+_MEMORY_COLUMNS = {
+    "text",
+    "kind",
+    "user_id",
+    "agent_id",
+    "team_id",
+    "visibility",
+    "authority",
+    "status",
+    "supersedes",
+    "superseded_by",
+    "valid_from",
+    "valid_to",
+    "created_at",
+    "updated_at",
+    "confidence",
+    "uses",
+    "successes",
+    "failures",
+    "last_used_at",
+    "shareable",
+    "entities",
+    "metadata",
+    "embedding",
+}
+
 _FTS_TOKEN = re.compile(r"[A-Za-z0-9_]+")
 
 
@@ -371,6 +400,9 @@ class SQLiteStore:
     def update_memory(self, memory_id: str, **fields: Any) -> None:
         if not fields:
             return
+        bad = set(fields) - _MEMORY_COLUMNS
+        if bad:
+            raise ValueError(f"unknown memory columns: {sorted(bad)}")
         cols, vals = [], []
         for k, v in fields.items():
             if k == "embedding":
@@ -410,6 +442,8 @@ class SQLiteStore:
         order: str = "created_at",
         limit: int | None = None,
     ) -> list[MemoryItem]:
+        if order not in _ORDERS:
+            raise ValueError(f"unsupported order {order!r}")
         sql = f"SELECT * FROM memories m WHERE {where} ORDER BY {order}"
         if limit:
             sql += f" LIMIT {int(limit)}"

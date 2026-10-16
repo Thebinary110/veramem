@@ -1,0 +1,22 @@
+name: Proposal / contribution request
+description: Propose a change before writing code (required for new contributors)
+labels: [proposal]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: checkboxes
+    id: vouch
+    attributes:
+      label: Contributing
+      options:
+        - label: I would like to implement this myself (a maintainer will vouch for me if accepted)
