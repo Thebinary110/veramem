@@ -1,0 +1,16 @@
+VeraMem
+Copyright 2026 Shhaurya Jaiswal and VeraMem contributors
+
+This product is licensed under the Apache License, Version 2.0.
+
+Portions of the prompts in src/veramem/prompts.py are adapted from:
+
+  * mem0 (https://github.com/mem0ai/mem0), Apache License 2.0,
+    Copyright 2023 Taranjeet Singh. Memory update prompt (ADD/UPDATE/DELETE/NONE).
+  * AMA: Adaptive Memory via Multi-Agent Collaboration
+    (https://github.com/Sherlockwz/AMA), Apache License 2.0. Constructor and
+    sufficiency-judge rules.
+
+Algorithms are re-implemented from the published papers cited in docs/RESEARCH.md
+(Memory-R1, AgeMem, Agent Zero Memory, AMA, AuthMem-Bench, ShareMem, Collaborative
+Memory, AIM). No code was copied from repositories without a license.
