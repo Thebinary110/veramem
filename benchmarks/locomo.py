@@ -105,7 +105,7 @@ def load(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         urllib.request.urlretrieve(DATA_URL, path)  # noqa: S310 - fixed https URL
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def sessions(conv: dict[str, Any]) -> list[tuple[str, str, list[dict[str, Any]]]]:
@@ -157,14 +157,14 @@ class Runner:
             / conv["sample_id"]
             / "ingested.json"
         )
-        done = set(json.loads(marker.read_text())) if marker.exists() else set()
+        done = set(json.loads(marker.read_text(encoding="utf-8"))) if marker.exists() else set()
         t = time.time()
         for key, _when, msgs in sessions(conv):
             if key in done:
                 continue
             sys_.add(conv["sample_id"], msgs, session_id=key)
             done.add(key)
-            marker.write_text(json.dumps(sorted(done)))
+            marker.write_text(json.dumps(sorted(done)), encoding="utf-8")
             print(
                 f"  [{name}] {conv['sample_id']} {key} ingested ({len(msgs)} turns, "
                 f"{time.time() - t:.0f}s)",
@@ -201,7 +201,9 @@ class Runner:
         res_path = self.out / f"{name}.{cid}.jsonl"
         done = set()
         if res_path.exists():
-            done = {json.loads(x)["qid"] for x in res_path.read_text().splitlines() if x}
+            done = {
+                json.loads(x)["qid"] for x in res_path.read_text(encoding="utf-8").splitlines() if x
+            }
         qas = [(i, q) for i, q in enumerate(conv["qa"]) if q.get("category") in CATEGORY]
         if len(done) >= len(qas):
             print(f"[{name}] {cid}: already complete", flush=True)
@@ -209,7 +211,7 @@ class Runner:
         sys_ = self.system(name, cid)
         ing = self.ingest(name, conv, sys_)
         today = sessions(conv)[-1][1]
-        with res_path.open("a") as f:
+        with res_path.open("a", encoding="utf-8") as f:
             for i, qa in qas:
                 if i in done:
                     continue
@@ -243,7 +245,9 @@ class Runner:
 def summarise(out: Path) -> dict[str, Any]:
     rows: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for p in out.glob("*.jsonl"):
-        rows[p.name.split(".")[0]] += [json.loads(x) for x in p.read_text().splitlines() if x]
+        rows[p.name.split(".")[0]] += [
+            json.loads(x) for x in p.read_text(encoding="utf-8").splitlines() if x
+        ]
     summary: dict[str, Any] = {}
     for name, rs in rows.items():
         by = defaultdict(list)
@@ -259,7 +263,7 @@ def summarise(out: Path) -> dict[str, Any]:
             }
             for cat, v in by.items()
         }
-    (out / "summary.json").write_text(json.dumps(summary, indent=2))
+    (out / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
 

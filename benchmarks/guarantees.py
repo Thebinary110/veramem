@@ -563,7 +563,7 @@ def main(argv: list[str] | None = None) -> int:
         wd.mkdir(parents=True, exist_ok=True)
         results.append(run(s, a.offline, wd, only))
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(a.out).write_text(json.dumps(results, indent=2))
+    Path(a.out).write_text(json.dumps(results, indent=2), encoding="utf-8")
     print(f"\nwrote {a.out}")
     if a.offline:
         errs = check_offline(results[0])

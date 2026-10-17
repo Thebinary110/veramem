@@ -47,6 +47,8 @@ api -X PUT "repos/${REPO}/actions/permissions/fork-pr-contributor-approval" \
   || echo "   (set manually: Settings > Actions > 'Require approval for all external contributors')"
 
 echo "==> Ruleset: protect main"
+# Admins may merge their own pull requests without a second reviewer (a solo maintainer
+# cannot approve their own PR), but only through a PR: direct pushes stay blocked.
 existing="$(api "repos/${REPO}/rulesets" --jq '.[] | select(.name=="protect-main") | .id' || true)"
 method=POST; path="repos/${REPO}/rulesets"
 if [ -n "${existing}" ]; then method=PUT; path="repos/${REPO}/rulesets/${existing}"; fi
@@ -56,7 +58,7 @@ api -X "${method}" "${path}" --input - >/dev/null <<JSON
   "target": "branch",
   "enforcement": "active",
   "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
-  "bypass_actors": [],
+  "bypass_actors": [{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "pull_request"}],
   "rules": [
     {"type": "deletion"},
     {"type": "non_fast_forward"},

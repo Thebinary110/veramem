@@ -121,7 +121,11 @@ def create_app(mem: Memory | None = None) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse, include_in_schema=False)
     def ui() -> str:
-        return resources.files("veramem.server").joinpath("static/index.html").read_text()
+        return (
+            resources.files("veramem.server")
+            .joinpath("static/index.html")
+            .read_text(encoding="utf-8")
+        )
 
     @app.get("/health")
     def health() -> dict[str, Any]:
