@@ -14,6 +14,8 @@ then `~/.veramem/config.json` (written by `veramem init`), then auto-detection.
 | `VERAMEM_EMBED_MODEL` | embedding model | `nomic-embed-text` / `text-embedding-3-small` |
 | `VERAMEM_CACHE` | file for an LLM response cache (replayable runs) | off |
 | `VERAMEM_API_KEY` | bearer token for the REST API | unset (localhost only) |
+| `VERAMEM_RANKING` | `contextual` (default) · `ranker` · `global` · `none` | `contextual` |
+| `VERAMEM_EXPLORATION` | `none` · `thompson` · `ucb` | `none` |
 | `VERAMEM_USER` / `VERAMEM_AGENT` | identity used by the MCP server | `default` |
 | `OLLAMA_HOST`, `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `ANTHROPIC_API_KEY` | provider settings | |
 

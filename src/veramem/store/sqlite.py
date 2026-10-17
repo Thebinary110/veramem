@@ -32,7 +32,7 @@ from ..types import (
 
 # Bump SCHEMA_VERSION and add an entry to MIGRATIONS for every schema change. SCHEMA
 # always describes the newest layout; MIGRATIONS[n] upgrades a v(n-1) database to vn.
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 MIGRATIONS: dict[int, list[str]] = {
     # v2: scope tokens inside the full-text indexes, so lexical search only touches the
     # caller's rows instead of ranking every tenant's documents.
@@ -47,6 +47,13 @@ MIGRATIONS: dict[int, list[str]] = {
         " text FROM memories",
         "INSERT INTO episodes_fts SELECT id, vm_owner(user_id, agent_id, NULL, 'private'),"
         " content FROM episodes",
+    ],
+    # v3: query vectors on traces and per-memory outcome rows (contextual utility)
+    3: [
+        "ALTER TABLE traces ADD COLUMN qvec BLOB",
+        "CREATE TABLE IF NOT EXISTS outcomes (memory_id TEXT NOT NULL, trace_id TEXT NOT NULL,"
+        " qvec BLOB, pos REAL NOT NULL, neg REAL NOT NULL, ts REAL NOT NULL)",
+        "CREATE INDEX IF NOT EXISTS outcomes_mem ON outcomes(memory_id)",
     ],
 }
 
@@ -148,8 +155,19 @@ CREATE TABLE IF NOT EXISTS traces (
   memory_ids TEXT NOT NULL,
   payload TEXT NOT NULL DEFAULT '{}',
   outcome REAL,
-  outcome_at REAL
+  outcome_at REAL,
+  qvec BLOB
 );
+
+CREATE TABLE IF NOT EXISTS outcomes (
+  memory_id TEXT NOT NULL,
+  trace_id TEXT NOT NULL,
+  qvec BLOB,
+  pos REAL NOT NULL,
+  neg REAL NOT NULL,
+  ts REAL NOT NULL
+);
+CREATE INDEX IF NOT EXISTS outcomes_mem ON outcomes(memory_id);
 
 CREATE TABLE IF NOT EXISTS grants (
   kind TEXT NOT NULL,        -- user_agent | agent_resource | team_member
@@ -363,7 +381,12 @@ class SQLiteStore:
         while current < SCHEMA_VERSION:
             with self.tx():
                 for stmt in MIGRATIONS[current + 1]:
-                    self.db.execute(stmt)
+                    try:
+                        self.db.execute(stmt)
+                    except sqlite3.OperationalError as e:
+                        # idempotent re-runs: a column added before an interrupted upgrade
+                        if "duplicate column name" not in str(e):
+                            raise
                 current += 1
                 self.db.execute(
                     "INSERT OR REPLACE INTO meta VALUES ('schema_version', ?)", (str(current),)
@@ -706,10 +729,12 @@ class SQLiteStore:
         created_at: float,
         memory_ids: list[str],
         payload: dict[str, Any] | None = None,
+        qvec: Vector | None = None,
     ) -> None:
         with self._lock:
             self.db.execute(
-                "INSERT INTO traces VALUES (?,?,?,?,?,?,?,?,NULL,NULL)",
+                "INSERT INTO traces (id, kind, query, user_id, agent_id, created_at, memory_ids,"
+                " payload, qvec) VALUES (?,?,?,?,?,?,?,?,?)",
                 (
                     trace_id,
                     kind,
@@ -719,6 +744,7 @@ class SQLiteStore:
                     created_at,
                     json.dumps(memory_ids),
                     json.dumps(payload or {}),
+                    _blob(qvec),
                 ),
             )
 
@@ -729,7 +755,38 @@ class SQLiteStore:
         d = dict(r)
         d["memory_ids"] = json.loads(d["memory_ids"])
         d["payload"] = json.loads(d["payload"])
+        d["qvec"] = _vec(d.get("qvec"))
         return d
+
+    def put_outcomes(self, rows: list[tuple[str, str, Vector | None, float, float, float]]) -> None:
+        """rows: (memory_id, trace_id, query_vector, positive_mass, negative_mass, ts)"""
+        with self._lock:
+            for mid, tid, qv, pos, neg, ts in rows:
+                self.db.execute(
+                    "INSERT INTO outcomes VALUES (?,?,?,?,?,?)", (mid, tid, _blob(qv), pos, neg, ts)
+                )
+
+    def outcomes_for(
+        self, memory_ids: list[str]
+    ) -> dict[str, list[tuple[np.ndarray, float, float]]]:
+        out: dict[str, list[tuple[np.ndarray, float, float]]] = {}
+        for chunk in _chunks(memory_ids, 500):
+            marks = ",".join("?" * len(chunk))
+            for r in self.db.execute(
+                f"SELECT memory_id, qvec, pos, neg FROM outcomes WHERE qvec IS NOT NULL"
+                f" AND memory_id IN ({marks})",
+                chunk,
+            ).fetchall():
+                v = _vec(r[1])
+                if v is not None:
+                    out.setdefault(r[0], []).append((v, float(r[2]), float(r[3])))
+        return out
+
+    def update_trace_payload(self, trace_id: str, payload: dict[str, Any]) -> None:
+        with self._lock:
+            self.db.execute(
+                "UPDATE traces SET payload=? WHERE id=?", (json.dumps(payload), trace_id)
+            )
 
     def set_trace_outcome(self, trace_id: str, outcome: float, at: float) -> None:
         with self._lock:
@@ -745,6 +802,7 @@ class SQLiteStore:
             d = dict(r)
             d["memory_ids"] = json.loads(d["memory_ids"])
             d["payload"] = json.loads(d["payload"])
+            d["qvec"] = _vec(d.get("qvec"))
             out.append(d)
         return out
 

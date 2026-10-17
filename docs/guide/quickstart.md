@@ -19,10 +19,13 @@ from veramem import Memory
 
 mem = Memory()
 
-mem.add([
-    {"role": "user", "content": "I'm Priya. I moved to Lisbon last week."},
-    {"role": "tool", "name": "crm", "content": "customer record: home_city=Porto"},
-], user_id="priya")
+mem.add(
+    [
+        {"role": "user", "content": "I'm Priya. I moved to Lisbon last week."},
+        {"role": "tool", "name": "crm", "content": "customer record: home_city=Porto"},
+    ],
+    user_id="priya",
+)
 
 for m in mem.get_all(user_id="priya"):
     print(m.authority.value, m.text)
@@ -30,9 +33,9 @@ for m in mem.get_all(user_id="priya"):
 # unendorsed  According to crm, the customer's home city is Porto.
 
 a = mem.answer("Where does Priya live?", user_id="priya")
-print(a.answer, a.citations)          # Lisbon ['mem_…']
+print(a.answer, a.citations)  # Lisbon ['mem_…']
 
-mem.feedback(a.trace_id, 1.0)         # tell VeraMem the memory helped
+mem.feedback(a.trace_id, 1.0)  # tell VeraMem the memory helped
 ```
 
 Async applications can use `AsyncMemory`, which has the same API with awaitable methods.

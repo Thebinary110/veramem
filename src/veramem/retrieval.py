@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
+from . import ranking as rk
 from .policy import Principal
 from .types import (
     Authority,
@@ -236,11 +237,14 @@ class Retriever:
         include_shared: bool = True,
         as_of: float | None = None,
         record: bool = True,
+        include_raw: bool = True,
     ) -> SearchResult:
         g = route(query) if granularity == "auto" else granularity
         temporal = is_temporal(query)
         qv = self.m.embedder.embed_one(query)
         hits: list[Hit] = []
+        feats: dict[str, list[float]] = {}
+        t0 = now()
 
         if g in ("fact", "dual", "summary"):
             k = [Kind.SUMMARY] + (kinds or []) if g == "summary" and kinds else kinds
@@ -256,15 +260,13 @@ class Retriever:
             top = max(fused.values(), default=1.0)
             ranked = sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 3, 30)]
             items = self.m.store.get_memories([mid for mid, _ in ranked])
+            ctx_rows = self.m.store.outcomes_for([mid for mid, _ in ranked])
             for mid, s in ranked:
                 item = items.get(mid)
                 if item is None:
                     continue
-                score = s / top
-                n_obs = item.successes + item.failures
-                if n_obs > 0:
-                    # confidence-weighted outcome prior: one rating nudges, repeated ones decide
-                    score *= math.exp(UTILITY_BETA * (item.utility - 0.5) * min(1.0, n_obs / 2))
+                score, fv = self._score(item, sig[mid], s / top, qv, ctx_rows.get(mid, []), t0)
+                feats[mid] = fv
                 sig[mid]["utility"] = round(item.utility, 3)
                 hits.append(
                     Hit(
@@ -277,7 +279,7 @@ class Retriever:
 
         # Raw turns are always a channel (AMA multi-granularity): an extraction miss must
         # never make information unfindable. They rank below facts unless routed "raw".
-        if as_of is None:
+        if as_of is None and include_raw:
             covered = {ev.episode_id for h in hits for ev in h.memory.evidence}
             fused, sig = self._rank_episodes(query, qv, p, live_only=g != "raw")
             top = max(fused.values(), default=1.0)
@@ -292,13 +294,20 @@ class Retriever:
                 ep = eps.get(eid)
                 if ep is None:
                     continue
-                hits.append(
-                    Hit(
-                        memory=episode_as_memory(ep),
-                        score=round(weight * s / top, 5),
-                        signals=sig[eid],
-                        granularity="raw",
+                em = episode_as_memory(ep)
+                score = weight * s / top
+                if (
+                    self.m.ranking == "ranker"
+                    and self.m.ranker is not None
+                    and self.m.ranker.active
+                ):
+                    fv = rk.features(
+                        em, sig[eid], s / top, rk.Posterior(), rk.Posterior(), t0, True
                     )
+                    feats[eid] = fv
+                    score = float(self.m.ranker.predict(np.asarray([fv]))[0])
+                hits.append(
+                    Hit(memory=em, score=round(score, 5), signals=sig[eid], granularity="raw")
                 )
 
         own, shared = [], []
@@ -331,10 +340,48 @@ class Retriever:
                 p.agent_id,
                 now(),
                 [h.memory.id for h in selected],
-                {"granularity": g, "temporal": temporal},
+                {
+                    "granularity": g,
+                    "temporal": temporal,
+                    "ranking": self.m.ranking,
+                    "exploration": self.m.exploration,
+                    # features as they were at retrieval time: training data for the ranker
+                    "features": {
+                        h.memory.id: feats[h.memory.id] for h in selected if h.memory.id in feats
+                    },
+                },
+                qvec=qv,
             )
             self._touch([h.memory.id for h in selected if h.granularity != "raw"])
         return result
+
+    def _score(
+        self,
+        item: MemoryItem,
+        signals: dict[str, float],
+        rrf_norm: float,
+        qv: np.ndarray,
+        ctx_rows: list[tuple[np.ndarray, float, float]],
+        now_ts: float,
+    ) -> tuple[float, list[float]]:
+        """Score one memory under the configured ranking mode; also return its features."""
+        g_post = rk.global_posterior(item)
+        c_post = rk.contextual_posterior(qv, ctx_rows)
+        fv = rk.features(item, signals, rrf_norm, g_post, c_post, now_ts)
+        mode = self.m.ranking
+        if mode == "ranker" and self.m.ranker is not None and self.m.ranker.active:
+            return float(self.m.ranker.predict(np.asarray([fv]))[0]), fv
+        if mode == "ranker":
+            # no deployable ranker: fall back to contextual utility, which the transfer
+            # experiment found harmless under bad feedback (global utility was not)
+            mode = "contextual"
+        post = c_post if mode == "contextual" else g_post
+        if mode == "none" or (post.mass <= 0 and self.m.exploration == "none"):
+            return rrf_norm, fv
+        u = rk.explore(post, self.m.exploration, self.m.rng)
+        # confidence-weighted outcome prior: one rating nudges, repeated ones decide
+        conf = min(1.0, post.mass / 2) if self.m.exploration == "none" else 1.0
+        return rrf_norm * math.exp(UTILITY_BETA * (u - 0.5) * conf), fv
 
     def _touch(self, ids: list[str]) -> None:
         t = now()

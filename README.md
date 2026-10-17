@@ -1,7 +1,7 @@
 # VeraMem
 
-**Long-term memory for AI agents that you can verify, that learns from outcomes, and that
-is safe to share.**
+**Long-term memory for AI agents that you can verify, that uses task outcomes to rank
+memories, and that is safe to share.**
 
 - One SQLite file, no servers to run.
 - Works fully offline with Ollama, or with OpenAI / Anthropic.
@@ -33,7 +33,7 @@ gaps. VeraMem fills each one with techniques from recent research:
 
 | | The gap | What VeraMem does |
 |---|---|---|
-| **A** | Memories are kept or dropped by heuristics. Nothing learns whether a memory actually *helped*. | `feedback(trace_id, reward)` credits the memories an answer cited. Utility re-ranks retrieval and archives memories that keep misleading, and successful tasks become reusable experiences. Rated traces export as GRPO training data. *(Memory-R1, AgeMem)* |
+| **A** | Memories are kept or dropped by heuristics. Whether a memory actually *helped* is never recorded. | **Outcome-informed ranking that transfers to unseen tasks:** `feedback(trace_id, reward, cited=...)` records which memories an agent used and how it went. Query-aware (contextual) utility re-ranks similar future searches. A learned ranker, deployed only when it beats retrieval with 95% confidence, improves Hit@3 by **+2.8 points on held-out task families** and ignores placebo feedback. Rated traces export as GRPO training data. Write decisions are prompted, not learned. [Evidence and negative results](docs/OUTCOME_LEARNING.md). *(Memory-R1, AgeMem)* |
 | **B** | Extracted "facts" lose the link to what was said. A tool's claim quietly becomes "the user's preference". | Every memory points to a **verbatim, verified quote** in an immutable, hashed source message. Each carries a **source-authority** label (user / assistant / tool) that consolidation can never raise. Updates are versioned and time-travel queryable. Every write goes into a **hash-chained ledger**. Answers cite or abstain, and `check_action()` blocks low-authority memories from driving payments, bookings or sends. *(Agent Zero Memory, AMA, AuthMem-Bench)* |
 | **C** | Sharing is all-or-nothing. Private data leaks through shared pools, dedup, or other users' preferences. | Access rules are compiled into SQL **before** ranking. Revocable user↔agent and agent↔resource grants apply retroactively. Preferences can never be shared. Experiences are shared through a two-stage pipeline with de-identification plus a **deterministic PII/canary gate**. Erasure is physical. *(ShareMem, Collaborative Memory, AIM)* |
 
@@ -56,7 +56,8 @@ Raw results: [`docs/results/`](docs/results/).
 | Those claims still retained, with attribution (Ret⁻) / user statements retained (Ret⁺) | **100% / 94%** | 97% / 89% |
 | Machine-checkable authority to block risky actions | **yes** | no |
 | Current value ranked first after three changes | **75%** | 50% |
-| Wrong top answer fixed by feedback within 5 rounds | **0% → 100%** | no feedback API |
+| Wrong top answer fixed by feedback within 5 rounds (synthetic) | **0% → 100%** | no feedback API |
+| Feedback improves retrieval on **unseen** task families (LoCoMo, 5 seeds, placebo-controlled) | **+2.8 pts Hit@3** [+1.9, +3.9] | no feedback API |
 | Revoking an agent's access hides its memories | **yes** | not supported |
 | Tampering with stored memories detected | **yes** | not supported |
 | User's secret left in plaintext on disk after deleting the user | **no** | **yes** (`history.db`) |
@@ -80,7 +81,7 @@ python -m benchmarks.locomo --systems veramem,mem0 --convs all
 | Remember chats, tool results, documents (role sets authority) | `add(messages, user_id=…)` | `veramem add` |
 | Hybrid search (dense + BM25 + entity, routed by granularity) | `search(q, user_id=…)` | `veramem search` |
 | Grounded answers with citations and abstention | `answer(q, user_id=…)` | `veramem ask` |
-| Learn from outcomes | `feedback(trace_id, reward)`, `learn(task, trajectory, reward)` | `veramem feedback` |
+| Outcome-informed ranking | `feedback(trace_id, reward, cited=…)`, `train_ranker()`, `learn(task, trajectory, reward)` | `veramem feedback`, `veramem train-ranker` |
 | Evidence and version history | `evidence(id)`, `history(id)`, `search(…, as_of=ts)` | `veramem history` |
 | Authority gate for actions | `check_action([ids])` | |
 | Teams, grants, revocation | `join_team`, `grant_agent`, `revoke_agent`, `grant_resource` | |

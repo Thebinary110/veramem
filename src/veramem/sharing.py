@@ -193,6 +193,7 @@ class Sharer:
         st = self.m.store
         st.bump()
         st.db.execute("DELETE FROM evidence WHERE memory_id=?", (memory_id,))
+        st.db.execute("DELETE FROM outcomes WHERE memory_id=?", (memory_id,))
         st.db.execute("DELETE FROM entity_links WHERE memory_id=?", (memory_id,))
         st.db.execute("DELETE FROM memories_fts WHERE id=?", (memory_id,))
         st.db.execute("UPDATE memories SET supersedes=NULL WHERE supersedes=?", (memory_id,))

@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 from typing import Any
 
+import numpy as np
+
 from .answer import Answerer
 from .config import Config, ollama_host, resolve
 from .learning import Learner
@@ -22,6 +24,7 @@ from .providers import (
     OpenAICompatibleLLM,
     ResponseCache,
 )
+from .ranking import LogisticRanker
 from .retrieval import Retriever
 from .sharing import Sharer
 from .store import SQLiteStore
@@ -57,8 +60,18 @@ class Memory:
         llm: LLM | None = None,
         embedder: Embedder | None = None,
         config: Config | None = None,
+        ranking: str = "contextual",
+        exploration: str = "none",
+        seed: int | None = None,
         **config_overrides: Any,
     ):
+        self.ranking = os.environ.get("VERAMEM_RANKING", ranking)
+        self.exploration = os.environ.get("VERAMEM_EXPLORATION", exploration)
+        if self.ranking not in ("none", "global", "contextual", "ranker"):
+            raise ValueError("ranking must be none | global | contextual | ranker")
+        if self.exploration not in ("none", "thompson", "ucb"):
+            raise ValueError("exploration must be none | thompson | ucb")
+        self.rng = np.random.default_rng(seed)
         self.config = config or Config.load(**config_overrides, db_path=path)
         choice = resolve(self.config)
         cache = ResponseCache(self.config.cache_path) if self.config.cache_path else None
@@ -75,6 +88,8 @@ class Memory:
         self.answerer = Answerer(self)
         self.learner = Learner(self)
         self.sharer = Sharer(self)
+        saved = self.store.meta_get("ranker")
+        self.ranker = LogisticRanker.from_json(saved) if saved else None
 
     # ---------------------------------------------------------------- info
     @property
@@ -172,6 +187,8 @@ class Memory:
         kinds: list[str] | None = None,
         include_shared: bool = True,
         as_of: float | None = None,
+        record: bool = True,
+        include_raw: bool = True,
     ) -> SearchResult:
         """Hybrid, access-controlled retrieval. Returns hits with evidence and a trace_id."""
         p = self._principal(user_id, agent_id)
@@ -184,6 +201,8 @@ class Memory:
             kinds=k,
             include_shared=include_shared,
             as_of=as_of,
+            record=record,
+            include_raw=include_raw,
         )
 
     def answer(
@@ -376,9 +395,21 @@ class Memory:
         raise ValueError("pass memory_id, or everything=True with user_id")
 
     # ------------------------------------------------------------ outcomes
-    def feedback(self, trace_id: str, reward: float) -> dict[str, Any]:
-        """Report how well a search/answer worked: reward in [-1, 1]."""
-        return self.learner.feedback(trace_id, reward)
+    def feedback(
+        self, trace_id: str, reward: float, *, cited: list[str] | None = None
+    ) -> dict[str, Any]:
+        """Report how well a search/answer worked: reward in [-1, 1].
+
+        `cited`: the memory ids your agent actually used (must come from that trace).
+        Defaults to the answer's citations, or the top retrieved memories for a search.
+        """
+        return self.learner.feedback(trace_id, reward, cited=cited)
+
+    def train_ranker(
+        self, *, user_ids: list[str] | None = None, min_examples: int = 30
+    ) -> dict[str, Any]:
+        """Fit the outcome ranker on rated traces; use it with Memory(ranking="ranker")."""
+        return self.learner.train_ranker(user_ids=user_ids, min_examples=min_examples)
 
     def learn(
         self,

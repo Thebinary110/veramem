@@ -54,5 +54,6 @@ nav:
       - Architecture: ARCHITECTURE.md
       - Research foundations: RESEARCH.md
   - Benchmarks: BENCHMARKS.md
+  - What feedback learns: OUTCOME_LEARNING.md
   - API reference: api.md
   - Security: security.md

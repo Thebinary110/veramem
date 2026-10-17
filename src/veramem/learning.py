@@ -1,4 +1,9 @@
-"""Gap A: outcome-driven consolidation without requiring RL training.
+"""Gap A: outcome-weighted memory ranking and retention (no RL training).
+
+What this is, and is not: VeraMem re-ranks and retains memories according to their
+observed usefulness. It does not learn which memories to *write*, update or delete;
+those decisions are prompted. See docs/OUTCOME_LEARNING.md for what transfers to new
+tasks and what does not.
 
 The papers learn a memory policy with RL (Memory-R1: EM reward through a frozen
 answer agent; AgeMem: task + context + memory rewards with step-wise GRPO). VeraMem
@@ -23,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from . import prompts
+from . import prompts, ranking
 from .grounding import same_proposition
 from .ledger import content_hash
 from .providers.llm import LLMError
@@ -44,7 +49,8 @@ if TYPE_CHECKING:
 
 ARCHIVE_UTILITY = 0.3
 ARCHIVE_MIN_USES = 3
-ADMIT_REWARD = 0.8  # ShareMem: only well-rewarded trajectories become experiences
+ADMIT_REWARD = 0.8
+GATE_MARGIN = 0.01  # ranker must beat retrieval-relevance AUC by this much to deploy  # ShareMem: only well-rewarded trajectories become experiences
 DUP_COS = 0.95
 
 
@@ -53,12 +59,24 @@ class Learner:
         self.m = mem
 
     # ------------------------------------------------------------ feedback
-    def feedback(self, trace_id: str, reward: float, actor: str | None = None) -> dict[str, Any]:
+    def feedback(
+        self,
+        trace_id: str,
+        reward: float,
+        actor: str | None = None,
+        cited: list[str] | None = None,
+    ) -> dict[str, Any]:
         reward = max(-1.0, min(1.0, float(reward)))
         tr = self.m.store.get_trace(trace_id)
         if tr is None:
             raise KeyError(f"unknown trace {trace_id}")
-        cited = [i for i in tr["payload"].get("cited", []) if i.startswith("mem_")]
+        if tr["outcome"] is not None:
+            raise ValueError(f"trace {trace_id} already has feedback")
+        if cited is not None:
+            # citation lock: only memories this trace actually returned can be credited
+            cited = [i for i in cited if i in set(tr["memory_ids"]) and i.startswith("mem_")]
+        else:
+            cited = [i for i in tr["payload"].get("cited", []) if i.startswith("mem_")]
         pool = cited or [i for i in tr["memory_ids"] if i.startswith("mem_")][:5]
         weight = 1.0 if cited else 1.0 / max(1, len(pool)) ** 0.5
         pos, neg = weight * (1 + reward) / 2, weight * (1 - reward) / 2
@@ -68,7 +86,11 @@ class Learner:
                     "UPDATE memories SET successes=successes+?, failures=failures+? WHERE id=?",
                     (pos, neg, mid),
                 )
-        self.m.store.set_trace_outcome(trace_id, reward, now())
+        t = now()
+        self.m.store.put_outcomes([(mid, trace_id, tr["qvec"], pos, neg, t) for mid in pool])
+        tr["payload"]["credited"] = pool
+        self.m.store.update_trace_payload(trace_id, tr["payload"])
+        self.m.store.set_trace_outcome(trace_id, reward, t)
         self.m.ledger.append(
             "FEEDBACK", trace_id, {"reward": reward, "credited": pool}, actor=actor
         )
@@ -366,6 +388,78 @@ class Learner:
         )
         return ("replace" if target_id else "add"), item
 
+    # --------------------------------------------------------------- ranker
+    def training_examples(
+        self, user_ids: list[str] | None = None
+    ) -> tuple[np.ndarray, np.ndarray, list[str]]:
+        """(features, labels, trace ids) from rated traces, using the features logged at
+        retrieval time, so later outcomes never leak into an example."""
+        where, params = "outcome IS NOT NULL AND outcome != 0", []
+        if user_ids:
+            where += f" AND user_id IN ({','.join('?' * len(user_ids))})"
+            params = list(user_ids)
+        xs, ys, tids = [], [], []
+        for t in self.m.store.traces(where, params):
+            feats = t["payload"].get("features") or {}
+            for mid in t["payload"].get("credited", []):
+                fv = feats.get(mid)
+                if fv is None or len(fv) != len(ranking.FEATURES):
+                    continue
+                xs.append(fv)
+                ys.append(1.0 if t["outcome"] > 0 else 0.0)
+                tids.append(t["id"])
+        if not xs:
+            return np.zeros((0, len(ranking.FEATURES))), np.zeros(0), []
+        return np.asarray(xs, dtype=float), np.asarray(ys), tids
+
+    def train_ranker(
+        self,
+        user_ids: list[str] | None = None,
+        min_examples: int = 30,
+        l2: float = 1.0,
+        save: bool = True,
+    ) -> dict[str, Any]:
+        x, y, tids = self.training_examples(user_ids)
+        if len(y) < min_examples or len(set(y.tolist())) < 2:
+            return {
+                "trained": False,
+                "examples": int(len(y)),
+                "reason": f"need >= {min_examples} examples with both outcomes",
+            }
+        # Grouped cross-validation picks the regularisation; the model is deployed only if
+        # its out-of-fold log-loss beats the relevance-only model with 95% confidence
+        # (bootstrap over traces). Uninformative feedback therefore cannot take over ranking.
+        cv = ranking.cross_validate(x, y, tids)
+        gain = cv["null_loss"] - cv["model_loss"]  # > 0 means the model predicts better
+        uniq = sorted(set(tids))
+        idx = {t: i for i, t in enumerate(uniq)}
+        per_trace = np.zeros(len(uniq))
+        np.add.at(per_trace, [idx[t] for t in tids], gain)
+        rng = np.random.default_rng(0)
+        boots = per_trace[rng.integers(0, len(uniq), size=(2000, len(uniq)))].sum(axis=1)
+        lower = float(np.percentile(boots, 5)) / len(y)
+        active = bool(lower > 0)
+        model = ranking.LogisticRanker.fit(x, y, l2=cv["best_l2"])  # final model on all data
+        model.active = active
+        model.metrics = {
+            "active": active,
+            "reason": (
+                "beats the relevance-only model on held-out feedback (95% bound)"
+                if active
+                else "no reliable gain over retrieval relevance; keeping baseline ranking"
+            ),
+            "cv_gain_per_example": float(gain.mean()),
+            "cv_gain_lower_95": lower,
+            "l2": cv["best_l2"],
+            "examples": int(len(y)),
+            "positive_rate": float(y.mean()),
+        }
+        if save:
+            self.m.store.meta_set("ranker", model.to_json())
+            self.m.ledger.append("TRAIN_RANKER", None, model.metrics)
+        self.m.ranker = model
+        return {"trained": True, **model.metrics, "coefficients": model.explain()}
+
     # ---------------------------------------------------------- action gate
     def check_action(self, memory_ids: list[str]) -> dict[str, Any]:
         """AuthMem-Bench Module B: may these memories bind a protected tool argument?
@@ -452,3 +546,14 @@ class Learner:
                 )
                 n += 1
         return n
+
+
+def _auc(scores: np.ndarray, labels: np.ndarray) -> float | None:
+    """Rank-based ROC AUC (probability a positive outranks a negative)."""
+    pos, neg = scores[labels == 1], scores[labels == 0]
+    if len(pos) == 0 or len(neg) == 0:
+        return None
+    order = np.argsort(np.concatenate([pos, neg]))
+    ranks = np.empty(len(order))
+    ranks[order] = np.arange(1, len(order) + 1)
+    return float((ranks[: len(pos)].sum() - len(pos) * (len(pos) + 1) / 2) / (len(pos) * len(neg)))

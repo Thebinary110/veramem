@@ -1,7 +1,7 @@
 # VeraMem
 
-**Long-term memory for AI agents that you can verify, that learns from outcomes, and that
-is safe to share.**
+**Long-term memory for AI agents that you can verify, that uses task outcomes to rank
+memories, and that is safe to share.**
 
 - One SQLite file, no servers to run.
 - Works offline with Ollama, or with OpenAI / Anthropic / any OpenAI-compatible server
@@ -16,7 +16,7 @@ veramem ask "where do I live?"
 
 | Gap in today's memory systems | What VeraMem does |
 |---|---|
-| Nothing learns whether a memory actually helped | `feedback()` credits the memories an answer cited. Utility re-ranks retrieval and archives memories that keep misleading. |
+| Whether a memory actually helped is never recorded | Outcome-informed ranking: query-aware utility, plus a gated learned ranker that transfers to unseen tasks ([evidence](OUTCOME_LEARNING.md)). |
 | Facts lose the link to what was said; a tool's claim becomes "the user's preference" | Verified quotes and source-authority labels on every memory, a hash-chained ledger, and an action gate for low-authority memories |
 | Sharing leaks private data | Access is enforced in SQL before ranking, grants are revocable, preferences are never shared, and a PII/canary gate runs before sharing |
 
