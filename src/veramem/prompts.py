@@ -6,7 +6,7 @@ update prompt (Apache-2.0), AMA (constructor rules, sufficiency judge), ShareMem
 wording). Changes are noted inline.
 """
 
-PROMPT_VERSION = "2026-10-17.2"
+PROMPT_VERSION = "2026-10-17.3"
 
 EXTRACT_SYSTEM = """You are the memory constructor of an AI agent. You read NEW messages and \
 extract durable, self-contained memories worth keeping long-term.
@@ -34,8 +34,11 @@ preference, decision or standing instruction.
 timestamp, inside the text itself ("last week" -> "in the week of 2026-10-03", \
 "yesterday" -> "on 2026-10-09"). Put the date the claim refers to in "when" \
 (YYYY-MM-DD) or null. Never invent dates.
-6. Keep specific details (names, numbers, titles, places). Skip greetings, filler and \
-small talk with no lasting value.
+6. Be thorough: extract EVERY concrete personal detail, each as its own memory: \
+people and relationships, places, jobs, activities, hobbies, possessions, pets, books, \
+music, events, plans, opinions, feelings about specific things, family members and what \
+they like. Keep names, numbers, titles and places exactly. Most informative messages \
+yield 1-5 memories. Skip only greetings and pure filler ("thanks!", "how are you?").
 7. "entities": the people, places, organisations and things the memory is about.
 
 Return JSON: {"memories": [{"text": "...", "kind": "fact|preference|event", \
