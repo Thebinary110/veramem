@@ -160,10 +160,10 @@ python -m benchmarks.outcome_transfer --seeds 5 --epochs 2   # ~15 min, no LLM n
 ## Use it
 
 ```python
-mem = Memory()                      # ranking="contextual" by default
+mem = Memory()  # ranking="contextual" by default
 r = mem.search("...", user_id="u")
-mem.feedback(r.trace_id, +1, cited=[r.hits[0].memory.id])   # what your agent used
+mem.feedback(r.trace_id, +1, cited=[r.hits[0].memory.id])  # what your agent used
 ...
-mem.train_ranker()                  # deploys only if it beats retrieval with 95% confidence
-mem = Memory(ranking="ranker")      # falls back to contextual if the gate is closed
+mem.train_ranker()  # deploys only if it beats retrieval with 95% confidence
+mem = Memory(ranking="ranker")  # falls back to contextual if the gate is closed
 ```
