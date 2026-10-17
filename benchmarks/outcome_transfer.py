@@ -149,7 +149,7 @@ def run_feedback(
     emb: OllamaEmbedder,
     epochs: int,
     genuine_rewards: list[float] | None,
-) -> tuple[list[float], float]:
+) -> tuple[list[float], float, dict[str, Any]]:
     ranking, exploration, _ = METHODS[method]
     mem = Memory(
         str(db), llm=_no_llm(), embedder=emb, ranking=ranking, exploration=exploration, seed=seed
@@ -175,10 +175,12 @@ def run_feedback(
                 reward = -reward
             if cited:
                 mem.feedback(r.trace_id, reward, cited=cited)
+    gate: dict[str, Any] = {}
     if METHODS[method][2] == "ranker":
-        mem.train_ranker(min_examples=20)
+        rep = mem.train_ranker(min_examples=20)
+        gate = {k: rep.get(k) for k in ("active", "cv_gain_per_example", "cv_gain_lower_95", "l2")}
     mem.close()
-    return rewards, time.time() - t0
+    return rewards, time.time() - t0, gate
 
 
 def evaluate(
@@ -300,7 +302,7 @@ def main(argv: list[str] | None = None) -> None:
                 shutil.copy(base, db)
                 for suffix in ("-wal", "-shm"):
                     Path(str(db) + suffix).unlink(missing_ok=True)
-                rewards, fb_secs = run_feedback(
+                rewards, fb_secs, gate = run_feedback(
                     db, turns, sp, method, cond, seed, emb, epochs, genuine
                 )
                 if cond == "genuine":
@@ -318,6 +320,7 @@ def main(argv: list[str] | None = None) -> None:
                             "feedback_seconds": round(fb_secs, 1),
                             "search_ms": ms,
                             "feedback_events": len(rewards),
+                            "ranker_gate": gate,
                             "feedback_success_rate": float(np.mean(np.asarray(rewards) > 0)),
                         },
                     )

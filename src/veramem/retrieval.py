@@ -372,7 +372,9 @@ class Retriever:
         if mode == "ranker" and self.m.ranker is not None and self.m.ranker.active:
             return float(self.m.ranker.predict(np.asarray([fv]))[0]), fv
         if mode == "ranker":
-            mode = "global"  # no (deployable) ranker yet: fall back to the baseline
+            # no deployable ranker: fall back to contextual utility, which the transfer
+            # experiment found harmless under bad feedback (global utility was not)
+            mode = "contextual"
         post = c_post if mode == "contextual" else g_post
         if mode == "none" or (post.mass <= 0 and self.m.exploration == "none"):
             return rrf_norm, fv

@@ -60,7 +60,7 @@ class Memory:
         llm: LLM | None = None,
         embedder: Embedder | None = None,
         config: Config | None = None,
-        ranking: str = "global",
+        ranking: str = "contextual",
         exploration: str = "none",
         seed: int | None = None,
         **config_overrides: Any,

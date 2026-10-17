@@ -99,7 +99,7 @@ def test_ranker_trained_on_uninformative_feedback_is_not_deployed(tmp_path):
         m.feedback(r.trace_id, float(rng.choice([1.0, -1.0])), cited=[r.hits[0].memory.id])
     rep = m.train_ranker(min_examples=10)
     assert rep["trained"] and not rep["active"], rep
-    ref = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="global")
+    ref = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="contextual")
     gated = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="ranker")
     q = "project timeline budget"
     assert [h.memory.id for h in gated.search(q, user_id="u", record=False).hits] == [
