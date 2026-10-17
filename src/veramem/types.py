@@ -7,6 +7,7 @@ access scope, and accumulates outcome statistics that drive retention.
 
 from __future__ import annotations
 
+import threading
 import time
 import uuid
 from enum import Enum
@@ -19,8 +20,24 @@ def new_id(prefix: str) -> str:
     return f"{prefix}_{uuid.uuid4().hex[:20]}"
 
 
+_last_now = 0.0
+_now_lock = threading.Lock()
+
+
 def now() -> float:
-    return time.time()
+    """Wall-clock time that never repeats or goes backwards within a process.
+
+    Versioning and time-travel queries compare timestamps, and some platforms
+    (notably Windows) have a ~15 ms clock tick, so two writes could otherwise share a
+    timestamp and make an old version vanish from `as_of` queries.
+    """
+    global _last_now
+    with _now_lock:
+        t = time.time()
+        if t <= _last_now:
+            t = _last_now + 1e-6
+        _last_now = t
+        return t
 
 
 class SourceType(str, Enum):

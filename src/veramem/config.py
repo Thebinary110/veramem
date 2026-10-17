@@ -53,7 +53,7 @@ class Config:
         cfg = cls()
         p = Path(path) if path else home() / "config.json"
         if p.exists():
-            data = json.loads(p.read_text())
+            data = json.loads(p.read_text(encoding="utf-8"))
             for k, v in data.items():
                 if hasattr(cfg, k):
                     setattr(cfg, k, v)
@@ -80,7 +80,7 @@ class Config:
     def save(self, path: str | Path | None = None) -> Path:
         p = Path(path) if path else home() / "config.json"
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(json.dumps(asdict(self), indent=2))
+        p.write_text(json.dumps(asdict(self), indent=2), encoding="utf-8")
         return p
 
 

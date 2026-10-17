@@ -212,7 +212,7 @@ def export(user: str = typer.Option(..., "--user", "-u"), out: Path = typer.Opti
     """Export everything about a user as portable JSON."""
     data = json.dumps(_mem().export(user_id=user), indent=2, default=str)
     if out:
-        out.write_text(data)
+        out.write_text(data, encoding="utf-8")
         typer.echo(f"wrote {out}")
     else:
         typer.echo(data)
@@ -221,7 +221,7 @@ def export(user: str = typer.Option(..., "--user", "-u"), out: Path = typer.Opti
 @app.command("import")
 def import_(path: Path) -> None:
     """Import a VeraMem export file."""
-    _out(_mem().import_(json.loads(path.read_text())))
+    _out(_mem().import_(json.loads(path.read_text(encoding="utf-8"))))
 
 
 @app.command("export-trajectories")
