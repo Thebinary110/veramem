@@ -133,7 +133,9 @@ def test_v1_database_migrates_and_stays_searchable(tmp_path):
     db.execute("UPDATE meta SET value='1' WHERE key='schema_version'")
     m.close()
     m2 = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
-    assert m2.store.meta_get("schema_version") == "2"
+    from veramem.store.sqlite import SCHEMA_VERSION
+
+    assert m2.store.meta_get("schema_version") == str(SCHEMA_VERSION)
     hits = m2.search("where is the passport", user_id="omar").hits
     assert hits and "drawer" in hits[0].memory.text
     assert not m2.search("passport drawer", user_id="someone-else").hits

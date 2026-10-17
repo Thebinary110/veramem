@@ -231,6 +231,12 @@ def export_trajectories(out: Path, user: str = typer.Option(None, "--user", "-u"
     typer.echo(f"wrote {n} records to {out}")
 
 
+@app.command("train-ranker")
+def train_ranker(min_examples: int = typer.Option(30, help="minimum rated examples")) -> None:
+    """Fit the outcome ranker on rated traces (then use VERAMEM_RANKING=ranker)."""
+    _out(_mem().train_ranker(min_examples=min_examples))
+
+
 @app.command()
 def serve(host: str = "127.0.0.1", port: int = 8765) -> None:
     """Run the REST API and web UI."""

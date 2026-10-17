@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from . import prompts
+from . import prompts, ranking
 from .grounding import same_proposition
 from .ledger import content_hash
 from .providers.llm import LLMError
@@ -58,12 +58,24 @@ class Learner:
         self.m = mem
 
     # ------------------------------------------------------------ feedback
-    def feedback(self, trace_id: str, reward: float, actor: str | None = None) -> dict[str, Any]:
+    def feedback(
+        self,
+        trace_id: str,
+        reward: float,
+        actor: str | None = None,
+        cited: list[str] | None = None,
+    ) -> dict[str, Any]:
         reward = max(-1.0, min(1.0, float(reward)))
         tr = self.m.store.get_trace(trace_id)
         if tr is None:
             raise KeyError(f"unknown trace {trace_id}")
-        cited = [i for i in tr["payload"].get("cited", []) if i.startswith("mem_")]
+        if tr["outcome"] is not None:
+            raise ValueError(f"trace {trace_id} already has feedback")
+        if cited is not None:
+            # citation lock: only memories this trace actually returned can be credited
+            cited = [i for i in cited if i in set(tr["memory_ids"]) and i.startswith("mem_")]
+        else:
+            cited = [i for i in tr["payload"].get("cited", []) if i.startswith("mem_")]
         pool = cited or [i for i in tr["memory_ids"] if i.startswith("mem_")][:5]
         weight = 1.0 if cited else 1.0 / max(1, len(pool)) ** 0.5
         pos, neg = weight * (1 + reward) / 2, weight * (1 - reward) / 2
@@ -73,7 +85,11 @@ class Learner:
                     "UPDATE memories SET successes=successes+?, failures=failures+? WHERE id=?",
                     (pos, neg, mid),
                 )
-        self.m.store.set_trace_outcome(trace_id, reward, now())
+        t = now()
+        self.m.store.put_outcomes([(mid, trace_id, tr["qvec"], pos, neg, t) for mid in pool])
+        tr["payload"]["credited"] = pool
+        self.m.store.update_trace_payload(trace_id, tr["payload"])
+        self.m.store.set_trace_outcome(trace_id, reward, t)
         self.m.ledger.append(
             "FEEDBACK", trace_id, {"reward": reward, "credited": pool}, actor=actor
         )
@@ -371,6 +387,63 @@ class Learner:
         )
         return ("replace" if target_id else "add"), item
 
+    # --------------------------------------------------------------- ranker
+    def training_examples(
+        self, user_ids: list[str] | None = None
+    ) -> tuple[np.ndarray, np.ndarray, list[str]]:
+        """(features, labels, trace ids) from rated traces, using the features logged at
+        retrieval time, so later outcomes never leak into an example."""
+        where, params = "outcome IS NOT NULL AND outcome != 0", []
+        if user_ids:
+            where += f" AND user_id IN ({','.join('?' * len(user_ids))})"
+            params = list(user_ids)
+        xs, ys, tids = [], [], []
+        for t in self.m.store.traces(where, params):
+            feats = t["payload"].get("features") or {}
+            for mid in t["payload"].get("credited", []):
+                fv = feats.get(mid)
+                if fv is None or len(fv) != len(ranking.FEATURES):
+                    continue
+                xs.append(fv)
+                ys.append(1.0 if t["outcome"] > 0 else 0.0)
+                tids.append(t["id"])
+        if not xs:
+            return np.zeros((0, len(ranking.FEATURES))), np.zeros(0), []
+        return np.asarray(xs, dtype=float), np.asarray(ys), tids
+
+    def train_ranker(
+        self,
+        user_ids: list[str] | None = None,
+        min_examples: int = 30,
+        l2: float = 1.0,
+        save: bool = True,
+    ) -> dict[str, Any]:
+        x, y, tids = self.training_examples(user_ids)
+        if len(y) < min_examples or len(set(y.tolist())) < 2:
+            return {
+                "trained": False,
+                "examples": int(len(y)),
+                "reason": f"need >= {min_examples} examples with both outcomes",
+            }
+        # validation split by trace, so one trace's examples never sit on both sides
+        rng = np.random.default_rng(0)
+        uniq = sorted(set(tids))
+        val = set(rng.choice(uniq, size=max(1, len(uniq) // 5), replace=False).tolist())
+        is_val = np.array([t in val for t in tids])
+        model = ranking.LogisticRanker.fit(x[~is_val], y[~is_val], l2=l2)
+        auc = _auc(model.predict(x[is_val]), y[is_val]) if is_val.any() else None
+        model = ranking.LogisticRanker.fit(x, y, l2=l2)  # final model on everything
+        model.metrics = {
+            "validation_auc": auc,
+            "examples": int(len(y)),
+            "positive_rate": float(y.mean()),
+        }
+        if save:
+            self.m.store.meta_set("ranker", model.to_json())
+            self.m.ledger.append("TRAIN_RANKER", None, model.metrics)
+        self.m.ranker = model
+        return {"trained": True, **model.metrics, "coefficients": model.explain()}
+
     # ---------------------------------------------------------- action gate
     def check_action(self, memory_ids: list[str]) -> dict[str, Any]:
         """AuthMem-Bench Module B: may these memories bind a protected tool argument?
@@ -457,3 +530,14 @@ class Learner:
                 )
                 n += 1
         return n
+
+
+def _auc(scores: np.ndarray, labels: np.ndarray) -> float | None:
+    """Rank-based ROC AUC (probability a positive outranks a negative)."""
+    pos, neg = scores[labels == 1], scores[labels == 0]
+    if len(pos) == 0 or len(neg) == 0:
+        return None
+    order = np.argsort(np.concatenate([pos, neg]))
+    ranks = np.empty(len(order))
+    ranks[order] = np.arange(1, len(order) + 1)
+    return float((ranks[: len(pos)].sum() - len(pos) * (len(pos) + 1) / 2) / (len(pos) * len(neg)))
