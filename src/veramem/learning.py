@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from . import prompts
+from .grounding import same_proposition
 from .ledger import content_hash
 from .providers.llm import LLMError
 from .types import (
@@ -122,6 +123,8 @@ class Learner:
                 ma, mb = self.m.store.get_memory(a), self.m.store.get_memory(b)
                 if not ma or not mb or ma.kind != mb.kind:
                     continue
+                if not same_proposition(ma.text, mb.text):
+                    continue  # similar wording, different value: not a duplicate
                 keep, drop = (ma, mb) if ma.authority.rank >= mb.authority.rank else (mb, ma)
                 self.m.store.add_evidence(keep.id, drop.evidence)
                 self.m.store.update_memory(

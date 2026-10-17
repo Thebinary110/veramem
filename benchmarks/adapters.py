@@ -34,6 +34,7 @@ class System:
         session_id: str | None = None,
         agent_id: str | None = None,
         resources: list[str] | None = None,
+        infer: bool = True,
     ) -> None:
         raise NotImplementedError
 
@@ -99,9 +100,14 @@ class VeraMemSystem(System):
         )
         self.last_trace: str | None = None
 
-    def add(self, user_id, messages, *, session_id=None, agent_id=None, resources=None):
+    def add(self, user_id, messages, *, session_id=None, agent_id=None, resources=None, infer=True):
         self.mem.add(
-            messages, user_id=user_id, session_id=session_id, agent_id=agent_id, resources=resources
+            messages,
+            user_id=user_id,
+            session_id=session_id,
+            agent_id=agent_id,
+            resources=resources,
+            infer=infer,
         )
 
     def search(self, user_id, query, k=10, agent_id=None):
@@ -199,7 +205,7 @@ class Mem0System(System):
         self.mem = Memory.from_config(cfg)
         _disable_thinking(self.mem)
 
-    def add(self, user_id, messages, *, session_id=None, agent_id=None, resources=None):
+    def add(self, user_id, messages, *, session_id=None, agent_id=None, resources=None, infer=True):
         msgs = []
         for m in messages:
             role = m.get("role", "user")
@@ -212,7 +218,7 @@ class Mem0System(System):
             if m.get("timestamp"):  # OSS mem0 rejects `timestamp=`; give it the date inline
                 content = f"[{m['timestamp']}] {content}"
             msgs.append({"role": role, "content": content})
-        kw: dict[str, Any] = {"user_id": user_id}
+        kw: dict[str, Any] = {"user_id": user_id, "infer": infer}
         if agent_id:
             kw["agent_id"] = agent_id
         ts = next((m.get("timestamp") for m in messages if m.get("timestamp")), None)

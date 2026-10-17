@@ -388,7 +388,9 @@ def g6_outcome_adaptation(sys_: System, rounds: int = 5) -> dict[str, Any]:
             for i, (q, good, bad) in enumerate(ADAPT):
                 uid = f"adapt-{i}"
                 if r == 0:
-                    sys_.add(uid, [{"role": "user", "content": t} for t in [good, *bad]])
+                    sys_.add(
+                        uid, [{"role": "user", "content": t} for t in [good, *bad]], infer=False
+                    )
                 hits = sys_.search(uid, q, k=1)
                 ok += int(bool(hits) and good.split(":")[0] in hits[0]["text"])
             acc.append(ok / len(ADAPT))
@@ -399,7 +401,7 @@ def g6_outcome_adaptation(sys_: System, rounds: int = 5) -> dict[str, Any]:
         for i, (q, good, bad) in enumerate(ADAPT):
             uid = f"adapt-{i}"
             if r == 0:
-                sys_.add(uid, [{"role": "user", "content": t} for t in [good, *bad]])
+                sys_.add(uid, [{"role": "user", "content": t} for t in [good, *bad]], infer=False)
             hits = sys_.search(uid, q, k=1)
             hit = bool(hits) and good.split(":")[0] in hits[0]["text"]
             ok += int(hit)

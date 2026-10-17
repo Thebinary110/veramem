@@ -96,3 +96,51 @@ def support_ratio(claim: str, text: str) -> float:
         return 1.0
     tw = set(_norm(text).split())
     return sum(1 for w in cw if w in tw or w.rstrip("s") in tw) / len(cw)
+
+
+_FILLER = {
+    "now",
+    "currently",
+    "still",
+    "also",
+    "today",
+    "these",
+    "days",
+    "instead",
+    "anymore",
+    "update",
+    "as",
+    "of",
+    "the",
+    "a",
+    "an",
+    "is",
+    "are",
+    "was",
+    "were",
+    "to",
+    "and",
+    "in",
+    "on",
+    "at",
+    "for",
+    "with",
+    "user",
+    "s",
+    "has",
+    "have",
+    "that",
+    "this",
+}
+
+
+def same_proposition(a: str, b: str) -> bool:
+    """True only if two statements carry the same content words.
+
+    Embedding similarity cannot tell "learning Italian" from "learning Japanese"
+    (cosine > 0.95 with common embedders), so near-duplicate shortcuts must also pass
+    this lexical check; anything else goes to the memory manager.
+    """
+    wa = {w.rstrip("s") for w in _norm(a).split() if w not in _FILLER}
+    wb = {w.rstrip("s") for w in _norm(b).split() if w not in _FILLER}
+    return wa == wb

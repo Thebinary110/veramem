@@ -87,3 +87,11 @@ def test_manual_update_and_delete_by_owner_only(mem):
         mem.delete(new.id, user_id="mallory")
     mem.delete(new.id, user_id="gina")
     assert mem.store.get_memory(new.id).status is Status.RETRACTED
+
+
+def test_same_proposition_distinguishes_values():
+    from veramem.grounding import same_proposition
+
+    assert not same_proposition("Una is learning Italian.", "Una is learning Japanese.")
+    assert not same_proposition("Gym at 6 am", "Gym at 8 pm")
+    assert same_proposition("Carol works at Initech", "Carol now works at Initech.")

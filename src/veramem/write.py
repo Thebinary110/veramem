@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from . import prompts
-from .grounding import locate
+from .grounding import locate, same_proposition
 from .ledger import content_hash
 from .providers.llm import LLMError
 from .types import (
@@ -310,14 +310,14 @@ class Writer:
         ids, mat = self.m.store.memory_vectors(where, params)
         changes: list[Change] = []
         pending: list[Candidate] = []
-        batch_vecs: list[np.ndarray] = []
+        batch: list[tuple[np.ndarray, str]] = []
         for c, v in zip(cands, vecs):
             c.vec = v
             # dedup within this batch
-            if batch_vecs and max(float(v @ b) for b in batch_vecs) > DUP_COS:
+            if any(float(v @ b) > DUP_COS and same_proposition(c.text, t) for b, t in batch):
                 changes.append(Change(op=Operation.NOOP, text=c.text, reason="duplicate in batch"))
                 continue
-            batch_vecs.append(v)
+            batch.append((v, c.text))
             if len(ids):
                 sims = mat @ v
                 order = np.argsort(-sims)[:NEIGHBOURS]
@@ -341,7 +341,7 @@ class Writer:
                         if len(c.neighbours) >= NEIGHBOURS:
                             break
             top = c.neighbours[0] if c.neighbours else None
-            if top and top[1] > DUP_COS:
+            if top and top[1] > DUP_COS and same_proposition(top[0].text, c.text):
                 changes.append(self._confirm(top[0], c, actor))
                 continue
             if not c.neighbours:
