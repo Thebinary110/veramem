@@ -330,9 +330,12 @@ class SQLiteStore:
         self._vec_cache: OrderedDict[tuple[Any, ...], tuple[int, list[str], np.ndarray]] = (
             OrderedDict()
         )
-        self.db = sqlite3.connect(self.path, check_same_thread=False, isolation_level=None)
-        self.db.row_factory = sqlite3.Row
-        self.db.create_function("vm_owner", 4, owner_token, deterministic=True)
+        self.raw = sqlite3.connect(self.path, check_same_thread=False, isolation_level=None)
+        self.raw.row_factory = sqlite3.Row
+        # every statement goes through the store lock: a transaction opened by one thread
+        # can never absorb another thread's statements on this shared connection
+        self.db = _LockedConnection(self.raw, self._lock)
+        self.raw.create_function("vm_owner", 4, owner_token, deterministic=True)
         existing = self.db.execute("SELECT 1 FROM sqlite_master WHERE name='meta'").fetchone()
         if (
             existing
@@ -385,7 +388,7 @@ class SQLiteStore:
                 self.db.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 
     def close(self) -> None:
-        self.db.close()
+        self.raw.close()
 
     def meta_get(self, key: str) -> str | None:
         r = self.db.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
@@ -811,17 +814,57 @@ class SQLiteStore:
             ).fetchall()
         return self.db.execute("SELECT * FROM ledger ORDER BY seq").fetchall()
 
+    def count(self, sql: str) -> int:
+        row = self.db.execute(sql).fetchone()
+        return int(row[0]) if row else 0
+
     def stats(self) -> dict[str, int]:
-        q = self.db.execute
         return {
-            "episodes": q("SELECT COUNT(*) FROM episodes").fetchone()[0],
-            "memories_active": q("SELECT COUNT(*) FROM memories WHERE status='active'").fetchone()[
-                0
-            ],
-            "memories_total": q("SELECT COUNT(*) FROM memories").fetchone()[0],
-            "traces": q("SELECT COUNT(*) FROM traces").fetchone()[0],
-            "ledger_entries": q("SELECT COUNT(*) FROM ledger").fetchone()[0],
+            "episodes": self.count("SELECT COUNT(*) FROM episodes"),
+            "memories_active": self.count("SELECT COUNT(*) FROM memories WHERE status='active'"),
+            "memories_total": self.count("SELECT COUNT(*) FROM memories"),
+            "traces": self.count("SELECT COUNT(*) FROM traces"),
+            "ledger_entries": self.count("SELECT COUNT(*) FROM ledger"),
         }
+
+
+class _Result:
+    """Fully materialised cursor result, safe to read after the lock is released."""
+
+    __slots__ = ("_rows", "lastrowid", "rowcount")
+
+    def __init__(self, rows: list[sqlite3.Row], lastrowid: int | None, rowcount: int):
+        self._rows, self.lastrowid, self.rowcount = rows, lastrowid, rowcount
+
+    def fetchone(self) -> sqlite3.Row | None:
+        return self._rows[0] if self._rows else None
+
+    def fetchall(self) -> list[sqlite3.Row]:
+        return self._rows
+
+    def __iter__(self):
+        return iter(self._rows)
+
+
+class _LockedConnection:
+    def __init__(self, conn: sqlite3.Connection, lock: threading.RLock):
+        self._conn, self._lock = conn, lock
+
+    def execute(self, sql: str, params: Iterable[Any] = ()) -> _Result:
+        with self._lock:
+            cur = self._conn.execute(sql, tuple(params))
+            return _Result(cur.fetchall(), cur.lastrowid, cur.rowcount)
+
+    def executescript(self, script: str) -> None:
+        with self._lock:
+            self._conn.executescript(script)
+
+    def iterdump(self):
+        with self._lock:
+            return list(self._conn.iterdump())
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._conn, name)
 
 
 class _Tx:

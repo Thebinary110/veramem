@@ -1,6 +1,7 @@
 """VeraMem: verifiable, outcome-aware, share-safe long-term memory for AI agents."""
 
 from .__about__ import __version__
+from .aio import AsyncMemory
 from .config import Config
 from .memory import Memory
 from .policy import AccessDenied
@@ -21,6 +22,7 @@ from .types import (
 
 __all__ = [
     "__version__",
+    "AsyncMemory",
     "Memory",
     "Config",
     "AccessDenied",

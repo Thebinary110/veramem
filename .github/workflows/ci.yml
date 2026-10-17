@@ -31,6 +31,8 @@ jobs:
         run: |
           uv run --with ruff==0.17.1 ruff check src tests benchmarks
           uv run --with ruff==0.17.1 ruff format --check src tests benchmarks
+      - name: Type check
+        run: uv run --with mypy==2.4.0 --extra mcp mypy src
 
   test:
     needs: lint
