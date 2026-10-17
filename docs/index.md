@@ -16,7 +16,7 @@ veramem ask "where do I live?"
 
 | Gap in today's memory systems | What VeraMem does |
 |---|---|
-| Whether a memory actually helped is never recorded | Outcome-weighted re-ranking: `feedback()` credits the memories an answer cited, utility re-ranks retrieval, and memories that keep misleading are archived. |
+| Whether a memory actually helped is never recorded | Outcome-informed ranking: query-aware utility, plus a gated learned ranker that transfers to unseen tasks ([evidence](OUTCOME_LEARNING.md)). |
 | Facts lose the link to what was said; a tool's claim becomes "the user's preference" | Verified quotes and source-authority labels on every memory, a hash-chained ledger, and an action gate for low-authority memories |
 | Sharing leaks private data | Access is enforced in SQL before ranking, grants are revocable, preferences are never shared, and a PII/canary gate runs before sharing |
 
