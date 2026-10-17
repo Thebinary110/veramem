@@ -15,8 +15,10 @@ Yan et al., ACL 2026, [arXiv:2508.19828](https://arxiv.org/abs/2508.19828)
 | Answer-agent *memory distillation*: select memories, then answer | `answer.Answerer` makes one call that selects ids and answers |
 | Outcome reward (EM via a frozen answer agent) | Online equivalent: `feedback()` credits the cited memories; manager decisions are logged so `export_trajectories()` can attach downstream reward to them |
 
-**Departure:** VeraMem needs no RL training to be useful. It learns online from outcome
-signals and exports GRPO-ready data for anyone who wants to train a manager.
+**Departure:** VeraMem does not train a memory policy. It re-ranks and retains memories
+using outcome signals, and exports GRPO-ready data for anyone who wants to train a
+manager. Its write decisions (add, update, delete) are prompted, not learned, so this is
+*not* equivalent to Memory-R1's learned consolidation policy.
 
 ### AgeMem: Agentic Memory, Unified Long-Term and Short-Term Memory Management
 Yu et al., ACL 2026, [arXiv:2601.01885](https://arxiv.org/abs/2601.01885)

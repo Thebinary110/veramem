@@ -1,7 +1,7 @@
 # VeraMem
 
-**Long-term memory for AI agents that you can verify, that learns from outcomes, and that
-is safe to share.**
+**Long-term memory for AI agents that you can verify, that uses task outcomes to rank
+memories, and that is safe to share.**
 
 - One SQLite file, no servers to run.
 - Works fully offline with Ollama, or with OpenAI / Anthropic.
@@ -33,7 +33,7 @@ gaps. VeraMem fills each one with techniques from recent research:
 
 | | The gap | What VeraMem does |
 |---|---|---|
-| **A** | Memories are kept or dropped by heuristics. Nothing learns whether a memory actually *helped*. | `feedback(trace_id, reward)` credits the memories an answer cited. Utility re-ranks retrieval and archives memories that keep misleading, and successful tasks become reusable experiences. Rated traces export as GRPO training data. *(Memory-R1, AgeMem)* |
+| **A** | Memories are kept or dropped by heuristics. Whether a memory actually *helped* is never recorded. | **Outcome-weighted memory re-ranking:** `feedback(trace_id, reward)` credits the memories an answer cited. Their utility re-ranks retrieval and archives memories that keep misleading. Successful tasks become reusable experiences, and rated traces export as GRPO training data. This re-ranks by *past* usefulness; whether it transfers to new tasks is measured in [docs/OUTCOME_LEARNING.md](docs/OUTCOME_LEARNING.md). *(Memory-R1, AgeMem)* |
 | **B** | Extracted "facts" lose the link to what was said. A tool's claim quietly becomes "the user's preference". | Every memory points to a **verbatim, verified quote** in an immutable, hashed source message. Each carries a **source-authority** label (user / assistant / tool) that consolidation can never raise. Updates are versioned and time-travel queryable. Every write goes into a **hash-chained ledger**. Answers cite or abstain, and `check_action()` blocks low-authority memories from driving payments, bookings or sends. *(Agent Zero Memory, AMA, AuthMem-Bench)* |
 | **C** | Sharing is all-or-nothing. Private data leaks through shared pools, dedup, or other users' preferences. | Access rules are compiled into SQL **before** ranking. Revocable user↔agent and agent↔resource grants apply retroactively. Preferences can never be shared. Experiences are shared through a two-stage pipeline with de-identification plus a **deterministic PII/canary gate**. Erasure is physical. *(ShareMem, Collaborative Memory, AIM)* |
 
@@ -80,7 +80,7 @@ python -m benchmarks.locomo --systems veramem,mem0 --convs all
 | Remember chats, tool results, documents (role sets authority) | `add(messages, user_id=…)` | `veramem add` |
 | Hybrid search (dense + BM25 + entity, routed by granularity) | `search(q, user_id=…)` | `veramem search` |
 | Grounded answers with citations and abstention | `answer(q, user_id=…)` | `veramem ask` |
-| Learn from outcomes | `feedback(trace_id, reward)`, `learn(task, trajectory, reward)` | `veramem feedback` |
+| Outcome-weighted re-ranking | `feedback(trace_id, reward)`, `learn(task, trajectory, reward)` | `veramem feedback` |
 | Evidence and version history | `evidence(id)`, `history(id)`, `search(…, as_of=ts)` | `veramem history` |
 | Authority gate for actions | `check_action([ids])` | |
 | Teams, grants, revocation | `join_team`, `grant_agent`, `revoke_agent`, `grant_resource` | |

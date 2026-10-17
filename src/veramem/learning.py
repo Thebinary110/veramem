@@ -1,4 +1,9 @@
-"""Gap A: outcome-driven consolidation without requiring RL training.
+"""Gap A: outcome-weighted memory ranking and retention (no RL training).
+
+What this is, and is not: VeraMem re-ranks and retains memories according to their
+observed usefulness. It does not learn which memories to *write*, update or delete;
+those decisions are prompted. See docs/OUTCOME_LEARNING.md for what transfers to new
+tasks and what does not.
 
 The papers learn a memory policy with RL (Memory-R1: EM reward through a frozen
 answer agent; AgeMem: task + context + memory rewards with step-wise GRPO). VeraMem
