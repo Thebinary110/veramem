@@ -42,6 +42,10 @@ jobs:
           python -m pip install build==1.6.1 twine==7.0.0
           python -m build
           python -m twine check --strict dist/*
+      - name: SBOM (CycloneDX) of the runtime dependency set
+        run: |
+          python -m venv /tmp/sbom && /tmp/sbom/bin/pip install -q dist/*.whl "cyclonedx-bom==7.5.0"
+          /tmp/sbom/bin/cyclonedx-py environment /tmp/sbom/bin/python --of JSON -o dist/veramem.cdx.json
       - name: SLSA build provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
@@ -66,6 +70,8 @@ jobs:
         with:
           name: dist
           path: dist/
+      - name: Keep only distributions for PyPI
+        run: find dist -type f ! -name '*.whl' ! -name '*.tar.gz' -delete
       - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
 
   github-release:

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Full local benchmark run: guarantees (both systems) then LoCoMo.
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 PY="${PY:-python}"
 mkdir -p benchmarks/runs
 $PY -m benchmarks.guarantees --systems veramem,mem0 --out benchmarks/runs/guarantees.json \

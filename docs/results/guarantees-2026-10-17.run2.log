@@ -1,0 +1,16 @@
+[veramem] G1_isolation: {"leak_rate": 0.0, "queries": 336, "own_recall": 1.0, "search_p50_ms": 4.0, "seconds": 37.2}
+[veramem] G5_knowledge_update: {"current_at_1": 0.75, "stale_ranked_above_current": 0.25, "cases": 8, "seconds": 87.7}
+[veramem] G6_outcome_adaptation: {"top1_round1": 0.0, "top1_final": 1.0, "curve": [0.0, 0.0, 0.5, 0.5, 1.0], "seconds": 1.2}
+Checked 1 package in 27ms
+Failed to load spaCy lemma model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+Checked 1 package in 3ms
+Failed to load spaCy full model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+[38;5;2m✔ Download and installation successful[0m
+You can now load the package via spacy.load('en_core_web_sm')
+[38;5;2m✔ Download and installation successful[0m
+You can now load the package via spacy.load('en_core_web_sm')
+[mem0] G1_isolation: {"leak_rate": 0.0, "queries": 336, "own_recall": 1.0, "search_p50_ms": 40.4, "seconds": 336.7}
+[mem0] G5_knowledge_update: {"current_at_1": 0.5, "stale_ranked_above_current": 0.5, "cases": 8, "seconds": 76.0}
+[mem0] G6_outcome_adaptation: {"top1_round1": 0.0, "top1_final": 0.0, "status": "no feedback API", "seconds": 2.6}
+
+wrote benchmarks/runs/guarantees_rerun.json

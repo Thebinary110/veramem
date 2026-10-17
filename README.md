@@ -18,7 +18,7 @@ veramem serve         # web UI on http://127.0.0.1:8765
 ```python
 from veramem import Memory
 
-mem = Memory()                                    # auto-detects your model provider
+mem = Memory()  # auto-detects your model provider
 mem.add("I moved to Lisbon last week", user_id="priya")
 mem.answer("Where does Priya live?", user_id="priya")
 # Answer(answer='Lisbon', citations=['mem_…'], abstained=False, trace_id='tr_…')
@@ -46,7 +46,26 @@ Measured head-to-head on the same machine, with the same local model (`qwen3.6:3
 thinking off, temperature 0) and the same embedder (`nomic-embed-text`) for every system.
 The full method and raw outputs are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
-<!-- BENCHMARK_TABLE -->
+Head-to-head with **mem0 2.2.1** (its best OSS setup), both on the same local model.
+Raw results: [`docs/results/`](docs/results/).
+
+| What is measured | VeraMem | mem0 |
+|---|---|---|
+| Cross-user leakage over 336 adversarial queries | **0%** | **0%** |
+| Tool, document or assistant claims stored as the user's own (all 7 AuthMem-Bench transitions) | **0.0%** | 2.9% |
+| Those claims still retained, with attribution (Ret⁻) / user statements retained (Ret⁺) | **100% / 94%** | 97% / 89% |
+| Machine-checkable authority to block risky actions | **yes** | no |
+| Current value ranked first after three changes | **75%** | 50% |
+| Wrong top answer fixed by feedback within 5 rounds | **0% → 100%** | no feedback API |
+| Revoking an agent's access hides its memories | **yes** | not supported |
+| Tampering with stored memories detected | **yes** | not supported |
+| User's secret left in plaintext on disk after deleting the user | **no** | **yes** (`history.db`) |
+| Search latency p50 | **4 ms** | 40 ms |
+
+> **Status:** these are the guarantee tests in `benchmarks/guarantees.py`, which follow the
+> protocols of the cited papers on synthetic data. Accuracy on the standard LoCoMo and
+> LongMemEval benchmarks is **being measured** and will be published here, wins or losses
+> included.
 
 Reproduce:
 ```bash

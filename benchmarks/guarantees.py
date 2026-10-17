@@ -544,9 +544,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--systems", default="veramem,mem0")
     ap.add_argument("--offline", action="store_true", help="no model: deterministic subset")
     ap.add_argument("--only", default="", help="comma list like G1,G4")
-    ap.add_argument("--out", default="benchmarks/runs/guarantees.json")
+    ap.add_argument(
+        "--out", default=None, help="default: benchmarks/runs/guarantees[-offline].json"
+    )
     a = ap.parse_args(argv)
     systems = ["veramem"] if a.offline else a.systems.split(",")
+    if a.out is None:
+        a.out = (
+            "benchmarks/runs/guarantees-offline.json"
+            if a.offline
+            else "benchmarks/runs/guarantees.json"
+        )
     only = {x.strip() for x in a.only.split(",") if x.strip()} or None
     stamp = time.strftime("%Y%m%d-%H%M%S")
     results = []

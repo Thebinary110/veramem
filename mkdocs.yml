@@ -1,0 +1,58 @@
+site_name: VeraMem
+site_description: Verifiable, outcome-aware, share-safe long-term memory for AI agents
+site_url: https://thebinary110.github.io/veramem/
+repo_url: https://github.com/Thebinary110/veramem
+repo_name: Thebinary110/veramem
+edit_uri: edit/main/docs/
+copyright: Apache-2.0 · VeraMem contributors
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      toggle: {icon: material/brightness-7, name: Dark mode}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      toggle: {icon: material/brightness-4, name: Light mode}
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            show_root_heading: true
+            members_order: source
+            docstring_style: google
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: {permalink: true}
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.details
+
+nav:
+  - Home: index.md
+  - Guide:
+      - Quickstart: guide/quickstart.md
+      - Concepts: guide/concepts.md
+      - Integrations (MCP, REST, Docker): guide/integrations.md
+      - Configuration: guide/configuration.md
+  - Design:
+      - Architecture: ARCHITECTURE.md
+      - Research foundations: RESEARCH.md
+  - Benchmarks: BENCHMARKS.md
+  - API reference: api.md
+  - Security: security.md

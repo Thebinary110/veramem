@@ -17,3 +17,5 @@ benchmarks/data/
 benchmarks/runs/
 benchmarks/.cache/
 .env
+site/
+docs/security.md

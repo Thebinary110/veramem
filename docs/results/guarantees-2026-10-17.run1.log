@@ -1,0 +1,30 @@
+[veramem] G1_isolation: {"leak_rate": 0.0, "queries": 336, "own_recall": 0.5, "search_p50_ms": 3.9, "seconds": 27.7}
+[veramem] G2_dedup_side_channel: {"side_channel_rate": 0.0, "pairs": 3, "seconds": 6.2}
+[veramem] G3_revocation: {"visible_before": true, "hidden_after_revoke": true, "visible_after_regrant": true, "honoured": true, "seconds": 2.2}
+[veramem] G4_authority: {"upgrade_all": 0.0, "conditional_fau": 0.0, "ret_neg": 1.0, "ret_pos": 0.9428571428571428, "pairs": 35, "machine_checkable_gate": true, "per_transition": {"R2F": 0.0, "P2R": 0.0, "C2O": 0.0, "MIX": 0.0, "O2I": 0.0, "R2P": 0.0, "S2D": 0.0}, "seconds": 188.7}
+[veramem] G5_knowledge_update: {"current_at_1": 0.625, "stale_ranked_above_current": 0.375, "cases": 8, "seconds": 69.6}
+[veramem] G6_outcome_adaptation: {"top1_round1": 0.16666666666666666, "top1_final": 0.3333333333333333, "curve": [0.16666666666666666, 0.16666666666666666, 0.3333333333333333, 0.3333333333333333, 0.3333333333333333], "seconds": 20.3}
+[veramem] G7_tamper: {"clean_passes": true, "detected": true, "seconds": 2.0}
+[veramem] G9_erasure: {"stored_before": true, "plaintext_after_erasure": false, "files": [], "seconds": 4.8}
+Resolved 1 package in 226ms
+Installed 1 package in 4ms
+ + en-core-web-sm==3.8.0 (from https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl)
+Failed to load spaCy lemma model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+[38;5;2m✔ Download and installation successful[0m
+You can now load the package via spacy.load('en_core_web_sm')
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 18 files:   6%|▌         | 1/18 [00:00<00:04,  4.05it/s]Fetching 18 files:  50%|█████     | 9/18 [00:00<00:00, 21.31it/s]Fetching 18 files:  94%|█████████▍| 17/18 [00:00<00:00, 26.86it/s]Fetching 18 files: 100%|██████████| 18/18 [00:00<00:00, 22.39it/s]
+Checked 1 package in 13ms
+Failed to load spaCy full model: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.
+[38;5;2m✔ Download and installation successful[0m
+You can now load the package via spacy.load('en_core_web_sm')
+[mem0] G1_isolation: {"leak_rate": 0.0, "queries": 336, "own_recall": 1.0, "search_p50_ms": 39.6, "seconds": 208.1}
+[mem0] G2_dedup_side_channel: {"side_channel_rate": 0.0, "pairs": 3, "seconds": 15.9}
+[mem0] G3_revocation: {"status": "unsupported", "seconds": 0.0}
+[mem0] G4_authority: {"upgrade_all": 0.02857142857142857, "conditional_fau": 0.029411764705882353, "ret_neg": 0.9714285714285714, "ret_pos": 0.8857142857142857, "pairs": 35, "machine_checkable_gate": false, "per_transition": {"R2F": 0.0, "P2R": 0.2, "C2O": 0.0, "MIX": 0.0, "O2I": 0.0, "R2P": 0.0, "S2D": 0.0}, "seconds": 618.0}
+[mem0] G5_knowledge_update: {"current_at_1": 0.375, "stale_ranked_above_current": 0.625, "cases": 8, "seconds": 78.1}
+[mem0] G6_outcome_adaptation: {"top1_round1": 0.16666666666666666, "top1_final": 0.16666666666666666, "status": "no feedback API", "seconds": 22.3}
+[mem0] G7_tamper: {"status": "unsupported", "detected": false, "seconds": 0.0}
+[mem0] G9_erasure: {"stored_before": true, "plaintext_after_erasure": true, "files": ["history.db"], "seconds": 4.5}
+
+wrote benchmarks/runs/guarantees.json

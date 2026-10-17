@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-17",
+  "llm": "qwen3.6:35b via Ollama (thinking off, temperature 0)",
+  "embedder": "nomic-embed-text",
+  "mem0": "mem0ai==2.2.1 [nlp,extras], embedded Qdrant",
+  "notes": "G1/G5/G6 from the rerun on the final code (benchmarks/runs/guarantees_rerun.log); G2/G3/G4/G7/G9 from the first full run (benchmarks/runs/guarantees.log).",
+  "results": [
+    {
+      "G1_isolation": {
+        "leak_rate": 0.0,
+        "queries": 336,
+        "own_recall": 1.0,
+        "search_p50_ms": 4.0,
+        "seconds": 37.2
+      },
+      "G2_dedup_side_channel": {
+        "side_channel_rate": 0.0,
+        "pairs": 3,
+        "seconds": 6.2
+      },
+      "G3_revocation": {
+        "visible_before": true,
+        "hidden_after_revoke": true,
+        "visible_after_regrant": true,
+        "honoured": true,
+        "seconds": 2.2
+      },
+      "G4_authority": {
+        "upgrade_all": 0.0,
+        "conditional_fau": 0.0,
+        "ret_neg": 1.0,
+        "ret_pos": 0.9428571428571428,
+        "pairs": 35,
+        "machine_checkable_gate": true,
+        "per_transition": {
+          "R2F": 0.0,
+          "P2R": 0.0,
+          "C2O": 0.0,
+          "MIX": 0.0,
+          "O2I": 0.0,
+          "R2P": 0.0,
+          "S2D": 0.0
+        },
+        "seconds": 188.7
+      },
+      "G5_knowledge_update": {
+        "current_at_1": 0.75,
+        "stale_ranked_above_current": 0.25,
+        "cases": 8,
+        "seconds": 87.7
+      },
+      "G6_outcome_adaptation": {
+        "top1_round1": 0.0,
+        "top1_final": 1.0,
+        "curve": [
+          0.0,
+          0.0,
+          0.5,
+          0.5,
+          1.0
+        ],
+        "seconds": 1.2
+      },
+      "G7_tamper": {
+        "clean_passes": true,
+        "detected": true,
+        "seconds": 2.0
+      },
+      "G9_erasure": {
+        "stored_before": true,
+        "plaintext_after_erasure": false,
+        "files": [],
+        "seconds": 4.8
+      },
+      "system": "veramem"
+    },
+    {
+      "G1_isolation": {
+        "leak_rate": 0.0,
+        "queries": 336,
+        "own_recall": 1.0,
+        "search_p50_ms": 40.4,
+        "seconds": 336.7
+      },
+      "G2_dedup_side_channel": {
+        "side_channel_rate": 0.0,
+        "pairs": 3,
+        "seconds": 15.9
+      },
+      "G3_revocation": {
+        "status": "unsupported",
+        "seconds": 0.0
+      },
+      "G4_authority": {
+        "upgrade_all": 0.02857142857142857,
+        "conditional_fau": 0.029411764705882353,
+        "ret_neg": 0.9714285714285714,
+        "ret_pos": 0.8857142857142857,
+        "pairs": 35,
+        "machine_checkable_gate": false,
+        "per_transition": {
+          "R2F": 0.0,
+          "P2R": 0.2,
+          "C2O": 0.0,
+          "MIX": 0.0,
+          "O2I": 0.0,
+          "R2P": 0.0,
+          "S2D": 0.0
+        },
+        "seconds": 618.0
+      },
+      "G5_knowledge_update": {
+        "current_at_1": 0.5,
+        "stale_ranked_above_current": 0.5,
+        "cases": 8,
+        "seconds": 76.0
+      },
+      "G6_outcome_adaptation": {
+        "top1_round1": 0.0,
+        "top1_final": 0.0,
+        "status": "no feedback API",
+        "seconds": 2.6
+      },
+      "G7_tamper": {
+        "status": "unsupported",
+        "detected": false,
+        "seconds": 0.0
+      },
+      "G9_erasure": {
+        "stored_before": true,
+        "plaintext_after_erasure": true,
+        "files": [
+          "history.db"
+        ],
+        "seconds": 4.5
+      },
+      "system": "mem0"
+    }
+  ]
+}
