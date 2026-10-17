@@ -27,7 +27,7 @@ Applied by `scripts/harden-github.sh`, and listed here so they can be audited:
   - PR required: 1 approval, code-owner review, stale reviews dismissed, last-push approval, conversations resolved.
   - Squash merge only.
   - Required checks: lint, test, build, CodeQL, secret scan, dependency audit, contributor gate.
-  - No bypass actors.
+  - Only repository admins may bypass the review requirement, and only when merging a pull request; direct pushes to `main` are always blocked.
 - **Tag ruleset:** only repository admins can create or move `v*` tags, and tags must be signed.
 - **Actions:**
   - The default token is read-only and can't approve PRs.
