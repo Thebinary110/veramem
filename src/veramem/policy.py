@@ -17,8 +17,9 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from typing import Any
 
-from .store.sqlite import SQLiteStore
+from .store.sqlite import SQLiteStore, owner_token
 from .types import Kind, MemoryItem, Visibility, now
 
 
@@ -108,10 +109,13 @@ class Policy:
         """Raw episodes are always private to their owner and obey the same provenance
         rules as memories (agent grants, resource grants)."""
         t = at or now()
+        params: list[Any] = []
         if p.user_id is not None:
-            where, params = f"{alias}.user_id IS ?", [p.user_id]
+            where = f"{alias}.user_id IS ?"
+            params.append(p.user_id)
         else:
-            where, params = f"{alias}.user_id IS NULL AND {alias}.agent_id IS ?", [p.agent_id]
+            where = f"{alias}.user_id IS NULL AND {alias}.agent_id IS ?"
+            params.append(p.agent_id)
         if p.user_id and self.store.has_any_grants("user_agent"):
             agents = sorted(self.store.grant_objects("user_agent", p.user_id, t))
             if agents:
@@ -125,6 +129,16 @@ class Policy:
             where += f" AND {_resources_subset_sql(alias)}"
             params.append(json.dumps(sorted(allowed)))
         return where, params
+
+    def fts_scopes(
+        self, p: Principal, include_shared: bool = True, at: float | None = None
+    ) -> list[str]:
+        """Owner tokens of every scope `p` may read (narrows full-text search)."""
+        own = owner_token(p.user_id, p.agent_id, None, "private")
+        if not include_shared:
+            return [own]
+        teams = [owner_token(None, None, t, "team") for t in sorted(self.teams(p.user_id, at))]
+        return [own, *teams, "pub"]
 
     def can_read(self, p: Principal, m: MemoryItem) -> bool:
         where, params = self.read_filter(p)

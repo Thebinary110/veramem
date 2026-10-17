@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from . import prompts
 from .policy import Principal
@@ -59,7 +59,7 @@ class Answerer:
         res = r.search(question, p, limit=limit, record=False)
         hits = list(res.hits)
         shown: dict[str, Hit] = {}
-        out = {"answer": "I don't know", "selected": [], "sufficient": False}
+        out: dict[str, Any] = {"answer": "I don't know", "selected": [], "sufficient": False}
         for rnd in range(max_rounds + 1):
             ctx, labels = render(hits)
             shown = labels

@@ -95,3 +95,45 @@ def test_same_proposition_distinguishes_values():
     assert not same_proposition("Una is learning Italian.", "Una is learning Japanese.")
     assert not same_proposition("Gym at 6 am", "Gym at 8 pm")
     assert same_proposition("Carol works at Initech", "Carol now works at Initech.")
+
+
+def test_schema_version_recorded_and_newer_db_refused(tmp_path):
+    import pytest
+
+    from veramem.store.sqlite import SCHEMA_VERSION, SQLiteStore
+
+    path = tmp_path / "v.db"
+    s = SQLiteStore(path)
+    assert s.meta_get("schema_version") == str(SCHEMA_VERSION)
+    s.meta_set("schema_version", str(SCHEMA_VERSION + 1))
+    s.close()
+    with pytest.raises(RuntimeError, match="Upgrade"):
+        SQLiteStore(path)
+
+
+def test_v1_database_migrates_and_stays_searchable(tmp_path):
+    from veramem import Memory
+    from veramem.providers import HashEmbedder, NoLLM
+
+    path = str(tmp_path / "old.db")
+    m = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
+    m.add("Omar keeps his passport in the desk drawer", user_id="omar")
+    db = m.store.db
+    # rewind to the v1 layout: FTS tables without the owner column
+    db.execute("DROP TABLE memories_fts")
+    db.execute("DROP TABLE episodes_fts")
+    db.execute(
+        "CREATE VIRTUAL TABLE memories_fts USING fts5(id UNINDEXED, text, tokenize='porter')"
+    )
+    db.execute(
+        "CREATE VIRTUAL TABLE episodes_fts USING fts5(id UNINDEXED, content, tokenize='porter')"
+    )
+    db.execute("INSERT INTO memories_fts SELECT id, text FROM memories")
+    db.execute("INSERT INTO episodes_fts SELECT id, content FROM episodes")
+    db.execute("UPDATE meta SET value='1' WHERE key='schema_version'")
+    m.close()
+    m2 = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
+    assert m2.store.meta_get("schema_version") == "2"
+    hits = m2.search("where is the passport", user_id="omar").hits
+    assert hits and "drawer" in hits[0].memory.text
+    assert not m2.search("passport drawer", user_id="someone-else").hits

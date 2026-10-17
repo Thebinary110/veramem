@@ -160,7 +160,13 @@ class Retriever:
         return where, params
 
     def _rank_memories(
-        self, query: str, qv: np.ndarray, where: str, params: list, pool: int = POOL
+        self,
+        query: str,
+        qv: np.ndarray,
+        where: str,
+        params: list,
+        pool: int = POOL,
+        scopes: list[str] | None = None,
     ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
         signals: dict[str, dict[str, float]] = {}
         ids, mat = self.m.store.memory_vectors(where, params)
@@ -171,7 +177,7 @@ class Retriever:
             dense = [ids[i] for i in order]
             for i in order:
                 signals.setdefault(ids[i], {})["dense"] = round(float(sims[i]), 4)
-        lexical = [r["id"] for r in self.m.store.memory_fts(query, where, params, pool)]
+        lexical = [r["id"] for r in self.m.store.memory_fts(query, where, params, pool, scopes)]
         for r, i in enumerate(lexical):
             signals.setdefault(i, {})["bm25_rank"] = r + 1
         ent = [
@@ -189,10 +195,10 @@ class Retriever:
             # turns whose every derived memory was superseded, retracted or archived are
             # history: they must not resurface an outdated or demoted value
             where += (
-                " AND NOT (e.id IN (SELECT ev.episode_id FROM evidence ev JOIN memories mm"
-                " ON mm.id=ev.memory_id WHERE mm.status!='active')"
-                " AND e.id NOT IN (SELECT ev.episode_id FROM evidence ev JOIN memories mm"
-                " ON mm.id=ev.memory_id WHERE mm.status='active'))"
+                " AND NOT (EXISTS (SELECT 1 FROM evidence ev JOIN memories mm"
+                " ON mm.id=ev.memory_id WHERE ev.episode_id=e.id AND mm.status!='active')"
+                " AND NOT EXISTS (SELECT 1 FROM evidence ev JOIN memories mm"
+                " ON mm.id=ev.memory_id WHERE ev.episode_id=e.id AND mm.status='active'))"
             )
         return where, params
 
@@ -209,7 +215,12 @@ class Retriever:
             dense = [ids[i] for i in order]
             for i in order:
                 signals.setdefault(ids[i], {})["dense"] = round(float(sims[i]), 4)
-        lexical = [r["id"] for r in self.m.store.episode_fts(query, where, params, pool)]
+        lexical = [
+            r["id"]
+            for r in self.m.store.episode_fts(
+                query, where, params, pool, self.m.policy.fts_scopes(p, False)
+            )
+        ]
         for r, i in enumerate(lexical):
             signals.setdefault(i, {})["bm25_rank"] = r + 1
         return _rrf([dense, lexical]), signals
@@ -234,16 +245,19 @@ class Retriever:
         if g in ("fact", "dual", "summary"):
             k = [Kind.SUMMARY] + (kinds or []) if g == "summary" and kinds else kinds
             where, params = self._memory_where(p, k, include_shared, as_of)
-            fused, sig = self._rank_memories(query, qv, where, params)
+            scopes = self.m.policy.fts_scopes(p, include_shared)
+            fused, sig = self._rank_memories(query, qv, where, params, scopes=scopes)
             if g == "summary":  # coarse level first, facts fill the rest
                 where2, params2 = self._memory_where(p, [Kind.SUMMARY], include_shared, as_of)
-                f2, s2 = self._rank_memories(query, qv, where2, params2, pool=10)
+                f2, s2 = self._rank_memories(query, qv, where2, params2, pool=10, scopes=scopes)
                 for i, v in f2.items():
                     fused[i] = fused.get(i, 0) + v * 2
                     sig.setdefault(i, {}).update(s2.get(i, {}))
             top = max(fused.values(), default=1.0)
-            for mid, s in sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 3, 30)]:
-                item = self.m.store.get_memory(mid)
+            ranked = sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 3, 30)]
+            items = self.m.store.get_memories([mid for mid, _ in ranked])
+            for mid, s in ranked:
+                item = items.get(mid)
                 if item is None:
                     continue
                 score = s / top
@@ -268,10 +282,14 @@ class Retriever:
             fused, sig = self._rank_episodes(query, qv, p, live_only=g != "raw")
             top = max(fused.values(), default=1.0)
             weight = RAW_WEIGHT.get(g, 0.6)
-            for eid, s in sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 2, 20)]:
-                if eid in covered and g not in ("raw",):
-                    continue  # the fact built from this turn is already in the results
-                ep = self.m.store.get_episode(eid)
+            ranked_eps = [
+                (eid, s)
+                for eid, s in sorted(fused.items(), key=lambda x: -x[1])[: max(limit * 2, 20)]
+                if not (eid in covered and g != "raw")  # the fact from this turn is already in
+            ]
+            eps = self.m.store.get_episodes([eid for eid, _ in ranked_eps])
+            for eid, s in ranked_eps:
+                ep = eps.get(eid)
                 if ep is None:
                     continue
                 hits.append(

@@ -158,30 +158,32 @@ class Writer:
             return AddResult(episodes=[], changes=[])
 
         vecs = self.m.embedder.embed([e.content for e in episodes])
-        for ep, v in zip(episodes, vecs):
-            self.m.store.put_episode(ep, v)
-            self.m.ledger.append(
-                "EPISODE",
-                ep.id,
-                {
-                    "sha256": ep.sha256,
-                    "source": ep.source.value,
-                    "user": user_id,
-                    "session": session_id,
-                },
-                actor=actor or user_id,
-            )
+        with self.m.store.tx():
+            for ep, v in zip(episodes, vecs):
+                self.m.store.put_episode(ep, v)
+                self.m.ledger.append(
+                    "EPISODE",
+                    ep.id,
+                    {
+                        "sha256": ep.sha256,
+                        "source": ep.source.value,
+                        "user": user_id,
+                        "session": session_id,
+                    },
+                    actor=actor or user_id,
+                )
 
         if episodes_only:
             return AddResult(episodes=[e.id for e in episodes], changes=[])
         scope = dict(user_id=user_id, agent_id=agent_id, team_id=team_id)
         if not infer or not self.m.has_llm:
-            changes = [
-                self._raw_memory(ep, scope, resources)
-                for ep in episodes
-                if ep.source in (SourceType.USER, SourceType.SYSTEM)
-            ]
-            return AddResult(episodes=[e.id for e in episodes], changes=changes)
+            with self.m.store.tx():
+                raw = [
+                    self._raw_memory(ep, v, scope, resources)
+                    for ep, v in zip(episodes, vecs)
+                    if ep.source in (SourceType.USER, SourceType.SYSTEM)
+                ]
+            return AddResult(episodes=[e.id for e in episodes], changes=raw)
 
         changes: list[Change] = []
         rejected: list[dict[str, Any]] = []
@@ -311,43 +313,45 @@ class Writer:
         changes: list[Change] = []
         pending: list[Candidate] = []
         batch: list[tuple[np.ndarray, str]] = []
-        for c, v in zip(cands, vecs):
-            c.vec = v
-            # dedup within this batch
-            if any(float(v @ b) > DUP_COS and same_proposition(c.text, t) for b, t in batch):
-                changes.append(Change(op=Operation.NOOP, text=c.text, reason="duplicate in batch"))
-                continue
-            batch.append((v, c.text))
-            if len(ids):
-                sims = mat @ v
-                order = np.argsort(-sims)[:NEIGHBOURS]
-                c.neighbours = [
-                    (self.m.store.get_memory(ids[i]), float(sims[i]))
-                    for i in order
-                    if sims[i] > 0.3
-                ]
-                c.neighbours = [(n, s) for n, s in c.neighbours if n is not None]
-                # same-entity memories are update candidates even when phrased differently
-                seen = {n.id for n, _ in c.neighbours}
-                if c.entities and len(c.neighbours) < NEIGHBOURS:
-                    id_pos = {mid: i for i, mid in enumerate(ids)}
-                    for row in self.m.store.memories_for_entities(c.entities, where, params):
-                        if row["id"] in seen or row["id"] not in id_pos:
-                            continue
-                        n = self.m.store.get_memory(row["id"])
-                        if n is not None:
-                            c.neighbours.append((n, float(sims[id_pos[row["id"]]])))
-                            seen.add(n.id)
-                        if len(c.neighbours) >= NEIGHBOURS:
-                            break
-            top = c.neighbours[0] if c.neighbours else None
-            if top and top[1] > DUP_COS and same_proposition(top[0].text, c.text):
-                changes.append(self._confirm(top[0], c, actor))
-                continue
-            if not c.neighbours:
-                changes.append(self._add(c, scope, resources, actor))
-                continue
-            pending.append(c)
+        with self.m.store.tx():
+            for c, v in zip(cands, vecs):
+                c.vec = v
+                # dedup within this batch
+                if any(float(v @ b) > DUP_COS and same_proposition(c.text, t) for b, t in batch):
+                    changes.append(
+                        Change(op=Operation.NOOP, text=c.text, reason="duplicate in batch")
+                    )
+                    continue
+                batch.append((v, c.text))
+                if len(ids):
+                    sims = mat @ v
+                    order = np.argsort(-sims)[:NEIGHBOURS]
+                    c.neighbours = [
+                        (n, float(sims[i]))
+                        for i in order
+                        if sims[i] > 0.3 and (n := self.m.store.get_memory(ids[i])) is not None
+                    ]
+                    # same-entity memories are update candidates even when phrased differently
+                    seen = {n.id for n, _ in c.neighbours}
+                    if c.entities and len(c.neighbours) < NEIGHBOURS:
+                        id_pos = {mid: i for i, mid in enumerate(ids)}
+                        for row in self.m.store.memories_for_entities(c.entities, where, params):
+                            if row["id"] in seen or row["id"] not in id_pos:
+                                continue
+                            n = self.m.store.get_memory(row["id"])
+                            if n is not None:
+                                c.neighbours.append((n, float(sims[id_pos[row["id"]]])))
+                                seen.add(n.id)
+                            if len(c.neighbours) >= NEIGHBOURS:
+                                break
+                top = c.neighbours[0] if c.neighbours else None
+                if top and top[1] > DUP_COS and same_proposition(top[0].text, c.text):
+                    changes.append(self._confirm(top[0], c, actor))
+                    continue
+                if not c.neighbours:
+                    changes.append(self._add(c, scope, resources, actor))
+                    continue
+                pending.append(c)
         if pending:
             changes += self._decide(pending, scope, resources, actor)
         return changes
@@ -407,28 +411,31 @@ class Writer:
             except (TypeError, ValueError):
                 continue
         changes: list[Change] = []
-        for i, c in enumerate(cands):
-            op = by_fact.get(i, {"event": "ADD"})
-            event = str(op.get("event", "ADD")).upper()
-            target = existing.get(str(op.get("id"))) if op.get("id") is not None else None
-            text = str(op.get("text") or c.text).strip()
-            if event in ("UPDATE", "DELETE") and target is None:
-                event = "ADD"
-            if event == "UPDATE" and target is not None:
-                changes.append(self._update(target, c, text, scope, resources, actor))
-            elif event == "DELETE" and target is not None:
-                # non-destructive: retract the old memory, keep the new statement as its
-                # successor so "no longer X" stays queryable (Graphiti-style invalidation)
-                ch = self._retract(target, c, actor)
-                changes.append(ch)
-                if ch.op is Operation.DELETE:
-                    changes.append(self._add(c, scope, resources, actor, supersedes=target.id))
-            elif event in ("NONE", "NOOP") and target is not None:
-                changes.append(self._confirm(target, c, actor))
-            elif event in ("NONE", "NOOP"):
-                changes.append(Change(op=Operation.NOOP, text=c.text, reason="judged irrelevant"))
-            else:
-                changes.append(self._add(c, scope, resources, actor))
+        with self.m.store.tx():
+            for i, c in enumerate(cands):
+                op = by_fact.get(i, {"event": "ADD"})
+                event = str(op.get("event", "ADD")).upper()
+                target = existing.get(str(op.get("id"))) if op.get("id") is not None else None
+                text = str(op.get("text") or c.text).strip()
+                if event in ("UPDATE", "DELETE") and target is None:
+                    event = "ADD"
+                if event == "UPDATE" and target is not None:
+                    changes.append(self._update(target, c, text, scope, resources, actor))
+                elif event == "DELETE" and target is not None:
+                    # non-destructive: retract the old memory, keep the new statement as its
+                    # successor so "no longer X" stays queryable (Graphiti-style invalidation)
+                    ch = self._retract(target, c, actor)
+                    changes.append(ch)
+                    if ch.op is Operation.DELETE:
+                        changes.append(self._add(c, scope, resources, actor, supersedes=target.id))
+                elif event in ("NONE", "NOOP") and target is not None:
+                    changes.append(self._confirm(target, c, actor))
+                elif event in ("NONE", "NOOP"):
+                    changes.append(
+                        Change(op=Operation.NOOP, text=c.text, reason="judged irrelevant")
+                    )
+                else:
+                    changes.append(self._add(c, scope, resources, actor))
         # replayable manager state for later RL fine-tuning (Memory-R1 manager records)
         self.m.store.put_trace(
             new_id("tr"),
@@ -496,6 +503,7 @@ class Writer:
         # Authority guard: lower-authority evidence never rewrites a higher-authority memory.
         if c.authority.rank < old.authority.rank:
             ch = self._add(c, scope, resources, actor)
+            assert ch.memory_id is not None
             self.m.store.update_memory(ch.memory_id, metadata={"conflicts_with": [old.id]})
             ch.reason = f"kept separate: {c.authority.value} source cannot update {old.authority.value} memory"
             return ch
@@ -585,7 +593,7 @@ class Writer:
         return Change(op=Operation.NOOP, memory_id=old.id, text=old.text, reason="already known")
 
     def _raw_memory(
-        self, ep: Episode, scope: dict[str, Any], resources: list[str] | None
+        self, ep: Episode, vec: np.ndarray, scope: dict[str, Any], resources: list[str] | None
     ) -> Change:
         c = Candidate(
             text=ep.content,
@@ -596,7 +604,7 @@ class Writer:
             authority=Authority.for_source(ep.source),
             entities=[],
             valid_from=ep.occurred_at,
-            vec=self.m.embedder.embed_one(ep.content),
+            vec=vec,  # same text as the episode: reuse its embedding
         )
         return self._add(c, scope, resources, scope["user_id"])
 

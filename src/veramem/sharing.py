@@ -170,6 +170,7 @@ class Sharer:
                     st.db.execute("DELETE FROM evidence WHERE episode_id=?", (e,))
                     st.db.execute("DELETE FROM episodes_fts WHERE id=?", (e,))
                     st.db.execute("DELETE FROM episodes WHERE id=?", (e,))
+                    st.bump()
                 n_ep = len(eps)
                 contributor = pseudonym(user_id, self.secret)
                 for m in st.memories(
@@ -190,6 +191,7 @@ class Sharer:
 
     def _erase_memory(self, memory_id: str) -> None:
         st = self.m.store
+        st.bump()
         st.db.execute("DELETE FROM evidence WHERE memory_id=?", (memory_id,))
         st.db.execute("DELETE FROM entity_links WHERE memory_id=?", (memory_id,))
         st.db.execute("DELETE FROM memories_fts WHERE id=?", (memory_id,))

@@ -232,8 +232,7 @@ class Learner:
             actor=user_id or agent_id,
             episodes_only=True,
         )
-        episodes = [self.m.store.get_episode(e) for e in res.episodes]
-        episodes = [e for e in episodes if e]
+        episodes = [ep for e in res.episodes if (ep := self.m.store.get_episode(e)) is not None]
         out: dict[str, Any] = {"episodes": res.episodes, "action": "none", "experience": None}
         if not self.m.has_llm or (0 <= reward < ADMIT_REWARD) or (-0.5 < reward < 0):
             out["reason"] = "outcome not decisive enough to learn from"

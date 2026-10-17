@@ -7,10 +7,12 @@ a memory the caller may not read never reaches the scorer.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sqlite3
 import threading
+from collections import OrderedDict
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any
@@ -28,10 +30,45 @@ from ..types import (
     Visibility,
 )
 
+# Bump SCHEMA_VERSION and add an entry to MIGRATIONS for every schema change. SCHEMA
+# always describes the newest layout; MIGRATIONS[n] upgrades a v(n-1) database to vn.
+SCHEMA_VERSION = 2
+MIGRATIONS: dict[int, list[str]] = {
+    # v2: scope tokens inside the full-text indexes, so lexical search only touches the
+    # caller's rows instead of ranking every tenant's documents.
+    2: [
+        "DROP TABLE IF EXISTS memories_fts",
+        "DROP TABLE IF EXISTS episodes_fts",
+        "CREATE VIRTUAL TABLE memories_fts USING fts5(id UNINDEXED, owner, text,"
+        " tokenize='porter')",
+        "CREATE VIRTUAL TABLE episodes_fts USING fts5(id UNINDEXED, owner, content,"
+        " tokenize='porter')",
+        "INSERT INTO memories_fts SELECT id, vm_owner(user_id, agent_id, team_id, visibility),"
+        " text FROM memories",
+        "INSERT INTO episodes_fts SELECT id, vm_owner(user_id, agent_id, NULL, 'private'),"
+        " content FROM episodes",
+    ],
+}
+
+
+def owner_token(
+    user_id: str | None, agent_id: str | None, team_id: str | None, visibility: str | None
+) -> str:
+    """Opaque FTS token naming the scope a row lives in (never a raw id)."""
+    if visibility == "public":
+        return "pub"
+    if visibility == "team":
+        return "t" + hashlib.sha256(f"team:{team_id}".encode()).hexdigest()[:20]
+    if user_id is not None:
+        return "o" + hashlib.sha256(f"user:{user_id}".encode()).hexdigest()[:20]
+    return "a" + hashlib.sha256(f"agent:{agent_id}".encode()).hexdigest()[:20]
+
+
 SCHEMA = """
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
 PRAGMA secure_delete=ON;
+PRAGMA synchronous=NORMAL;
 
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 
@@ -96,8 +133,10 @@ CREATE TABLE IF NOT EXISTS entity_links (
   PRIMARY KEY (entity, memory_id)
 );
 
-CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(id UNINDEXED, text, tokenize='porter');
-CREATE VIRTUAL TABLE IF NOT EXISTS episodes_fts USING fts5(id UNINDEXED, content, tokenize='porter');
+CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
+  id UNINDEXED, owner, text, tokenize='porter');
+CREATE VIRTUAL TABLE IF NOT EXISTS episodes_fts USING fts5(
+  id UNINDEXED, owner, content, tokenize='porter');
 
 CREATE TABLE IF NOT EXISTS traces (
   id TEXT PRIMARY KEY,
@@ -162,14 +201,28 @@ _MEMORY_COLUMNS = {
     "embedding",
 }
 
+Vector = Sequence[float] | np.ndarray
+VECTOR_CACHE_ENTRIES = 32
+
 _FTS_TOKEN = re.compile(r"[A-Za-z0-9_]+")
 
 
-def fts_query(text: str) -> str:
-    """Turn free text into a safe FTS5 OR-query (no operator injection)."""
+def fts_query(text: str, scopes: list[str] | None = None, column: str = "text") -> str:
+    """Turn free text into a safe FTS5 query (no operator injection).
+
+    `scopes` restricts matches to rows whose owner token is one of the caller's scopes,
+    so the index never ranks other tenants' rows. The SQL access predicate is still
+    applied afterwards; this is an optimisation, not the security boundary.
+    """
     toks = [t.lower() for t in _FTS_TOKEN.findall(text) if len(t) > 1]
     toks = [t for t in toks if t not in _STOP][:32]
-    return " OR ".join(f'"{t}"' for t in dict.fromkeys(toks))
+    terms = " OR ".join(f'"{t}"' for t in dict.fromkeys(toks))
+    if not terms:
+        return ""
+    if not scopes:
+        return terms
+    owners = " OR ".join(f'"{s}"' for s in scopes)
+    return f"owner : ({owners}) AND {column} : ({terms})"
 
 
 _STOP = set(
@@ -256,7 +309,7 @@ def _vec(blob: bytes | None) -> np.ndarray | None:
     return None if blob is None else np.frombuffer(blob, dtype=np.float32)
 
 
-def _blob(v: Sequence[float] | np.ndarray | None) -> bytes | None:
+def _blob(v: Vector | None) -> bytes | None:
     if v is None:
         return None
     a = np.asarray(v, dtype=np.float32)
@@ -271,9 +324,51 @@ class SQLiteStore:
             Path(self.path).expanduser().parent.mkdir(parents=True, exist_ok=True)
             self.path = str(Path(self.path).expanduser())
         self._lock = threading.RLock()
+        self._tx_depth = 0
+        # bumped on every write that can change which vectors a query sees
+        self.generation = 0
+        self._vec_cache: OrderedDict[tuple[Any, ...], tuple[int, list[str], np.ndarray]] = (
+            OrderedDict()
+        )
         self.db = sqlite3.connect(self.path, check_same_thread=False, isolation_level=None)
         self.db.row_factory = sqlite3.Row
+        self.db.create_function("vm_owner", 4, owner_token, deterministic=True)
+        existing = self.db.execute("SELECT 1 FROM sqlite_master WHERE name='meta'").fetchone()
+        if (
+            existing
+            and not self.db.execute("SELECT 1 FROM meta WHERE key='schema_version'").fetchone()
+        ):
+            # pre-versioning database (v1)
+            self.db.execute("INSERT INTO meta VALUES ('schema_version', '1')")
         self.db.executescript(SCHEMA)
+        self._migrate()
+
+    # -------------------------------------------------------------- migrations
+    def _migrate(self) -> None:
+        """Bring an existing database up to SCHEMA_VERSION, one step at a time.
+
+        Each step in MIGRATIONS runs in its own transaction. A database created by a
+        newer VeraMem is refused rather than risk silently corrupting it.
+        """
+        row = self.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        current = int(row[0]) if row else SCHEMA_VERSION
+        if current > SCHEMA_VERSION:
+            raise RuntimeError(
+                f"database {self.path} uses schema v{current}, but this VeraMem supports up to "
+                f"v{SCHEMA_VERSION}. Upgrade with: pip install -U veramem"
+            )
+        while current < SCHEMA_VERSION:
+            with self.tx():
+                for stmt in MIGRATIONS[current + 1]:
+                    self.db.execute(stmt)
+                current += 1
+                self.db.execute(
+                    "INSERT OR REPLACE INTO meta VALUES ('schema_version', ?)", (str(current),)
+                )
+        if row is None:
+            self.db.execute(
+                "INSERT OR REPLACE INTO meta VALUES ('schema_version', ?)", (str(SCHEMA_VERSION),)
+            )
 
     # ------------------------------------------------------------------ utils
     def tx(self):
@@ -301,7 +396,8 @@ class SQLiteStore:
             self.db.execute("INSERT OR REPLACE INTO meta VALUES (?,?)", (key, value))
 
     # --------------------------------------------------------------- episodes
-    def put_episode(self, ep: Episode, embedding: Sequence[float] | None = None) -> None:
+    def put_episode(self, ep: Episode, embedding: Vector | None = None) -> None:
+        self.generation += 1
         with self._lock:
             self.db.execute(
                 "INSERT OR IGNORE INTO episodes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -320,7 +416,10 @@ class SQLiteStore:
                     _blob(embedding),
                 ),
             )
-            self.db.execute("INSERT INTO episodes_fts VALUES (?,?)", (ep.id, ep.content))
+            self.db.execute(
+                "INSERT INTO episodes_fts VALUES (?,?,?)",
+                (ep.id, owner_token(ep.user_id, ep.agent_id, None, "private"), ep.content),
+            )
 
     def get_episode(self, episode_id: str) -> Episode | None:
         r = self.db.execute("SELECT * FROM episodes WHERE id=?", (episode_id,)).fetchone()
@@ -349,24 +448,32 @@ class SQLiteStore:
         )
 
     def episode_vectors(self, where: str, params: Iterable[Any]) -> tuple[list[str], np.ndarray]:
-        rows = self.db.execute(
+        return self._cached_vectors(
+            "e",
             f"SELECT e.id, e.embedding FROM episodes e WHERE e.embedding IS NOT NULL AND {where}",
             tuple(params),
-        ).fetchall()
-        return _stack(rows)
+        )
 
-    def episode_fts(self, query: str, ids_where: str, params: Iterable[Any], limit: int):
-        q = fts_query(query)
+    def episode_fts(
+        self,
+        query: str,
+        ids_where: str,
+        params: Iterable[Any],
+        limit: int,
+        scopes: list[str] | None = None,
+    ):
+        q = fts_query(query, scopes, "content")
         if not q:
             return []
         return self.db.execute(
-            f"SELECT f.id, bm25(episodes_fts) AS s FROM episodes_fts f JOIN episodes e "
+            f"SELECT f.id, bm25(episodes_fts, 0, 0, 1) AS s FROM episodes_fts f JOIN episodes e "
             f"ON e.id=f.id WHERE episodes_fts MATCH ? AND {ids_where} ORDER BY s LIMIT ?",
             (q, *params, limit),
         ).fetchall()
 
     # --------------------------------------------------------------- memories
-    def put_memory(self, m: MemoryItem, embedding: Sequence[float] | None = None) -> None:
+    def put_memory(self, m: MemoryItem, embedding: Vector | None = None) -> None:
+        self.generation += 1
         with self._lock:
             self.db.execute(
                 "INSERT INTO memories VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -397,7 +504,10 @@ class SQLiteStore:
                     _blob(embedding),
                 ),
             )
-            self.db.execute("INSERT INTO memories_fts VALUES (?,?)", (m.id, m.text))
+            self.db.execute(
+                "INSERT INTO memories_fts VALUES (?,?,?)",
+                (m.id, owner_token(m.user_id, m.agent_id, m.team_id, m.visibility.value), m.text),
+            )
             for ev in m.evidence:
                 self.db.execute(
                     "INSERT INTO evidence VALUES (?,?,?,?,?,?)",
@@ -426,15 +536,23 @@ class SQLiteStore:
                 v = int(v)
             cols.append(f"{k}=?")
             vals.append(v)
+        self.generation += 1
         with self._lock:
             self.db.execute(f"UPDATE memories SET {', '.join(cols)} WHERE id=?", (*vals, memory_id))
-            if "text" in fields:
+            if fields.keys() & {"text", "user_id", "agent_id", "team_id", "visibility"}:
+                r = self.db.execute(
+                    "SELECT text, user_id, agent_id, team_id, visibility FROM memories WHERE id=?",
+                    (memory_id,),
+                ).fetchone()
                 self.db.execute("DELETE FROM memories_fts WHERE id=?", (memory_id,))
-                self.db.execute(
-                    "INSERT INTO memories_fts VALUES (?,?)", (memory_id, fields["text"])
-                )
+                if r is not None:
+                    self.db.execute(
+                        "INSERT INTO memories_fts VALUES (?,?,?)",
+                        (memory_id, owner_token(r[1], r[2], r[3], r[4]), r[0]),
+                    )
 
     def add_evidence(self, memory_id: str, evs: list[Evidence]) -> None:
+        self.generation += 1
         with self._lock:
             for ev in evs:
                 self.db.execute(
@@ -464,19 +582,69 @@ class SQLiteStore:
         r = self.db.execute("SELECT embedding FROM memories WHERE id=?", (memory_id,)).fetchone()
         return _vec(r[0]) if r else None
 
+    def bump(self) -> None:
+        self.generation += 1
+
+    def _cached_vectors(self, kind: str, sql: str, params: tuple[Any, ...]):
+        key = (kind, sql, params)
+        hit = self._vec_cache.get(key)
+        if hit is not None and hit[0] == self.generation:
+            self._vec_cache.move_to_end(key)
+            return hit[1], hit[2]
+        ids, mat = _stack(self.db.execute(sql, params).fetchall())
+        self._vec_cache[key] = (self.generation, ids, mat)
+        while len(self._vec_cache) > VECTOR_CACHE_ENTRIES:
+            self._vec_cache.popitem(last=False)
+        return ids, mat
+
     def memory_vectors(self, where: str, params: Iterable[Any]) -> tuple[list[str], np.ndarray]:
-        rows = self.db.execute(
+        return self._cached_vectors(
+            "m",
             f"SELECT m.id, m.embedding FROM memories m WHERE m.embedding IS NOT NULL AND {where}",
             tuple(params),
-        ).fetchall()
-        return _stack(rows)
+        )
 
-    def memory_fts(self, query: str, where: str, params: Iterable[Any], limit: int):
-        q = fts_query(query)
+    def get_memories(self, ids: list[str]) -> dict[str, MemoryItem]:
+        """Batch fetch (2 queries instead of 2 per id)."""
+        if not ids:
+            return {}
+        out: dict[str, MemoryItem] = {}
+        evs: dict[str, list[Evidence]] = {}
+        for chunk in _chunks(ids, 500):
+            marks = ",".join("?" * len(chunk))
+            for r in self.db.execute(
+                f"SELECT * FROM evidence WHERE memory_id IN ({marks})", chunk
+            ).fetchall():
+                evs.setdefault(r["memory_id"], []).append(_row_evidence(r))
+            for r in self.db.execute(
+                f"SELECT * FROM memories WHERE id IN ({marks})", chunk
+            ).fetchall():
+                out[r["id"]] = self._row_memory(r, evs.get(r["id"], []))
+        return out
+
+    def get_episodes(self, ids: list[str]) -> dict[str, Episode]:
+        out: dict[str, Episode] = {}
+        for chunk in _chunks(ids, 500):
+            marks = ",".join("?" * len(chunk))
+            for r in self.db.execute(
+                f"SELECT * FROM episodes WHERE id IN ({marks})", chunk
+            ).fetchall():
+                out[r["id"]] = self._row_episode(r)
+        return out
+
+    def memory_fts(
+        self,
+        query: str,
+        where: str,
+        params: Iterable[Any],
+        limit: int,
+        scopes: list[str] | None = None,
+    ):
+        q = fts_query(query, scopes, "text")
         if not q:
             return []
         return self.db.execute(
-            f"SELECT f.id, bm25(memories_fts) AS s FROM memories_fts f JOIN memories m "
+            f"SELECT f.id, bm25(memories_fts, 0, 0, 1) AS s FROM memories_fts f JOIN memories m "
             f"ON m.id=f.id WHERE memories_fts MATCH ? AND {where} ORDER BY s LIMIT ?",
             (q, *params, limit),
         ).fetchall()
@@ -486,7 +654,7 @@ class SQLiteStore:
             return []
         marks = ",".join("?" * len(entities))
         return self.db.execute(
-            f"SELECT l.memory_id AS id, COUNT(*) AS n FROM entity_links l JOIN memories m "
+            f"SELECT l.memory_id AS id, COUNT(*) AS n FROM entity_links l CROSS JOIN memories m "
             f"ON m.id=l.memory_id WHERE l.entity IN ({marks}) AND {where} "
             f"GROUP BY l.memory_id ORDER BY n DESC LIMIT 200",
             (*[e.lower() for e in entities], *params),
@@ -494,18 +662,9 @@ class SQLiteStore:
 
     def evidence_for(self, memory_id: str) -> list[Evidence]:
         rows = self.db.execute("SELECT * FROM evidence WHERE memory_id=?", (memory_id,)).fetchall()
-        return [
-            Evidence(
-                episode_id=r["episode_id"],
-                quote=r["quote"],
-                start=r["start"],
-                end=r["end"],
-                source=SourceType(r["source"]),
-            )
-            for r in rows
-        ]
+        return [_row_evidence(r) for r in rows]
 
-    def _row_memory(self, r: sqlite3.Row) -> MemoryItem:
+    def _row_memory(self, r: sqlite3.Row, evidence: list[Evidence] | None = None) -> MemoryItem:
         return MemoryItem(
             id=r["id"],
             text=r["text"],
@@ -530,7 +689,7 @@ class SQLiteStore:
             shareable=bool(r["shareable"]),
             entities=json.loads(r["entities"]),
             metadata=json.loads(r["metadata"]),
-            evidence=self.evidence_for(r["id"]),
+            evidence=evidence if evidence is not None else self.evidence_for(r["id"]),
         )
 
     # ----------------------------------------------------------------- traces
@@ -666,19 +825,40 @@ class SQLiteStore:
 
 
 class _Tx:
+    """Re-entrant transaction: only the outermost block issues BEGIN / COMMIT."""
+
     def __init__(self, store: SQLiteStore):
         self.s = store
 
     def __enter__(self):
         self.s._lock.acquire()
-        self.s.db.execute("BEGIN")
+        if self.s._tx_depth == 0:
+            self.s.db.execute("BEGIN")
+        self.s._tx_depth += 1
         return self.s
 
     def __exit__(self, et, ev, tb):
         try:
-            self.s.db.execute("ROLLBACK" if et else "COMMIT")
+            self.s._tx_depth -= 1
+            if self.s._tx_depth == 0:
+                self.s.db.execute("ROLLBACK" if et else "COMMIT")
         finally:
             self.s._lock.release()
+
+
+def _chunks(items: list[str], n: int):
+    for i in range(0, len(items), n):
+        yield items[i : i + n]
+
+
+def _row_evidence(r: sqlite3.Row) -> Evidence:
+    return Evidence(
+        episode_id=r["episode_id"],
+        quote=r["quote"],
+        start=r["start"],
+        end=r["end"],
+        source=SourceType(r["source"]),
+    )
 
 
 def _stack(rows: list[sqlite3.Row]) -> tuple[list[str], np.ndarray]:

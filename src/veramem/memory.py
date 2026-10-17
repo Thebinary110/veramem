@@ -62,8 +62,10 @@ class Memory:
         self.config = config or Config.load(**config_overrides, db_path=path)
         choice = resolve(self.config)
         cache = ResponseCache(self.config.cache_path) if self.config.cache_path else None
-        self.llm = llm or _make_llm(*choice["llm"], cache=cache)
-        self.embedder = embedder or _make_embedder(*choice["embed"], cache=cache)
+        lp, lm, lu = choice["llm"]
+        ep, em, eu = choice["embed"]
+        self.llm = llm or _make_llm(lp, lm, lu, cache=cache)
+        self.embedder = embedder or _make_embedder(ep, em, eu, cache=cache)
         self.store = SQLiteStore(self.config.db_path)
         self._check_embedder()
         self.ledger = Ledger(self.store)
@@ -119,6 +121,7 @@ class Memory:
                     self.store.db.execute(
                         "UPDATE episodes SET embedding=? WHERE id=?", (_blob(v), r[0])
                     )
+                    self.store.bump()
             n += len(chunk)
         self.store.meta_set("embedder", f"{self.embedder.name}:{self.embedder.model}")
         return n
@@ -244,8 +247,10 @@ class Memory:
     ) -> list[dict[str, Any]]:
         """Resolve a memory's evidence pointers back to the raw episodes."""
         m = self.get(memory_id, user_id=user_id, agent_id=agent_id)
+        if m is None:
+            return []
         out = []
-        for ev in m.evidence if m else []:
+        for ev in m.evidence:
             ep = self.store.get_episode(ev.episode_id)
             out.append(
                 {
@@ -332,7 +337,9 @@ class Memory:
         )
         scope = {"user_id": old.user_id, "agent_id": old.agent_id, "team_id": old.team_id}
         ch = self.writer._update(old, cand, text, scope, None, p.user_id or p.agent_id)
-        return self.store.get_memory(ch.memory_id)  # type: ignore[return-value]
+        new = self.store.get_memory(ch.memory_id or "")
+        assert new is not None
+        return new
 
     def delete(
         self, memory_id: str, *, user_id: str | None = None, agent_id: str | None = None
