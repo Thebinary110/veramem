@@ -64,14 +64,16 @@ def test_ranker_trains_and_is_used(tmp_path):
     m2 = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="ranker")
     assert m2.ranker is not None  # persisted
     hits = m2.search("gate code for block C", user_id="u", include_raw=False).hits
-    assert all(0.0 <= h.score <= 1.0 for h in hits)
+    assert {"cv_gain_per_example", "cv_gain_lower_95", "active"} <= set(rep)
+    if rep["active"]:  # deployed: scores are the model's probabilities
+        assert all(0.0 <= h.score <= 1.0 for h in hits)
 
 
 def test_logistic_ranker_recovers_signal():
     rng = np.random.default_rng(0)
     x = rng.normal(size=(400, len(FEATURES)))
     y = (x[:, 1] - 0.5 * x[:, 4] + rng.normal(scale=0.3, size=400) > 0).astype(float)
-    model = LogisticRanker.fit(x, y, l2=0.1)
+    model = LogisticRanker.fit(x, y, l2=0.1, residual=False)
     top = list(model.explain())[:2]
     assert set(top) == {FEATURES[1], FEATURES[4]}
     assert ((model.predict(x) > 0.5) == (y > 0.5)).mean() > 0.9
@@ -85,3 +87,21 @@ def test_forget_erases_outcome_rows(tmp_path):
     assert m.store.count("SELECT COUNT(*) FROM outcomes") == 1
     m.forget(user_id="zed", everything=True)
     assert m.store.count("SELECT COUNT(*) FROM outcomes") == 0
+
+
+def test_ranker_trained_on_uninformative_feedback_is_not_deployed(tmp_path):
+    """Shuffled/random rewards must leave the baseline ranking in charge."""
+    m = _mem(tmp_path, exploration="thompson", seed=5)
+    m.add([f"note {i} about the project timeline and budget" for i in range(12)], user_id="u")
+    rng = np.random.default_rng(0)
+    for _ in range(60):
+        r = m.search("project timeline", user_id="u", include_raw=False, limit=5)
+        m.feedback(r.trace_id, float(rng.choice([1.0, -1.0])), cited=[r.hits[0].memory.id])
+    rep = m.train_ranker(min_examples=10)
+    assert rep["trained"] and not rep["active"], rep
+    ref = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="global")
+    gated = Memory(str(tmp_path / "r.db"), llm=NoLLM(), embedder=HashEmbedder(), ranking="ranker")
+    q = "project timeline budget"
+    assert [h.memory.id for h in gated.search(q, user_id="u", record=False).hits] == [
+        h.memory.id for h in ref.search(q, user_id="u", record=False).hits
+    ]

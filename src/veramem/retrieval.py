@@ -296,7 +296,11 @@ class Retriever:
                     continue
                 em = episode_as_memory(ep)
                 score = weight * s / top
-                if self.m.ranking == "ranker" and self.m.ranker is not None:
+                if (
+                    self.m.ranking == "ranker"
+                    and self.m.ranker is not None
+                    and self.m.ranker.active
+                ):
                     fv = rk.features(
                         em, sig[eid], s / top, rk.Posterior(), rk.Posterior(), t0, True
                     )
@@ -365,8 +369,10 @@ class Retriever:
         c_post = rk.contextual_posterior(qv, ctx_rows)
         fv = rk.features(item, signals, rrf_norm, g_post, c_post, now_ts)
         mode = self.m.ranking
-        if mode == "ranker" and self.m.ranker is not None:
+        if mode == "ranker" and self.m.ranker is not None and self.m.ranker.active:
             return float(self.m.ranker.predict(np.asarray([fv]))[0]), fv
+        if mode == "ranker":
+            mode = "global"  # no (deployable) ranker yet: fall back to the baseline
         post = c_post if mode == "contextual" else g_post
         if mode == "none" or (post.mass <= 0 and self.m.exploration == "none"):
             return rrf_norm, fv

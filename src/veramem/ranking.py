@@ -50,6 +50,8 @@ FEATURES = [
     "ctx_mass",
     "is_raw",
 ]
+# relevance signals: their learned effect is constrained to be non-negative
+MONOTONE = ("rrf", "dense", "bm25_rr", "entity")
 
 
 @dataclass
@@ -83,12 +85,20 @@ def contextual_posterior(qv: np.ndarray, rows: list[tuple[np.ndarray, float, flo
     return Posterior(1.0 + float(w @ pos), 1.0 + float(w @ neg), float(w @ (pos + neg)))
 
 
+EXPLORE_SCALE = 0.5  # fraction of posterior uncertainty used for exploration
+
+
 def explore(post: Posterior, mode: str, rng: np.random.Generator, ucb_c: float = 1.0) -> float:
-    """Utility estimate used for ranking under an exploration strategy."""
+    """Utility estimate used for ranking under an exploration strategy.
+
+    Exploration is damped (EXPLORE_SCALE): sampling the full Beta(1,1) prior for every
+    unrated memory scrambles rankings so badly that the agent mostly fails, and the
+    feedback it collects is then uninformative.
+    """
     if mode == "thompson":
-        return float(rng.beta(post.alpha, post.beta))
+        return post.mean + EXPLORE_SCALE * (float(rng.beta(post.alpha, post.beta)) - post.mean)
     if mode == "ucb":
-        return min(1.0, post.mean + ucb_c * math.sqrt(post.var))
+        return min(1.0, post.mean + EXPLORE_SCALE * ucb_c * math.sqrt(post.var))
     return post.mean
 
 
@@ -137,6 +147,15 @@ class LogisticRanker:
     feature_names: list[str] = field(default_factory=lambda: list(FEATURES))
     trained_on: int = 0
     metrics: dict[str, Any] = field(default_factory=dict)
+    # residual model: logit = log(retrieval relevance) + learned terms, so a ranker that
+    # learned nothing (e.g. from uninformative feedback) reproduces retrieval order
+    residual: bool = True
+    # set by train_ranker's validation gate; an inactive model is stored but not used
+    active: bool = True
+
+    @staticmethod
+    def offset(x: np.ndarray) -> np.ndarray:
+        return np.log(np.clip(x[:, FEATURES.index("rrf")], 1e-3, None))
 
     @classmethod
     def fit(
@@ -145,10 +164,20 @@ class LogisticRanker:
         y: np.ndarray,
         w: np.ndarray | None = None,
         l2: float = 1.0,
-        iters: int = 50,
+        iters: int = 60,
+        residual: bool = True,
+        monotone: bool = True,
+        null: bool = False,
     ) -> LogisticRanker:
+        """Newton / IRLS with an active set for the monotonicity constraints.
+
+        monotone: relevance features (MONOTONE) may only raise the predicted helpfulness,
+        so a model fit to uninformative feedback cannot invert retrieval order.
+        null: fit only the intercept (with the residual offset): the relevance-only model.
+        """
         n, d = x.shape
         w = np.ones(n) if w is None else w
+        off = cls.offset(x) if residual else np.zeros(n)
         mu = x.mean(axis=0)
         sd = x.std(axis=0)
         sd[sd < 1e-9] = 1.0
@@ -156,13 +185,25 @@ class LogisticRanker:
         theta = np.zeros(d + 1)
         reg = np.full(d + 1, l2)
         reg[-1] = 0.0  # do not shrink the bias
-        for _ in range(iters):  # Newton / IRLS: converges in a handful of steps
-            p = 1.0 / (1.0 + np.exp(-np.clip(z @ theta, -30, 30)))
+        mono = np.zeros(d + 1, bool)
+        if monotone:
+            for name in MONOTONE:
+                mono[FEATURES.index(name)] = True
+        frozen = np.zeros(d + 1, bool)
+        if null:
+            frozen[:-1] = True
+        for _ in range(iters):
+            p = 1.0 / (1.0 + np.exp(-np.clip(z @ theta + off, -30, 30)))
             grad = z.T @ (w * (p - y)) + reg * theta
             hess = (z.T * (w * p * (1 - p))) @ z + np.diag(reg) + 1e-9 * np.eye(d + 1)
-            step = np.linalg.solve(hess, grad)
+            # a constrained coefficient at its bound that wants to go negative stays fixed
+            fix = frozen | (mono & (theta <= 0) & (grad > 0))
+            free = ~fix
+            step = np.zeros(d + 1)
+            step[free] = np.linalg.solve(hess[np.ix_(free, free)], grad[free])
             theta -= step
-            if float(np.max(np.abs(step))) < 1e-6:
+            theta[mono & (theta < 0)] = 0.0
+            if float(np.max(np.abs(step))) < 1e-7:
                 break
         return cls(
             weights=theta[:-1].tolist(),
@@ -170,11 +211,15 @@ class LogisticRanker:
             mean=mu.tolist(),
             scale=sd.tolist(),
             trained_on=int(n),
+            residual=residual,
         )
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         z = (x - np.asarray(self.mean)) / np.asarray(self.scale)
-        return 1.0 / (1.0 + np.exp(-np.clip(z @ np.asarray(self.weights) + self.bias, -30, 30)))
+        logit = z @ np.asarray(self.weights) + self.bias
+        if self.residual:
+            logit = logit + self.offset(x)
+        return 1.0 / (1.0 + np.exp(-np.clip(logit, -30, 30)))
 
     def to_json(self) -> str:
         return json.dumps(self.__dict__)
@@ -186,3 +231,41 @@ class LogisticRanker:
     def explain(self) -> dict[str, float]:
         """Standardised coefficient per feature (sign = direction of effect)."""
         return dict(sorted(zip(self.feature_names, self.weights), key=lambda kv: -abs(kv[1])))
+
+
+def log_loss(p: np.ndarray, y: np.ndarray) -> np.ndarray:
+    p = np.clip(p, 1e-6, 1 - 1e-6)
+    return -(y * np.log(p) + (1 - y) * np.log(1 - p))
+
+
+def cross_validate(
+    x: np.ndarray,
+    y: np.ndarray,
+    groups: list[str],
+    l2_grid: tuple[float, ...] = (1.0, 10.0, 100.0, 1000.0),
+    folds: int = 5,
+    seed: int = 0,
+) -> dict[str, Any]:
+    """Grouped K-fold CV (a trace never spans folds). Returns the best L2 and the
+    out-of-fold per-example log-loss of that model and of the relevance-only null model."""
+    rng = np.random.default_rng(seed)
+    uniq = sorted(set(groups))
+    fold_of = {g: int(f) for g, f in zip(uniq, rng.permutation(len(uniq)) % folds)}
+    fid = np.array([fold_of[g] for g in groups])
+    oof = {l2: np.zeros(len(y)) for l2 in l2_grid}
+    null = np.zeros(len(y))
+    for f in range(folds):
+        tr, te = fid != f, fid == f
+        if not te.any() or len(set(y[tr].tolist())) < 2:
+            continue
+        null[te] = LogisticRanker.fit(x[tr], y[tr], null=True).predict(x[te])
+        for l2 in l2_grid:
+            oof[l2][te] = LogisticRanker.fit(x[tr], y[tr], l2=l2).predict(x[te])
+    losses = {l2: float(log_loss(p, y).mean()) for l2, p in oof.items()}
+    best = min(losses, key=lambda k: losses[k])
+    return {
+        "best_l2": best,
+        "cv_logloss": losses,
+        "model_loss": log_loss(oof[best], y),
+        "null_loss": log_loss(null, y),
+    }

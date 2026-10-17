@@ -49,7 +49,8 @@ if TYPE_CHECKING:
 
 ARCHIVE_UTILITY = 0.3
 ARCHIVE_MIN_USES = 3
-ADMIT_REWARD = 0.8  # ShareMem: only well-rewarded trajectories become experiences
+ADMIT_REWARD = 0.8
+GATE_MARGIN = 0.01  # ranker must beat retrieval-relevance AUC by this much to deploy  # ShareMem: only well-rewarded trajectories become experiences
 DUP_COS = 0.95
 
 
@@ -425,16 +426,31 @@ class Learner:
                 "examples": int(len(y)),
                 "reason": f"need >= {min_examples} examples with both outcomes",
             }
-        # validation split by trace, so one trace's examples never sit on both sides
-        rng = np.random.default_rng(0)
+        # Grouped cross-validation picks the regularisation; the model is deployed only if
+        # its out-of-fold log-loss beats the relevance-only model with 95% confidence
+        # (bootstrap over traces). Uninformative feedback therefore cannot take over ranking.
+        cv = ranking.cross_validate(x, y, tids)
+        gain = cv["null_loss"] - cv["model_loss"]  # > 0 means the model predicts better
         uniq = sorted(set(tids))
-        val = set(rng.choice(uniq, size=max(1, len(uniq) // 5), replace=False).tolist())
-        is_val = np.array([t in val for t in tids])
-        model = ranking.LogisticRanker.fit(x[~is_val], y[~is_val], l2=l2)
-        auc = _auc(model.predict(x[is_val]), y[is_val]) if is_val.any() else None
-        model = ranking.LogisticRanker.fit(x, y, l2=l2)  # final model on everything
+        idx = {t: i for i, t in enumerate(uniq)}
+        per_trace = np.zeros(len(uniq))
+        np.add.at(per_trace, [idx[t] for t in tids], gain)
+        rng = np.random.default_rng(0)
+        boots = per_trace[rng.integers(0, len(uniq), size=(2000, len(uniq)))].sum(axis=1)
+        lower = float(np.percentile(boots, 5)) / len(y)
+        active = bool(lower > 0)
+        model = ranking.LogisticRanker.fit(x, y, l2=cv["best_l2"])  # final model on all data
+        model.active = active
         model.metrics = {
-            "validation_auc": auc,
+            "active": active,
+            "reason": (
+                "beats the relevance-only model on held-out feedback (95% bound)"
+                if active
+                else "no reliable gain over retrieval relevance; keeping baseline ranking"
+            ),
+            "cv_gain_per_example": float(gain.mean()),
+            "cv_gain_lower_95": lower,
+            "l2": cv["best_l2"],
             "examples": int(len(y)),
             "positive_rate": float(y.mean()),
         }
