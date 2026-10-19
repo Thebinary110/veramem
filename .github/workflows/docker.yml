@@ -1,0 +1,61 @@
+name: Docker image
+
+# Builds the image on every PR (no push). On a release tag, pushes a multi-arch image to
+# GitHub Container Registry and attaches SLSA build provenance to the pushed digest.
+# Uses only the Docker CLI and GitHub-owned actions (no third-party build actions).
+
+on:
+  pull_request:
+    paths: ["Dockerfile", "src/**", "pyproject.toml", ".github/workflows/docker.yml"]
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write # push to ghcr.io (tags only)
+      id-token: write # provenance signing
+      attestations: write
+    steps:
+      - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build (and smoke-test) the image
+        run: |
+          docker build -t veramem:ci .
+          docker run --rm -e VERAMEM_LLM=none -e VERAMEM_EMBEDDER=hash veramem:ci \
+            sh -c 'veramem add "image smoke test" && veramem verify'
+          # must refuse a public bind without authentication
+          if docker run --rm -e VERAMEM_LLM=none veramem:ci; then exit 1; fi
+      - name: Push multi-arch image to GHCR
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: push
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}"
+          version="${GITHUB_REF_NAME#v}"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$ACTOR" --password-stdin
+          docker buildx create --use --name vm
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            -t "$image:$version" -t "$image:latest" --push --metadata-file meta.json .
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+          echo "digest=$(python3 -c 'import json;print(json.load(open("meta.json"))["containerimage.digest"])')" >> "$GITHUB_OUTPUT"
+      - name: SLSA provenance for the pushed image
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ steps.push.outputs.image }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true

@@ -15,6 +15,30 @@ All notable changes are documented here. The format follows
 - `feedback(..., cited=...)`: credit exactly the memories an agent used (citation lock).
 - Schema v3: `outcomes` table and trace query vectors (erased by `forget`).
 
+- **Security:**
+  - per-user API keys (hashed), OIDC/JWT, per-caller rate limits, a body size limit, CSP and security headers;
+  - a STRIDE threat model, and 190+ adversarial tests that drive VeraMem with a compromised LLM.
+- **Fixes found by the adversarial suite:**
+  - `check_action` leaked other users' memory text;
+  - anyone could rate another user's trace;
+  - anyone could rewrite or delete the shared pool (now operator-only via `Memory.moderate`);
+  - the shared-pool manager's output bypassed the privacy gate;
+  - tool claims could borrow a user quote, and merged update text was ungrounded (now value provenance);
+  - timestamp poisoning;
+  - unknown roles were trusted as `user`;
+  - several 500s on malformed input.
+- **Scale:**
+  - incremental vector cache: search after a write went from 1.4 s to 30 ms at 100k memories;
+  - full-text scoping only where it's selective;
+  - optional per-scope HNSW index (experimental);
+  - a PostgreSQL backend that passes the whole test suite;
+  - cache invalidation shared across processes.
+- **Ecosystem:**
+  - TypeScript SDK;
+  - LangChain, LangGraph, LlamaIndex and CrewAI adapters, plus plain tool schemas.
+- **Web UI:** tabs for sharing (consent, share, shared pool), access (agent grants, teams, export) and admin (keys, teams, ledger).
+- **Release:** multi-arch GHCR image with SLSA provenance; coverage gate (80%) in CI.
+
 ### Changed
 - The default ranking is now `contextual`. The original per-memory (`global`) utility
   lowered within-family Hit@3 by 5.9 points in the transfer experiment.

@@ -33,7 +33,7 @@ gaps. VeraMem fills each one with techniques from recent research:
 
 | | The gap | What VeraMem does |
 |---|---|---|
-| **A** | Memories are kept or dropped by heuristics. Whether a memory actually *helped* is never recorded. | **Outcome-informed ranking that transfers to unseen tasks:** `feedback(trace_id, reward, cited=...)` records which memories an agent used and how it went. Query-aware (contextual) utility re-ranks similar future searches. A learned ranker, deployed only when it beats retrieval with 95% confidence, improves Hit@3 by **+2.8 points on held-out task families** and ignores placebo feedback. Rated traces export as GRPO training data. Write decisions are prompted, not learned. [Evidence and negative results](docs/OUTCOME_LEARNING.md). *(Memory-R1, AgeMem)* |
+| **A** | Memories are kept or dropped by heuristics. Whether a memory actually *helped* is never recorded. | **Outcome-informed ranking:** `feedback(trace_id, reward, cited=...)` records which memories an agent used and how it went. Query-aware utility re-ranks similar future searches. A learned ranker, deployed only when it beats retrieval with 95% confidence, learns non-retrieval signals such as source authority from feedback and transfers them to unseen tasks (Hit@1 0.14 → 1.00 on held-out attributes). On LoCoMo, a tuned static weighting beats it (+3.4 vs +2.1 pts). Write decisions are prompted, not learned. [Evidence and negative results](docs/OUTCOME_LEARNING.md). *(Memory-R1, AgeMem)* |
 | **B** | Extracted "facts" lose the link to what was said. A tool's claim quietly becomes "the user's preference". | Every memory points to a **verbatim, verified quote** in an immutable, hashed source message. Each carries a **source-authority** label (user / assistant / tool) that consolidation can never raise. Updates are versioned and time-travel queryable. Every write goes into a **hash-chained ledger**. Answers cite or abstain, and `check_action()` blocks low-authority memories from driving payments, bookings or sends. *(Agent Zero Memory, AMA, AuthMem-Bench)* |
 | **C** | Sharing is all-or-nothing. Private data leaks through shared pools, dedup, or other users' preferences. | Access rules are compiled into SQL **before** ranking. Revocable user↔agent and agent↔resource grants apply retroactively. Preferences can never be shared. Experiences are shared through a two-stage pipeline with de-identification plus a **deterministic PII/canary gate**. Erasure is physical. *(ShareMem, Collaborative Memory, AIM)* |
 
@@ -57,7 +57,8 @@ Raw results: [`docs/results/`](docs/results/).
 | Machine-checkable authority to block risky actions | **yes** | no |
 | Current value ranked first after three changes | **75%** | 50% |
 | Wrong top answer fixed by feedback within 5 rounds (synthetic) | **0% → 100%** | no feedback API |
-| Feedback improves retrieval on **unseen** task families (LoCoMo, 5 seeds, placebo-controlled) | **+2.8 pts Hit@3** [+1.9, +3.9] | no feedback API |
+| Feedback improves retrieval on **unseen** task families (LoCoMo, 5 seeds, placebo-controlled) | +2.1 pts Hit@3 [+1.1, +3.1]; a tuned static weighting gets +3.4 without feedback | no feedback API |
+| Feedback teaches source authority on **unseen** attributes (synthetic, 5 seeds) | **Hit@1 0.14 → 1.00** | no feedback API |
 | Revoking an agent's access hides its memories | **yes** | not supported |
 | Tampering with stored memories detected | **yes** | not supported |
 | User's secret left in plaintext on disk after deleting the user | **no** | **yes** (`history.db`) |
@@ -93,11 +94,18 @@ python -m benchmarks.locomo --systems veramem,mem0 --convs all
 
 ### Use it from any app
 
+- **Python SDK:** `Memory` and `AsyncMemory`.
+- **TypeScript SDK:** [`sdk/typescript`](sdk/typescript), with no runtime dependencies; works in Node 18+ and browsers.
+- **Agent frameworks:** LangChain, LangGraph (long-term `BaseStore`), LlamaIndex and CrewAI adapters, plus plain tool schemas for OpenAI and Anthropic tool calling. See [docs/guide/frameworks.md](docs/guide/frameworks.md).
+
 - **MCP** (Claude Desktop, Claude Code, Cursor, VS Code): `veramem mcp-config` prints the
   config to paste. See [examples/mcp_clients.md](examples/mcp_clients.md).
 - **REST**: `veramem serve` serves interactive docs at `/docs`. Set `VERAMEM_API_KEY` to
   require a bearer token; the CLI refuses to listen publicly without one.
 - **Docker**: `VERAMEM_API_KEY=… docker compose up` starts VeraMem plus Ollama, fully local.
+- **Multi-user deployments**: per-user API keys or OIDC/JWT, PostgreSQL for many replicas,
+  rate limits, and a web UI for sharing, access and key management. See
+  [docs/guide/deployment.md](docs/guide/deployment.md).
 
 ### Configuration
 

@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import os
+import re
 from typing import Any
 
 import numpy as np
 
+from .ann import AnnManager
+from .ann import available as ann_available
 from .answer import Answerer
 from .config import Config, ollama_host, resolve
 from .learning import Learner
@@ -27,7 +30,7 @@ from .providers import (
 from .ranking import LogisticRanker
 from .retrieval import Retriever
 from .sharing import Sharer
-from .store import SQLiteStore
+from .store import make_store
 from .types import (
     AddResult,
     Answer,
@@ -40,6 +43,8 @@ from .types import (
     SourceType,
     Status,
     Visibility,
+    check_id,
+    clean_text,
     now,
 )
 from .write import Candidate, Writer
@@ -63,6 +68,7 @@ class Memory:
         ranking: str = "contextual",
         exploration: str = "none",
         seed: int | None = None,
+        vector_index: str = "exact",
         **config_overrides: Any,
     ):
         self.ranking = os.environ.get("VERAMEM_RANKING", ranking)
@@ -71,6 +77,9 @@ class Memory:
             raise ValueError("ranking must be none | global | contextual | ranker")
         if self.exploration not in ("none", "thompson", "ucb"):
             raise ValueError("exploration must be none | thompson | ucb")
+        self.vector_index = os.environ.get("VERAMEM_VECTOR_INDEX", vector_index)
+        if self.vector_index not in ("exact", "auto", "hnsw"):
+            raise ValueError("vector_index must be exact | auto | hnsw")
         self.rng = np.random.default_rng(seed)
         self.config = config or Config.load(**config_overrides, db_path=path)
         choice = resolve(self.config)
@@ -79,7 +88,7 @@ class Memory:
         ep, em, eu = choice["embed"]
         self.llm = llm or _make_llm(lp, lm, lu, cache=cache)
         self.embedder = embedder or _make_embedder(ep, em, eu, cache=cache)
-        self.store = SQLiteStore(self.config.db_path)
+        self.store = make_store(self.config.db_path)
         self._check_embedder()
         self.ledger = Ledger(self.store)
         self.policy = Policy(self.store)
@@ -88,6 +97,9 @@ class Memory:
         self.answerer = Answerer(self)
         self.learner = Learner(self)
         self.sharer = Sharer(self)
+        self.ann: AnnManager | None = None
+        if self.vector_index == "hnsw" or (self.vector_index == "auto" and ann_available()):
+            self.ann = AnnManager(self.store)  # raises a clear ImportError if missing
         saved = self.store.meta_get("ranker")
         self.ranker = LogisticRanker.from_json(saved) if saved else None
 
@@ -98,7 +110,7 @@ class Memory:
 
     def info(self) -> dict[str, Any]:
         return {
-            "db": self.store.path,
+            "db": re.sub(r"://([^:/@]+):[^@]*@", r"://\1:***@", self.store.path),
             "llm": f"{self.llm.name}:{self.llm.model}" if self.has_llm else "none (raw-turn mode)",
             "embedder": f"{self.embedder.name}:{self.embedder.model}",
             **self.store.stats(),
@@ -219,6 +231,7 @@ class Memory:
         """Answer from memory only, with citations; abstains when evidence is missing."""
         if not self.has_llm:
             raise RuntimeError("answer() needs an LLM; configure one with `veramem init`")
+        question = clean_text(question)
         return self.answerer.answer(
             question,
             self._principal(user_id, agent_id),
@@ -234,16 +247,9 @@ class Memory:
         m = self.store.get_memory(memory_id)
         if m is None:
             return None
-        if (
-            not self.policy.can_read(self._principal(user_id, agent_id), m)
-            and m.status is Status.ACTIVE
-        ):
-            raise AccessDenied(f"not allowed to read {memory_id}")
-        if (
-            m.status is not Status.ACTIVE
-            and m.user_id != (user_id or "default")
-            and m.visibility is Visibility.PRIVATE
-        ):
+        # the same predicate as search, whatever the status: a retracted team item is no
+        # more readable by a non-member than an active one
+        if not self.policy.can_read(self._principal(user_id, agent_id), m):
             raise AccessDenied(f"not allowed to read {memory_id}")
         return m
 
@@ -327,6 +333,7 @@ class Memory:
         if old is None:
             raise KeyError(memory_id)
         self.policy.check_write(p, old)
+        text = clean_text(text)
         ep = Episode(
             content=text,
             source=SourceType.USER,
@@ -396,13 +403,26 @@ class Memory:
 
     # ------------------------------------------------------------ outcomes
     def feedback(
-        self, trace_id: str, reward: float, *, cited: list[str] | None = None
+        self,
+        trace_id: str,
+        reward: float,
+        *,
+        cited: list[str] | None = None,
+        user_id: str | None = None,
+        agent_id: str | None = None,
     ) -> dict[str, Any]:
         """Report how well a search/answer worked: reward in [-1, 1].
 
         `cited`: the memory ids your agent actually used (must come from that trace).
         Defaults to the answer's citations, or the top retrieved memories for a search.
+        `user_id`/`agent_id`: when given, the trace must belong to that caller.
         """
+        if user_id is not None or agent_id is not None:
+            tr = self.store.get_trace(trace_id)
+            if tr is None:
+                raise KeyError(trace_id)
+            if tr["user_id"] != user_id or (agent_id is not None and tr["agent_id"] != agent_id):
+                raise AccessDenied("this trace belongs to another caller")
         return self.learner.feedback(trace_id, reward, cited=cited)
 
     def train_ranker(
@@ -436,9 +456,20 @@ class Memory:
     def consolidate(self, *, user_id: str | None = None, summarize: bool = True) -> dict[str, Any]:
         return self.learner.consolidate(user_id=user_id, summarize=summarize)
 
-    def check_action(self, memory_ids: list[str]) -> dict[str, Any]:
-        """May these memories bind a protected tool call? (authority gate)"""
-        return self.learner.check_action(memory_ids)
+    def check_action(
+        self,
+        memory_ids: list[str],
+        *,
+        user_id: str | None = None,
+        agent_id: str | None = None,
+    ) -> dict[str, Any]:
+        """May these memories bind a protected tool call? (authority gate)
+
+        Memories the caller may not read are reported as missing, so the gate can't be
+        used to probe other users' memories.
+        """
+        p = self._principal(user_id, agent_id)
+        return self.learner.check_action(memory_ids, p)
 
     def export_trajectories(self, path: str, *, user_id: str | None = None) -> int:
         return self.learner.export_trajectories(path, user_id=user_id)
@@ -468,6 +499,41 @@ class Memory:
             raise AccessDenied("preferences are user-bound and cannot be shared")
         self.store.update_memory(memory_id, shareable=shareable)
         self.ledger.append("CONSENT", memory_id, {"shareable": shareable}, actor=user_id)
+
+    def moderate(self, memory_id: str, action: str, *, reason: str = "") -> dict[str, Any]:
+        """Operator action on a shared (team/public) memory: "retract" or "forget".
+
+        End users cannot change pooled memories; this is the audited operator path.
+        """
+        m = self.store.get_memory(memory_id)
+        if m is None:
+            raise KeyError(memory_id)
+        if m.visibility is Visibility.PRIVATE:
+            raise ValueError("moderate() is for shared memories; owners use update/delete")
+        if action == "retract":
+            self.store.update_memory(
+                memory_id, status=Status.RETRACTED, valid_to=now(), updated_at=now()
+            )
+            self.ledger.append("MODERATE", memory_id, {"action": action, "reason": reason})
+            return {"retracted": memory_id}
+        if action == "forget":
+            out = self.sharer.forget(memory_id=memory_id, actor="moderator")
+            self.ledger.append("MODERATE", memory_id, {"action": action, "reason": reason})
+            return out
+        raise ValueError('action must be "retract" or "forget"')
+
+    def shared_with(self, *, user_id: str | None = None, limit: int = 200) -> list[MemoryItem]:
+        """Team and public memories this user may read (never other users' private ones)."""
+        p = self._principal(user_id, None)
+        where, params = self.policy.read_filter(p, include_shared=True)
+        where += " AND m.status='active' AND m.visibility!='private'"
+        return self.store.memories(where, params, order="created_at DESC", limit=limit)
+
+    def agents_of(self, user_id: str | None) -> list[str]:
+        """Agents currently granted access to this user's memory."""
+        if not user_id:
+            return []
+        return sorted(self.store.grant_objects("user_agent", user_id, now()))
 
     def grant_agent(self, user_id: str, agent_id: str) -> None:
         self.policy.grant_agent(user_id, agent_id)
@@ -570,6 +636,8 @@ class Memory:
     # ------------------------------------------------------------ helpers
     @staticmethod
     def _principal(user_id: str | None, agent_id: str | None) -> Principal:
+        check_id(user_id, "user_id")
+        check_id(agent_id, "agent_id")
         if user_id is None and agent_id is None:
             user_id = "default"
         return Principal(user_id=user_id, agent_id=agent_id)

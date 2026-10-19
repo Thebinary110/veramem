@@ -1,5 +1,7 @@
 """Gap B: provenance, source authority, tamper evidence."""
 
+import pytest
+
 from veramem import Authority, Kind
 
 
@@ -43,9 +45,9 @@ def test_action_gate(mem):
         user_id="ivy",
     )
     mems = {m.authority: m.id for m in mem.get_all(user_id="ivy")}
-    ok = mem.check_action([mems[Authority.AUTHORIZED]])
+    ok = mem.check_action([mems[Authority.AUTHORIZED]], user_id="ivy")
     assert ok["allowed"]
-    gated = mem.check_action([mems[Authority.UNENDORSED]])
+    gated = mem.check_action([mems[Authority.UNENDORSED]], user_id="ivy")
     assert not gated["allowed"] and gated["needs_confirmation"][0]["authority"] == "unendorsed"
 
 
@@ -79,3 +81,53 @@ def test_episode_tampering_detected(mem):
     mem.store.db.execute("UPDATE episodes SET content='Mia was born in Quito'")
     rep = mem.verify()
     assert not rep["ok"] and rep["tampered_episodes"]
+
+
+def test_action_gate_does_not_leak_other_users_memories(mem):
+    mid = mem.add({"role": "tool", "content": "vault pin is 9911"}, user_id="vic").changes[0]
+    out = mem.check_action([mid.memory_id], user_id="mallory")
+    assert out["missing"] == [mid.memory_id] and out["needs_confirmation"] == []
+
+
+def test_feedback_on_another_users_trace_is_denied(mem):
+    import pytest
+
+    from veramem import AccessDenied
+
+    mem.add("Wes rides a red bike", user_id="wes")
+    r = mem.search("bike", user_id="wes")
+    with pytest.raises(AccessDenied):
+        mem.feedback(r.trace_id, -1.0, user_id="mallory")
+    mem.feedback(r.trace_id, 1.0, user_id="wes")
+
+
+@pytest.mark.sqlite_only  # spawned processes use the SQLite file directly
+def test_ledger_chain_survives_concurrent_processes(tmp_path):
+    import multiprocessing as mp
+
+    from veramem import Memory
+    from veramem.providers import HashEmbedder, NoLLM
+
+    path = str(tmp_path / "multi.db")
+    Memory(path, llm=NoLLM(), embedder=HashEmbedder()).close()
+    ctx = mp.get_context("spawn")
+    procs = [ctx.Process(target=_writer, args=(path, i)) for i in range(3)]
+    for p in procs:
+        p.start()
+    for p in procs:
+        p.join(120)
+        assert p.exitcode == 0
+    m = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
+    rep = m.verify()
+    assert rep["ok"], rep
+    assert len(m.get_all(user_id="p0")) == 25
+
+
+def _writer(path: str, i: int) -> None:
+    from veramem import Memory
+    from veramem.providers import HashEmbedder, NoLLM
+
+    m = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
+    for j in range(25):
+        m.add(f"process {i} note {j}", user_id=f"p{i}")
+    m.close()

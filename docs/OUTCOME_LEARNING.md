@@ -1,15 +1,28 @@
 # What VeraMem learns from feedback
 
-**Short answer:** VeraMem's learned ranker improves retrieval on task families it has never
-received feedback for: **+2.8 points Hit@3 [95% CI +1.9, +3.9]** on held-out LoCoMo
-conversations. It beats a shuffled-reward placebo by the same margin, and uninformative
-feedback cannot change rankings, because the ranker is deployed only when it passes a
-statistical gate. The per-memory utility that VeraMem shipped with first does **not**
-help: within a family it *lowers* Hit@3 by 5.9 points.
+**Short answer, after two follow-up experiments:**
 
-This supports the claim **"outcome-informed memory ranking that transfers to unseen
-tasks"**. It does **not** support "a learned consolidation policy" like Memory-R1 or
-AgeMem: deciding what to write, update or delete is prompted, not learned, in VeraMem.
+- **The learned ranker transfers to unseen task families, but on LoCoMo a static
+  weighting does better.** With genuine feedback the ranker improves Hit@3 on held-out
+  conversations by +2.1 points [95% CI +1.1, +3.1]. A fixed re-weighting of the same
+  retrieval features, tuned once on labelled data and given no feedback at all, improves
+  it by +3.4 [+2.2, +4.6]. On this data the ranker learns retrieval *calibration* (mainly
+  "longer turns tend to be the evidence"), and a tuned default captures that calibration
+  better.
+- **Where the useful signal is not a retrieval signal, feedback is what finds it.** In a
+  controlled benchmark where tools and the assistant make conflicting claims, the ranker
+  learns from feedback alone to prefer user-stated (authorized) memories. On attribute
+  families it never saw, Hit@1 goes from 0.14 to 1.00. A static weighting tuned on
+  retrieval features cannot learn this unless someone already knows the domain.
+- **Uninformative feedback never changes rankings.** Shuffled rewards left the deployment
+  gate closed on 15 of 15 seeds across both experiments.
+- **The original per-memory ("global") utility does not help.** Within a family it lowers
+  Hit@3 by 5.9 points. The default is now `contextual`.
+
+This supports **"outcome-informed ranking that learns non-retrieval signals such as source
+authority and transfers them"**. It does **not** support "feedback beats a well-tuned
+retriever on LoCoMo", and it is **not** a learned consolidation policy like Memory-R1 or
+AgeMem: deciding what to write, update or delete is prompted, not learned.
 
 ## The question
 
@@ -57,7 +70,7 @@ whatever the ranker learns can apply to memories it has never seen.
   95% t-interval, and differences come with a paired bootstrap 95% CI over questions
   (all seeds pooled).
 
-## Results (run 2, final design)
+## Results (run 2; the follow-ups below have the current numbers)
 
 ### Held-out task families: every memory unseen
 
@@ -119,6 +132,65 @@ meaning outcomes on similar past questions, adds to that.
 Feedback adds no model calls. With the feedback phase taking about 3.5 s per 700–870
 events, search latency stays at about 2–3 ms p50 at this scale for every method.
 
+## Follow-up 1: a static baseline (no feedback)
+
+Is the ranker's transfer *learning*, or calibration a fixed setting could provide? The
+`static-tuned` method re-weights exactly the features the ranker relied on (BM25 rank and
+memory length). Its two weights are grid-searched per seed on the feedback families'
+questions using **gold** labels, which is strictly more information than feedback
+provides, and then frozen for evaluation (`--static-baseline`). Results are from the current
+code, 5 seeds (raw data in
+[results/ranker-validation-2026-10-19](results/ranker-validation-2026-10-19/static-baseline-report.md)):
+
+| Split | Method | Hit@3 | Δ vs no feedback [95% CI] |
+|---|---|---|---|
+| held-out families | none | 0.386 | |
+| held-out families | ranker, genuine feedback | 0.407 | +0.021 [+0.011, +0.031] |
+| held-out families | ranker, shuffled feedback | 0.386 | +0.000 |
+| held-out families | **static-tuned (no feedback)** | **0.420** | **+0.034 [+0.022, +0.046]** |
+| within families | ranker, genuine feedback | 0.410 | +0.027 [+0.012, +0.042] |
+| within families | **static-tuned (no feedback)** | **0.426** | **+0.043 [+0.026, +0.060]** |
+
+The tuning picked a small length boost (weight 0.25, no BM25 boost) on 4 of 5 seeds. The
+ranker's held-out gain here (+0.021) is lower than in run 2 (+0.028). That is the same
+method on the current code, after the retrieval changes made since run 2.
+
+**Conclusion:** on LoCoMo, the transferable part of the feedback signal is retrieval
+calibration, and a tuned static default beats learning it online. The defaults were *not*
+changed to that length boost: it was tuned on one dataset, and adopting it would need
+validation elsewhere first.
+
+## Follow-up 2: can the ranker learn source authority? (`benchmarks/authority_ranking.py`)
+
+LoCoMo never varies authority or kind, so the first experiment couldn't test those
+features. In this controlled benchmark:
+
+- There are 8 attribute families (airline, home city, diet, ...), split 4/4 into feedback
+  families and held-out families.
+- Each user has their own statement of the value, plus two tool claims and one assistant
+  suggestion with wrong values. The wrong ones are worded to match the question better.
+- Memories go through the real write path, so authority and kind are assigned by
+  production code.
+
+| Held-out attribute families | Hit@1 [95% CI over 5 seeds] |
+|---|---|
+| retrieval only | 0.144 [0.015, 0.273] |
+| ranker, genuine feedback | **1.000** |
+| ranker, shuffled feedback | 0.144 (gate closed on 5/5 seeds) |
+
+Learned coefficients were consistent across seeds:
+
+| Feature | Coefficient |
+|---|---|
+| authorized | +1.5 to +2.1 |
+| unendorsed | −0.6 to −0.9 |
+| attested | −0.8 to −1.2 |
+| preference | +0.35 to +0.66 |
+
+The perfect score reflects a clean synthetic signal. This shows the authority and kind
+features are wired correctly and can be learned and transferred. It does not show how
+large the effect would be on real traffic.
+
 ## Negative results and limitations
 
 1. **Per-memory ("global") utility hurts.** With question-level rewards credited to
@@ -139,13 +211,12 @@ events, search latency stays at about 2–3 ms p50 at this scale for every metho
    2 of 5 seeds.
 4. **This is not counterfactual credit.** "Cited in a successful answer" is not proof
    that a memory caused the success. Counterfactual credit assignment is future work.
-5. **A static re-weighting was not compared.** Because the transferable signal is
-   retrieval re-weighting (BM25, length), a hand-tuned static boost might capture part
-   of the gain without any feedback.
+5. **A static re-weighting does better on LoCoMo** (follow-up 1). The ranker's value there
+   is limited to calibrating retrieval, which a tuned default does better.
 6. **The agent and reward are simulated.** The cite-top-3 agent and the gold-turn reward
    are a proxy. With an LLM agent and an LLM judge the effect could be larger or smaller.
-7. **Only one dataset was used.** Authority and kind features never varied, so this
-   experiment says nothing about them.
+7. **Authority and kind features were tested only on synthetic data** (follow-up 2). Real
+   effect sizes are unmeasured.
 8. **The write side is not learned.** Outcome signals affect ranking and archival only.
    `export_trajectories()` provides data for training a write policy with GRPO, but
    none is trained here.

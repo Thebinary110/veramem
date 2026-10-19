@@ -19,18 +19,23 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink);
        font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px;
+header { display: flex; align-items: center; gap: 14px; padding: 12px 20px;
          border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
 header h1 { font-size: 18px; margin: 0; letter-spacing: .2px; }
 header .sub { color: var(--muted); font-size: 13px; }
-header .grow { flex: 1; }
+.grow { flex: 1; }
 .pill { font-size: 12px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--line);
         color: var(--muted); white-space: nowrap; }
 .pill.ok { color: var(--auth); border-color: var(--auth); }
 .pill.bad { color: var(--unend); border-color: var(--unend); }
-main { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 16px; padding: 16px 20px;
-       max-width: 1400px; margin: 0 auto; }
-@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 16px; } }
+nav { display: flex; gap: 4px; padding: 0 20px; background: var(--panel);
+      border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav button { background: transparent; color: var(--muted); border: 0; border-bottom: 2px solid transparent;
+             border-radius: 0; padding: 10px 12px; }
+nav button.on { color: var(--ink); border-bottom-color: var(--accent); }
+main { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+.grid { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 16px; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } main { padding: 16px; } }
 section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
 section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted);
              margin: 0 0 10px; font-weight: 600; }
@@ -39,15 +44,16 @@ label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px
 input, textarea, select { width: 100%; font: inherit; color: var(--ink); background: var(--bg);
        border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; }
 textarea { min-height: 70px; resize: vertical; }
-.row { display: flex; gap: 8px; }
-.row > * { flex: 1; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > * { flex: 1; min-width: 120px; }
 button { font: inherit; border: 1px solid var(--accent); background: var(--accent);
          color: var(--accent-ink); border-radius: 7px; padding: 7px 14px; cursor: pointer; }
 button.ghost { background: transparent; color: var(--accent); }
+button.small { padding: 2px 9px; font-size: 12px; }
 button:disabled { opacity: .5; cursor: wait; }
-.mem { border-top: 1px solid var(--line); padding: 10px 0; }
-.mem:first-child { border-top: 0; }
-.mem .text { margin: 2px 0 4px; }
+.item { border-top: 1px solid var(--line); padding: 10px 0; }
+.item:first-child { border-top: 0; }
+.item .text { margin: 2px 0 4px; white-space: pre-wrap; }
 .meta { font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .badge { font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid currentColor; }
 .authorized { color: var(--auth); } .attested { color: var(--att); }
@@ -55,12 +61,13 @@ button:disabled { opacity: .5; cursor: wait; }
 .link { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .drawer { margin-top: 8px; padding: 8px 10px; background: var(--bg); border-radius: 7px;
           font-size: 13px; border: 1px solid var(--line); }
-.drawer code, .mono { font-family: var(--mono); font-size: 12px; word-break: break-all; }
+.mono { font-family: var(--mono); font-size: 12px; word-break: break-all; }
 .answer { font-size: 17px; margin: 4px 0 6px; }
 .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
 .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.toolbar .grow { flex: 1; }
 .err { color: var(--unend); font-size: 13px; }
+.note { color: var(--muted); font-size: 13px; }
+[hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -68,63 +75,163 @@ button:disabled { opacity: .5; cursor: wait; }
   <h1>VeraMem</h1>
   <span class="sub" id="model">connecting...</span>
   <span class="grow"></span>
-  <span class="pill" id="stats">-</span>
+  <span class="pill" id="who" title="Who the server thinks you are">-</span>
   <span class="pill" id="ledger" title="Hash-chained audit ledger">ledger: -</span>
-  <button class="ghost" id="verifyBtn">Verify</button>
 </header>
+<nav id="tabs">
+  <button data-tab="memories" class="on">Memories</button>
+  <button data-tab="sharing">Sharing</button>
+  <button data-tab="access">Access</button>
+  <button data-tab="admin" id="adminTab" hidden>Admin</button>
+  <button data-tab="settings">Connection</button>
+</nav>
 <main>
-  <div class="stack">
-    <section class="stack">
-      <h2>Who</h2>
-      <div class="row">
-        <div><label for="user">User</label><input id="user" value="default"></div>
-        <div><label for="agent">Agent (optional)</label><input id="agent" placeholder="any"></div>
+  <!-- ---------------------------------------------------------------- memories -->
+  <div id="tab-memories" class="grid">
+    <div class="stack">
+      <section class="stack">
+        <h2>Remember</h2>
+        <div class="row">
+          <div style="flex:0 0 130px"><label for="role">Said by</label>
+            <select id="role"><option>user</option><option>assistant</option><option>tool</option>
+            <option>document</option></select></div>
+          <div><label for="session">Session (optional)</label><input id="session"></div>
+        </div>
+        <textarea id="msg" placeholder="I just moved to Lisbon and I'm allergic to peanuts."></textarea>
+        <div class="toolbar"><button id="addBtn">Add memory</button><span class="grow"></span>
+          <span id="addOut" class="meta"></span></div>
+      </section>
+      <section class="stack">
+        <h2>Ask</h2>
+        <input id="q" placeholder="Where does the user live now?">
+        <div class="toolbar"><button id="askBtn">Answer</button>
+          <button class="ghost" id="searchBtn">Search only</button></div>
+        <div id="askOut"></div>
+      </section>
+    </div>
+    <section>
+      <div class="toolbar" style="margin-bottom:6px">
+        <h2 style="margin:0">Memories</h2><span class="grow"></span>
+        <label style="margin:0;display:flex;gap:6px;align-items:center">
+          <input type="checkbox" id="inactive" style="width:auto"> show history</label>
+        <button class="ghost small" id="refreshBtn">Refresh</button>
       </div>
-      <div><label for="apikey">API key (if the server requires one)</label>
-        <input id="apikey" type="password" autocomplete="off"></div>
-    </section>
-    <section class="stack">
-      <h2>Remember</h2>
-      <div class="row">
-        <div style="flex:0 0 120px"><label for="role">Said by</label>
-          <select id="role"><option>user</option><option>assistant</option><option>tool</option>
-          <option>document</option></select></div>
-        <div><label for="session">Session (optional)</label><input id="session"></div>
-      </div>
-      <textarea id="msg" placeholder="I just moved to Lisbon and I'm allergic to peanuts."></textarea>
-      <div class="toolbar"><button id="addBtn">Add memory</button><span class="grow"></span>
-        <span id="addOut" class="meta"></span></div>
-    </section>
-    <section class="stack">
-      <h2>Ask</h2>
-      <input id="q" placeholder="Where does the user live now?">
-      <div class="toolbar"><button id="askBtn">Answer</button>
-        <button class="ghost" id="searchBtn">Search only</button></div>
-      <div id="askOut"></div>
+      <div id="list"><div class="empty">Loading...</div></div>
     </section>
   </div>
-  <section>
-    <div class="toolbar" style="margin-bottom:6px">
-      <h2 style="margin:0">Memories</h2><span class="grow"></span>
-      <label style="margin:0;display:flex;gap:6px;align-items:center">
-        <input type="checkbox" id="inactive" style="width:auto"> show history</label>
-      <button class="ghost" id="refreshBtn">Refresh</button>
-    </div>
-    <div id="list"><div class="empty">Loading...</div></div>
-  </section>
+
+  <!-- ----------------------------------------------------------------- sharing -->
+  <div id="tab-sharing" class="grid" hidden>
+    <section class="stack">
+      <h2>Your experiences</h2>
+      <p class="note">Experiences are lessons distilled from finished tasks. Mark the ones you
+        are happy to share, then share them: they are de-identified and must pass a
+        PII/canary check first. Preferences can never be shared.</p>
+      <div id="experiences"><div class="empty">Loading...</div></div>
+      <div class="row">
+        <div><label for="shareTeam">Share with team (empty = everyone)</label>
+          <select id="shareTeam"></select></div>
+        <div style="flex:0 0 auto;align-self:end"><button id="shareBtn">Share consented</button></div>
+      </div>
+      <div id="shareOut" class="meta"></div>
+    </section>
+    <section>
+      <h2>Shared with you</h2>
+      <p class="note">Team and public experiences. They are auxiliary and unendorsed: they never
+        override your own memories and can't authorise actions.</p>
+      <div id="sharedList"><div class="empty">Loading...</div></div>
+    </section>
+  </div>
+
+  <!-- ------------------------------------------------------------------ access -->
+  <div id="tab-access" class="grid" hidden>
+    <section class="stack">
+      <h2>Agents that may use your memory</h2>
+      <p class="note">Once any agent is granted, memories written by other agents are hidden from
+        you until you grant those agents too. Revoking takes effect immediately.</p>
+      <div id="agents"></div>
+      <div class="row">
+        <div><label for="agentName">Agent id</label><input id="agentName" placeholder="travel-bot"></div>
+        <div style="flex:0 0 auto;align-self:end"><button id="grantBtn">Grant</button></div>
+      </div>
+      <div id="accessOut" class="meta"></div>
+    </section>
+    <section class="stack">
+      <h2>Your teams</h2>
+      <div id="teams"></div>
+      <p class="note">Team membership is managed by an administrator.</p>
+      <div class="toolbar"><button class="ghost" id="exportBtn">Export my data (JSON)</button></div>
+    </section>
+  </div>
+
+  <!-- ------------------------------------------------------------------- admin -->
+  <div id="tab-admin" class="grid" hidden>
+    <section class="stack">
+      <h2>API keys</h2>
+      <p class="note">Keys are shown once and stored only as hashes. A user key is pinned to one
+        user; an admin key can act for anyone.</p>
+      <div class="row">
+        <div><label for="kUser">User</label><input id="kUser" placeholder="alice"></div>
+        <div><label for="kAgent">Agent (optional)</label><input id="kAgent"></div>
+        <div><label for="kLabel">Label</label><input id="kLabel" placeholder="alice laptop"></div>
+      </div>
+      <div class="toolbar">
+        <label style="margin:0;display:flex;gap:6px;align-items:center">
+          <input type="checkbox" id="kAdmin" style="width:auto"> admin key</label>
+        <span class="grow"></span><button id="keyBtn">Create key</button></div>
+      <div id="newKey"></div>
+      <div id="keys"></div>
+    </section>
+    <section class="stack">
+      <h2>Teams</h2>
+      <div class="row">
+        <div><label for="tUser">User</label><input id="tUser"></div>
+        <div><label for="tTeam">Team</label><input id="tTeam"></div>
+      </div>
+      <div class="toolbar"><button id="joinBtn">Add to team</button>
+        <button class="ghost" id="leaveBtn">Remove from team</button></div>
+      <h2 style="margin-top:20px">Integrity</h2>
+      <div class="toolbar"><button class="ghost" id="verifyBtn">Verify ledger</button></div>
+      <div id="verifyOut" class="drawer mono" hidden></div>
+      <div id="adminOut" class="meta"></div>
+    </section>
+  </div>
+
+  <!-- ---------------------------------------------------------------- settings -->
+  <div id="tab-settings" hidden>
+    <section class="stack" style="max-width:640px">
+      <h2>Connection</h2>
+      <div><label for="apikey">API key or token (kept for this browser tab only)</label>
+        <input id="apikey" type="password" autocomplete="off"></div>
+      <div class="row">
+        <div><label for="user">Act as user (admin / open mode only)</label><input id="user" value="default"></div>
+        <div><label for="agent">Agent (optional)</label><input id="agent" placeholder="any"></div>
+      </div>
+      <div class="toolbar"><button id="connectBtn">Save</button><span id="connOut" class="meta"></span></div>
+    </section>
+  </div>
 </main>
 <script>
+"use strict";
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const day = (t) => t ? new Date(t * 1000).toISOString().slice(0, 10) : "";
+const day = (t) => { try { return t ? new Date(t * 1000).toISOString().slice(0, 10) : ""; } catch (e) { return ""; } };
+let me = { role: "anonymous", user_id: null };
+
+function session(k, v) {
+  try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); }
+  catch (e) { return null; }
+}
 function who() {
   const p = new URLSearchParams();
-  if ($("user").value.trim()) p.set("user_id", $("user").value.trim());
-  if ($("agent").value.trim()) p.set("agent_id", $("agent").value.trim());
+  const u = $("user").value.trim(), a = $("agent").value.trim();
+  if (me.role !== "user" && u) p.set("user_id", u);
+  if (a) p.set("agent_id", a);
   return p;
 }
 function whoBody() {
-  return { user_id: $("user").value.trim() || null, agent_id: $("agent").value.trim() || null };
+  const u = $("user").value.trim(), a = $("agent").value.trim();
+  return { user_id: me.role === "user" ? null : (u || null), agent_id: a || null };
 }
 async function api(path, opts = {}) {
   const headers = { "Content-Type": "application/json" };
@@ -132,58 +239,59 @@ async function api(path, opts = {}) {
   if (key) headers["Authorization"] = "Bearer " + key;
   const r = await fetch(path, { ...opts, headers });
   const body = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(body.detail || r.statusText);
+  if (!r.ok) throw new Error((r.status === 401 ? "Not signed in: add a key under Connection. " : "") + (body.detail || r.statusText));
   return body;
 }
+const post = (path, body) => api(path, { method: "POST", body: JSON.stringify(body) });
+
 function memCard(m, extra = "") {
-  const auth = m.authority;
-  return `<div class="mem" data-id="${esc(m.id)}">
+  return `<div class="item" data-id="${esc(m.id)}">
     <div class="text">${esc(m.text)}</div>
     <div class="meta">
-      <span class="badge ${esc(auth)}" title="source authority">${esc(auth)}</span>
+      <span class="badge ${esc(m.authority)}" title="source authority">${esc(m.authority)}</span>
       <span>${esc(m.kind)}</span><span>${day(m.valid_from || m.created_at)}</span>
       ${m.status !== "active" ? `<span class="badge">${esc(m.status)}</span>` : ""}
-      ${m.uses ? `<span title="outcome-based utility">utility ${(((m.successes + 1) / (m.successes + m.failures + 2))).toFixed(2)}</span>` : ""}
+      ${(m.successes + m.failures) > 0 ? `<span title="outcome-based utility">utility ${((m.successes + 1) / (m.successes + m.failures + 2)).toFixed(2)}</span>` : ""}
       ${extra}
       <span class="link" data-act="evidence">evidence</span>
       <span class="link" data-act="history">history</span>
     </div><div class="slot"></div></div>`;
 }
+
+// ------------------------------------------------------------------ tabs
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("on", x === b));
+  for (const t of ["memories", "sharing", "access", "admin", "settings"]) $("tab-" + t).hidden = t !== b.dataset.tab;
+  ({ memories: refresh, sharing: loadSharing, access: loadAccess, admin: loadAdmin })[b.dataset.tab]?.();
+});
+
+// ------------------------------------------------------------ memories
 async function refresh() {
   try {
     const info = await api("/v1/info");
     $("model").textContent = `${info.llm} · ${info.embedder}`;
-    $("stats").textContent = `${info.memories_active} memories · ${info.episodes} episodes`;
     const p = who(); if ($("inactive").checked) p.set("include_inactive", "true");
     const items = await api("/v1/memories?" + p.toString());
     $("list").innerHTML = items.length ? items.map(m => memCard(m)).join("")
-      : `<div class="empty">No memories yet for this user. Add one on the left.</div>`;
+      : `<div class="empty">No memories yet. Add one on the left.</div>`;
   } catch (e) { $("list").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
-}
-async function verify() {
-  try {
-    const v = await api("/v1/verify");
-    $("ledger").textContent = v.ok ? `ledger: verified (${v.ledger_entries})` : "ledger: TAMPERED";
-    $("ledger").className = "pill " + (v.ok ? "ok" : "bad");
-    $("ledger").title = "head " + v.head;
-  } catch (e) { $("ledger").textContent = "ledger: ?"; }
 }
 document.addEventListener("click", async (ev) => {
   const act = ev.target.dataset && ev.target.dataset.act;
-  if (!act) return;
-  const card = ev.target.closest(".mem"); const slot = card.querySelector(".slot");
+  if (!act || !["evidence", "history"].includes(act)) return;
+  const card = ev.target.closest(".item"); const slot = card.querySelector(".slot");
   if (slot.innerHTML) { slot.innerHTML = ""; return; }
   try {
     if (act === "evidence") {
-      const ev2 = await api(`/v1/memories/${card.dataset.id}/evidence?` + who().toString());
-      slot.innerHTML = ev2.map(e => `<div class="drawer">
+      const evs = await api(`/v1/memories/${encodeURIComponent(card.dataset.id)}/evidence?` + who().toString());
+      slot.innerHTML = evs.map(e => `<div class="drawer">
         <div><span class="badge ${e.source === "user" ? "authorized" : e.source === "assistant" ? "attested" : "unendorsed"}">${esc(e.source)}</span>
         ${e.intact ? "hash intact" : "<span class='err'>hash mismatch</span>"} · ${day(e.occurred_at)}</div>
         <div>“${esc(e.quote)}”</div>
         ${e.episode && e.episode !== e.quote ? `<div class="meta">in: ${esc(e.episode.slice(0, 400))}</div>` : ""}
       </div>`).join("") || `<div class="drawer">no evidence (shared or imported item)</div>`;
     } else {
-      const h = await api(`/v1/memories/${card.dataset.id}/history?` + who().toString());
+      const h = await api(`/v1/memories/${encodeURIComponent(card.dataset.id)}/history?` + who().toString());
       slot.innerHTML = `<div class="drawer">` + h.map(v => `<div>
         <span class="badge">${esc(v.status)}</span> ${esc(v.text)}
         <span class="meta">${day(v.valid_from)}${v.valid_to ? " → " + day(v.valid_to) : ""}</span>
@@ -195,9 +303,8 @@ $("addBtn").onclick = async () => {
   const text = $("msg").value.trim(); if (!text) return;
   $("addBtn").disabled = true; $("addOut").textContent = "thinking...";
   try {
-    const r = await api("/v1/memories", { method: "POST", body: JSON.stringify({
-      ...whoBody(), session_id: $("session").value.trim() || null,
-      messages: [{ role: $("role").value, content: text }] }) });
+    const r = await post("/v1/memories", { ...whoBody(), session_id: $("session").value.trim() || null,
+      messages: [{ role: $("role").value, content: text }] });
     const ops = r.changes.map(c => c.op).join(", ") || "nothing new";
     $("addOut").textContent = ops + (r.rejected.length ? ` · ${r.rejected.length} ungrounded rejected` : "");
     $("msg").value = ""; refresh(); verify();
@@ -209,26 +316,157 @@ async function ask(searchOnly) {
   $("askOut").innerHTML = `<div class="empty">...</div>`;
   try {
     if (searchOnly) {
-      const r = await api("/v1/search", { method: "POST", body: JSON.stringify({ ...whoBody(), query: q }) });
+      const r = await post("/v1/search", { ...whoBody(), query: q });
       $("askOut").innerHTML = `<div class="meta">route: ${esc(r.granularity)} · trace ${esc(r.trace_id)}</div>` +
         (r.hits.map(h => memCard(h.memory, `<span class="badge ${h.granularity === "shared" ? "shared" : ""}">${esc(h.granularity)}</span><span>score ${h.score.toFixed(3)}</span>`)).join("") || `<div class="empty">no hits</div>`);
       return;
     }
-    const a = await api("/v1/answer", { method: "POST", body: JSON.stringify({ ...whoBody(), question: q }) });
+    const a = await post("/v1/answer", { ...whoBody(), question: q });
     $("askOut").innerHTML = `<div class="answer">${esc(a.answer)}</div>
       <div class="meta">${a.abstained ? "abstained: not enough evidence" : a.citations.length + " citation(s)"}
       · <span class="link" id="up">helpful</span> · <span class="link" id="down">wrong</span></div>`;
-    const fb = async (r) => { await api("/v1/feedback", { method: "POST", body: JSON.stringify({ trace_id: a.trace_id, reward: r }) }); refresh(); };
+    const fb = async (r) => { await post("/v1/feedback", { ...whoBody(), trace_id: a.trace_id, reward: r }); refresh(); };
     $("up").onclick = () => fb(1); $("down").onclick = () => fb(-1);
   } catch (e) { $("askOut").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
 }
 $("askBtn").onclick = () => ask(false);
 $("searchBtn").onclick = () => ask(true);
 $("refreshBtn").onclick = refresh;
-$("verifyBtn").onclick = verify;
 $("inactive").onchange = refresh;
-$("user").onchange = refresh; $("agent").onchange = refresh;
-refresh(); verify();
+
+// ------------------------------------------------------------- sharing
+async function loadSharing() {
+  try {
+    const items = await api("/v1/memories?" + who().toString());
+    const exps = items.filter(m => m.kind === "experience");
+    $("experiences").innerHTML = exps.length ? exps.map(m => memCard(m,
+      `<label style="margin:0;display:inline-flex;gap:4px;align-items:center"><input type="checkbox" data-share="${esc(m.id)}" ${m.shareable ? "checked" : ""} style="width:auto"> consent to share</label>
+       ${m.metadata && m.metadata.shared_as ? '<span class="badge shared">shared</span>' : ""}`)).join("")
+      : `<div class="empty">No experiences yet. Your agent creates them with learn() after a task.</div>`;
+    const t = await api("/v1/teams?" + who().toString());
+    $("shareTeam").innerHTML = `<option value="">everyone (public)</option>` + t.teams.map(x => `<option>${esc(x)}</option>`).join("");
+    const shared = await api("/v1/shared?" + who().toString());
+    $("sharedList").innerHTML = shared.length ? shared.map(m => memCard(m, `<span class="badge shared">${esc(m.visibility)}${m.team_id ? ": " + esc(m.team_id) : ""}</span>`)).join("")
+      : `<div class="empty">Nothing shared with you yet.</div>`;
+  } catch (e) { $("experiences").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+document.addEventListener("change", async (ev) => {
+  const id = ev.target.dataset && ev.target.dataset.share;
+  if (!id) return;
+  try {
+    await api(`/v1/memories/${encodeURIComponent(id)}/shareable`, { method: "PUT",
+      body: JSON.stringify({ shareable: ev.target.checked, user_id: whoBody().user_id }) });
+    $("shareOut").textContent = ev.target.checked ? "consent recorded" : "consent withdrawn";
+  } catch (e) { ev.target.checked = !ev.target.checked; $("shareOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+});
+$("shareBtn").onclick = async () => {
+  $("shareOut").textContent = "checking...";
+  try {
+    const r = await post("/v1/share", { user_id: whoBody().user_id || $("user").value.trim(), team_id: $("shareTeam").value || null });
+    $("shareOut").textContent = `shared ${r.shared.length} · rejected ${r.rejected.length}` +
+      (r.rejected.length ? " (" + r.rejected.map(x => x.reason).join("; ") + ")" : "") + ` · skipped ${r.skipped.length}`;
+    loadSharing();
+  } catch (e) { $("shareOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+};
+
+// -------------------------------------------------------------- access
+async function loadAccess() {
+  try {
+    const t = await api("/v1/teams?" + who().toString());
+    $("agents").innerHTML = t.agents.length ? t.agents.map(a => `<div class="item toolbar"><span class="mono">${esc(a)}</span>
+      <span class="grow"></span><button class="ghost small" data-revoke="${esc(a)}">Revoke</button></div>`).join("")
+      : `<div class="empty">No agent grants: memory from every agent is visible to you.</div>`;
+    $("teams").innerHTML = t.teams.length ? t.teams.map(x => `<span class="pill">${esc(x)}</span>`).join(" ") : `<div class="empty">Not in any team.</div>`;
+  } catch (e) { $("agents").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+async function grant(agent, revoke) {
+  const subject = me.role === "user" ? me.user_id : ($("user").value.trim() || "default");
+  await post("/v1/grants", { kind: "user_agent", subject, object: agent, revoke });
+}
+$("grantBtn").onclick = async () => {
+  const a = $("agentName").value.trim(); if (!a) return;
+  try { await grant(a, false); $("agentName").value = ""; $("accessOut").textContent = "granted"; loadAccess(); }
+  catch (e) { $("accessOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+};
+document.addEventListener("click", async (ev) => {
+  const a = ev.target.dataset && ev.target.dataset.revoke; if (!a) return;
+  try { await grant(a, true); $("accessOut").textContent = "revoked " + a; loadAccess(); }
+  catch (e) { $("accessOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+});
+$("exportBtn").onclick = async () => {
+  try {
+    const data = await api("/v1/export?" + who().toString());
+    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
+    const a = document.createElement("a"); a.href = url; a.download = "veramem-export.json"; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) { $("accessOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+};
+
+// --------------------------------------------------------------- admin
+async function loadAdmin() {
+  try {
+    const keys = await api("/v1/keys");
+    $("keys").innerHTML = keys.length ? keys.map(k => `<div class="item toolbar">
+      <span class="mono">${esc(k.prefix)}…</span><span class="badge">${esc(k.role)}</span>
+      <span>${esc(k.user_id || "")}${k.agent_id ? " / " + esc(k.agent_id) : ""}</span>
+      <span class="note">${esc(k.label || "")}</span><span class="grow"></span>
+      ${k.revoked_at ? '<span class="badge">revoked</span>' : `<button class="ghost small" data-key="${esc(k.prefix)}">Revoke</button>`}</div>`).join("")
+      : `<div class="empty">No stored keys.</div>`;
+  } catch (e) { $("keys").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+}
+$("keyBtn").onclick = async () => {
+  try {
+    const r = await post("/v1/keys", { role: $("kAdmin").checked ? "admin" : "user",
+      user_id: $("kUser").value.trim() || null, agent_id: $("kAgent").value.trim() || null, label: $("kLabel").value.trim() || null });
+    $("newKey").innerHTML = `<div class="drawer"><div>New key (copy it now, it is not shown again):</div><div class="mono">${esc(r.key)}</div></div>`;
+    loadAdmin();
+  } catch (e) { $("newKey").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+};
+document.addEventListener("click", async (ev) => {
+  const p = ev.target.dataset && ev.target.dataset.key; if (!p) return;
+  try { await api(`/v1/keys/${encodeURIComponent(p)}`, { method: "DELETE" }); loadAdmin(); }
+  catch (e) { $("adminOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+});
+async function team(revoke) {
+  try {
+    await post("/v1/grants", { kind: "team_member", subject: $("tUser").value.trim(), object: $("tTeam").value.trim(), revoke });
+    $("adminOut").textContent = revoke ? "removed from team" : "added to team";
+  } catch (e) { $("adminOut").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+}
+$("joinBtn").onclick = () => team(false);
+$("leaveBtn").onclick = () => team(true);
+async function verify() {
+  try {
+    const v = await api("/v1/verify");
+    $("ledger").textContent = v.ok ? `ledger: verified (${v.ledger_entries})` : "ledger: TAMPERED";
+    $("ledger").className = "pill " + (v.ok ? "ok" : "bad");
+    $("ledger").title = "head " + v.head;
+    $("verifyOut").hidden = false; $("verifyOut").textContent = JSON.stringify(v, null, 2);
+  } catch (e) { $("ledger").textContent = "ledger: admin only"; }
+}
+$("verifyBtn").onclick = verify;
+
+// ------------------------------------------------------------ connection
+async function connect() {
+  try {
+    me = await api("/v1/me");
+    $("who").textContent = me.role === "user" ? `user: ${me.user_id}` : me.role;
+    $("who").className = "pill ok";
+    $("adminTab").hidden = !(me.role === "admin" || me.role === "anonymous");
+    if (me.role === "user") { $("user").value = me.user_id; $("user").disabled = true; } else { $("user").disabled = false; }
+    $("ledger").hidden = me.role === "user";  // ledger verification is an admin action
+    $("connOut").textContent = "connected";
+    refresh(); if (me.role !== "user") verify();
+  } catch (e) {
+    $("who").textContent = "not signed in"; $("who").className = "pill bad";
+    $("connOut").innerHTML = `<span class="err">${esc(e.message)}</span>`;
+    $("list").innerHTML = `<div class="err">${esc(e.message)}</div>`;
+  }
+}
+$("connectBtn").onclick = () => { session("veramem.key", $("apikey").value.trim()); session("veramem.user", $("user").value.trim()); connect(); };
+$("apikey").value = session("veramem.key") || "";
+$("user").value = session("veramem.user") || "default";
+connect();
 </script>
 </body>
 </html>

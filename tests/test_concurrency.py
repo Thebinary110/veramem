@@ -41,3 +41,17 @@ def test_async_facade(tmp_path):
             assert (await m.verify())["ok"]
 
     asyncio.run(run())
+
+
+def test_cache_invalidation_crosses_processes(tmp_path):
+    """A retraction by another process/replica must take effect in this one's cache."""
+    from veramem import Memory
+
+    path = str(tmp_path / "shared.db")
+    a = Memory(path, llm=NoLLM(), embedder=HashEmbedder())
+    mid = a.add("Kim's locker code is 5521", user_id="kim").changes[0].memory_id
+    assert a.search("locker code", user_id="kim", include_raw=False).hits  # warms a's cache
+    b = Memory(path, llm=NoLLM(), embedder=HashEmbedder())  # separate cache, like a 2nd process
+    b.delete(mid, user_id="kim")
+    hits = a.search("locker code", user_id="kim", include_raw=False).hits
+    assert all(h.memory.id != mid for h in hits)

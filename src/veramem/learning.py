@@ -23,7 +23,7 @@ keeps the same *signals* at inference time:
 from __future__ import annotations
 
 import json
-import time
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -40,6 +40,8 @@ from .types import (
     SourceType,
     Status,
     Visibility,
+    check_id,
+    day,
     now,
 )
 from .write import normalise_messages
@@ -67,6 +69,7 @@ class Learner:
         cited: list[str] | None = None,
     ) -> dict[str, Any]:
         reward = max(-1.0, min(1.0, float(reward)))
+        check_id(trace_id, "trace id")
         tr = self.m.store.get_trace(trace_id)
         if tr is None:
             raise KeyError(f"unknown trace {trace_id}")
@@ -161,7 +164,7 @@ class Learner:
         where = "e.session_id IS NOT NULL" + (" AND e.user_id IS ?" if user_id else "")
         rows = self.m.store.db.execute(
             f"SELECT session_id, user_id, agent_id, COUNT(*) n FROM episodes e WHERE {where} "
-            f"GROUP BY session_id, user_id, agent_id HAVING n>=4",
+            f"GROUP BY session_id, user_id, agent_id HAVING COUNT(*)>=4",
             [user_id] if user_id else [],
         ).fetchall()
         out = []
@@ -173,8 +176,7 @@ class Learner:
                 "e.session_id=? AND e.user_id IS ?", [r["session_id"], r["user_id"]]
             )
             convo = "\n".join(
-                f"({time.strftime('%Y-%m-%d', time.gmtime(e.occurred_at))}) "
-                f"{e.actor or e.source.value}: {e.content[:600]}"
+                f"({day(e.occurred_at)}) {e.actor or e.source.value}: {e.content[:600]}"
                 for e in eps
             )[:24000]
             try:
@@ -298,7 +300,10 @@ class Learner:
         visibility: Visibility,
         team_id: str | None,
         extra_meta: dict[str, Any] | None = None,
+        gate: Callable[[str], Any] | None = None,
     ):
+        """Reconcile one experience with its pool. `gate`, if given, is run on the *final*
+        text (after the pool manager may have rewritten it) and can veto storing it."""
         if visibility is Visibility.PRIVATE:
             where = "m.status='active' AND m.kind='experience' AND m.user_id IS ? AND m.visibility='private'"
             params: list[Any] = [user_id]
@@ -327,17 +332,28 @@ class Learner:
                     ],
                     max_tokens=900,
                 )
+                if not isinstance(d, dict):
+                    d = {}
                 action = str(d.get("action", "add")).lower()
+                if action not in ("add", "replace", "none"):
+                    action = "add"
                 if action == "replace":
                     try:
                         target_id = neigh[int(str(d.get("id")).strip())].id
                     except (ValueError, IndexError, TypeError):
                         action = "add"
-                final = str(d.get("content") or content).strip()
+                proposed = d.get("content")
+                final = (
+                    proposed.strip() if isinstance(proposed, str) and proposed.strip() else content
+                )
             except LLMError:
                 action = "add"
         if action == "none":
             return "none", None
+        if gate is not None:
+            verdict = gate(final)
+            if not verdict.ok:
+                return "rejected", verdict
         src = [e.source for e in episodes] or [SourceType.SHARED]
         item = MemoryItem(
             text=final,
@@ -461,7 +477,7 @@ class Learner:
         return {"trained": True, **model.metrics, "coefficients": model.explain()}
 
     # ---------------------------------------------------------- action gate
-    def check_action(self, memory_ids: list[str]) -> dict[str, Any]:
+    def check_action(self, memory_ids: list[str], principal: Any = None) -> dict[str, Any]:
         """AuthMem-Bench Module B: may these memories bind a protected tool argument?
 
         Only Authorized memories may. Attested / Unendorsed ones require the agent to
@@ -470,7 +486,7 @@ class Learner:
         needs, missing = [], []
         for mid in memory_ids:
             m = self.m.store.get_memory(mid)
-            if m is None:
+            if m is None or (principal is not None and not self.m.policy.can_read(principal, m)):
                 missing.append(mid)
             elif m.authority is not Authority.AUTHORIZED or m.status is not Status.ACTIVE:
                 needs.append(

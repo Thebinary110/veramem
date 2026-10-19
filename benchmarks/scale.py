@@ -56,6 +56,48 @@ def single(sizes: list[int]) -> None:
         print(f"| {target:,} | {ingest:.1f} | {p50:.1f} | {p95:.1f} | {size:.0f} |", flush=True)
 
 
+def compare_index(sizes: list[int]) -> None:
+    """Exact vs HNSW on the same database: latency and top-10 agreement."""
+    rng = random.Random(3)
+    d = tempfile.mkdtemp()
+    path = os.path.join(d, "c.db")
+    writer = Memory(path, llm=NoLLM(), embedder=HashEmbedder(dim=768))
+    done = 0
+    print(
+        "| memories | exact p50 (ms) | hnsw p50 (ms) | hnsw first-search build (s) | top-10 overlap |"
+    )
+    print("|---:|---:|---:|---:|---:|")
+    for target in sizes:
+        while done < target:
+            n = min(1000, target - done)
+            writer.add([_text(rng) for _ in range(n)], user_id="u", infer=False)
+            done += n
+        exact = Memory(path, llm=NoLLM(), embedder=HashEmbedder(dim=768), vector_index="exact")
+        ann = Memory(path, llm=NoLLM(), embedder=HashEmbedder(dim=768), vector_index="hnsw")
+        t = time.time()
+        ann.search("warm up", user_id="u", record=False)
+        build = time.time() - t
+        exact.search("warm up", user_id="u", record=False)
+        qs = [" ".join(rng.choices(VOCAB, k=5)) for _ in range(30)]
+        lat_e, lat_a, overlap = [], [], []
+        for q in qs:
+            t = time.perf_counter()
+            e = exact.search(q, user_id="u", limit=10, record=False, include_raw=False).hits
+            lat_e.append(time.perf_counter() - t)
+            t = time.perf_counter()
+            a = ann.search(q, user_id="u", limit=10, record=False, include_raw=False).hits
+            lat_a.append(time.perf_counter() - t)
+            overlap.append(len({h.memory.id for h in e} & {h.memory.id for h in a}) / 10)
+        print(
+            f"| {target:,} | {statistics.median(lat_e) * 1000:.1f} | "
+            f"{statistics.median(lat_a) * 1000:.1f} | {build:.1f} | "
+            f"{statistics.mean(overlap):.2f} |",
+            flush=True,
+        )
+        exact.close()
+        ann.close()
+
+
 def tenants(n_users: int, per_user: int) -> None:
     rng = random.Random(2)
     d = tempfile.mkdtemp()
@@ -74,8 +116,11 @@ def main() -> None:
     ap.add_argument("--tenants", type=int, default=0)
     ap.add_argument("--per-user", type=int, default=2000)
     ap.add_argument("--sizes", default="10000,50000,100000")
+    ap.add_argument("--compare-index", action="store_true", help="exact vs HNSW")
     a = ap.parse_args()
-    if a.tenants:
+    if a.compare_index:
+        compare_index([int(x) for x in a.sizes.split(",")])
+    elif a.tenants:
         tenants(a.tenants, a.per_user)
     else:
         single([int(x) for x in a.sizes.split(",")])

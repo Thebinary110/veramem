@@ -240,15 +240,79 @@ def train_ranker(min_examples: int = typer.Option(30, help="minimum rated exampl
 @app.command()
 def serve(host: str = "127.0.0.1", port: int = 8765) -> None:
     """Run the REST API and web UI."""
-    if host not in ("127.0.0.1", "localhost", "::1") and not os.environ.get("VERAMEM_API_KEY"):
-        typer.secho("Refusing to listen on a public interface without VERAMEM_API_KEY.", fg="red")
+    mem = _mem()
+    from . import auth
+
+    secured = bool(
+        os.environ.get("VERAMEM_API_KEY")
+        or os.environ.get("VERAMEM_JWT_JWKS_URL")
+        or os.environ.get("VERAMEM_JWT_SECRET")
+        or auth.has_keys(mem.store)
+    )
+    if host not in ("127.0.0.1", "localhost", "::1") and not secured:
+        typer.secho(
+            "Refusing to listen on a public interface without authentication. Create a key "
+            "with `veramem keys create --admin`, or set VERAMEM_API_KEY.",
+            fg="red",
+        )
         raise typer.Exit(2)
     import uvicorn
 
     from .server import create_app
 
     typer.echo(f"VeraMem UI: http://{host}:{port}   API docs: http://{host}:{port}/docs")
-    uvicorn.run(create_app(_mem()), host=host, port=port, log_level="warning")
+    uvicorn.run(create_app(mem), host=host, port=port, log_level="warning")
+
+
+keys_app = typer.Typer(help="Manage REST API keys (stored as hashes).")
+app.add_typer(keys_app, name="keys")
+
+
+@keys_app.command("create")
+def keys_create(
+    user: str = typer.Option(None, "--user", "-u", help="bind the key to this user"),
+    agent: str = typer.Option(None, "--agent", help="also bind it to one agent"),
+    admin: bool = typer.Option(False, "--admin", help="admin key: may act for any user"),
+    label: str = typer.Option(None, help="a note to recognise the key"),
+) -> None:
+    """Create an API key. It is printed once and cannot be recovered."""
+    from . import auth
+
+    mem = _mem()
+    try:
+        key = auth.create_key(
+            mem.store, role="admin" if admin else "user", user_id=user, agent_id=agent, label=label
+        )
+    except ValueError as e:
+        typer.secho(str(e), fg="red")
+        raise typer.Exit(2) from None
+    mem.ledger.append("KEY_CREATE", key[:10], {"role": "admin" if admin else "user", "user": user})
+    typer.echo(key)
+    typer.echo("Store it now: it is not shown again.", err=True)
+
+
+@keys_app.command("list")
+def keys_list() -> None:
+    """List keys (prefix, role, user, status)."""
+    from . import auth
+
+    for k in auth.list_keys(_mem().store):
+        status = "revoked" if k["revoked_at"] else "active"
+        typer.echo(
+            f"{k['prefix']}  {k['role']:5}  user={k['user_id']}  agent={k['agent_id']}"
+            f"  {status}  {k['label'] or ''}"
+        )
+
+
+@keys_app.command("revoke")
+def keys_revoke(prefix: str) -> None:
+    """Revoke a key by its prefix (as shown by `veramem keys list`)."""
+    from . import auth
+
+    mem = _mem()
+    n = auth.revoke_key(mem.store, prefix)
+    mem.ledger.append("KEY_REVOKE", prefix, {"revoked": n})
+    typer.echo(f"revoked {n} key(s)")
 
 
 @app.command()

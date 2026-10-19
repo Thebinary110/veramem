@@ -99,7 +99,7 @@ class Policy:
                 where += f" AND {alias}.agent_id IS NULL"
         if p.agent_id and self.store.has_any_grants("agent_resource"):
             allowed = self.store.grant_objects("agent_resource", p.agent_id, t)
-            where += f" AND {_resources_subset_sql(alias)}"
+            where += f" AND {self.store.resources_subset_sql(alias)}"
             params.append(json.dumps(sorted(allowed)))
         return where, params
 
@@ -126,7 +126,7 @@ class Policy:
                 where += f" AND {alias}.agent_id IS NULL"
         if p.agent_id and self.store.has_any_grants("agent_resource"):
             allowed = self.store.grant_objects("agent_resource", p.agent_id, t)
-            where += f" AND {_resources_subset_sql(alias)}"
+            where += f" AND {self.store.resources_subset_sql(alias)}"
             params.append(json.dumps(sorted(allowed)))
         return where, params
 
@@ -149,11 +149,21 @@ class Policy:
 
     # --------------------------------------------------------------- writing
     def check_write(self, p: Principal, m: MemoryItem) -> None:
-        """Only the owner may modify a memory; agent-owned memories by that agent."""
+        """Only the owner may modify a memory.
+
+        * user-owned: only that user;
+        * agent-owned (no user): only that agent acting without a user;
+        * shared (team/public, owned by nobody): no end user may modify it; operators use
+          `Memory.moderate`. Otherwise anyone could rewrite pooled experience.
+        """
+        if m.visibility is not Visibility.PRIVATE or (m.user_id is None and m.agent_id is None):
+            raise AccessDenied(
+                f"memory {m.id} is shared; only an administrator can change it (Memory.moderate)"
+            )
         if m.user_id is not None:
             if p.user_id != m.user_id:
                 raise AccessDenied(f"{p} may not modify memory {m.id} owned by another user")
-        elif m.agent_id is not None and p.agent_id != m.agent_id and p.user_id is not None:
+        elif p.user_id is not None or p.agent_id != m.agent_id:
             raise AccessDenied(f"{p} may not modify agent memory {m.id}")
 
     @staticmethod
@@ -161,11 +171,3 @@ class Policy:
         """Invariant from ShareMem §4.4: preferences are user-bound and never shared."""
         if m.kind is Kind.PREFERENCE and m.visibility is not Visibility.PRIVATE:
             raise AccessDenied("preferences are user-bound and cannot be shared")
-
-
-def _resources_subset_sql(alias: str) -> str:
-    # every resource in the memory's provenance must be in the allowed set
-    return (
-        f"NOT EXISTS (SELECT 1 FROM json_each(COALESCE(json_extract({alias}.metadata,"
-        f"'$.resources'),'[]')) r WHERE r.value NOT IN (SELECT value FROM json_each(?)))"
-    )

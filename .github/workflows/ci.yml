@@ -47,7 +47,7 @@ jobs:
           - os: windows-latest
             python: "3.11"
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 35
     steps:
       - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
         if: runner.os == 'Linux'
@@ -60,15 +60,110 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install
-        run: python -m pip install -e ".[dev,mcp]"
+        run: python -m pip install -e ".[dev,mcp,auth,ann]"
       - name: "Tests (no network, no model: deterministic fake LLM)"
-        run: python -m pytest --cov=veramem --cov-report=term-missing
+        run: python -m pytest -n auto --cov=veramem --cov-report=term-missing --cov-fail-under=80
       - name: Gap guarantees benchmark (deterministic)
         if: runner.os == 'Linux' && matrix.python == '3.12'
         run: python -m benchmarks.guarantees --offline
 
+  postgres:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16@sha256:ca0bd484cb98bf4b24eb1010e73fb3fcbd6714d240fbc1a10eea5b7dbecb641d
+        env:
+          POSTGRES_USER: vm
+          POSTGRES_DB: veramem
+          # ephemeral database reachable only from this job: no password needed
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U vm" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[dev,mcp,auth,postgres]"
+      - name: Full test suite against PostgreSQL
+        env:
+          VERAMEM_TEST_PG: postgresql://vm@127.0.0.1:5432/veramem
+        run: python -m pytest --cov=veramem --cov-report=term-missing
+
+  integrations:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install with every framework extra
+        run: python -m pip install -e ".[dev,langchain,langgraph]" "llama-index-core>=0.14" "crewai>=1.15"
+      - name: Framework adapters
+        run: python -m pytest tests/test_integrations.py -v
+
+  sdk-typescript:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        node: ["20", "22"]
+    defaults:
+      run:
+        working-directory: sdk/typescript
+    steps:
+      - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          npm ci --ignore-scripts
+          python -m pip install -e "../.."
+      - name: Lint, build, unit tests
+        run: |
+          npm run lint
+          npm run build
+          npm test
+      - name: Live tests against a real VeraMem server
+        env:
+          VERAMEM_LLM: none
+          VERAMEM_EMBEDDER: hash
+          VERAMEM_API_KEY: ci-admin-key
+        run: |
+          VERAMEM_HOME="$(mktemp -d)"
+          export VERAMEM_HOME
+          veramem serve --port 8797 &
+          for _ in $(seq 1 30); do curl -sf http://127.0.0.1:8797/health && break; sleep 1; done
+          VERAMEM_URL=http://127.0.0.1:8797 npm test
+
   build:
-    needs: test
+    needs: [test, postgres, integrations, sdk-typescript]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
