@@ -153,7 +153,7 @@ python -m benchmarks.guarantees --systems veramem,mem0   # reproduce the table
 
 ## Works with your stack
 
-| | |
+| Use it from | How |
 |---|---|
 | **MCP** | Claude Desktop, Claude Code, Cursor, VS Code. `veramem mcp-config` prints the config to paste. |
 | **Python** | `Memory` and `AsyncMemory` |
