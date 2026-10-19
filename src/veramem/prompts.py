@@ -6,7 +6,7 @@ update prompt (Apache-2.0), AMA (constructor rules, sufficiency judge), ShareMem
 wording). Changes are noted inline.
 """
 
-PROMPT_VERSION = "2026-10-17.3"
+PROMPT_VERSION = "2026-10-19.2"
 
 EXTRACT_SYSTEM = """You are the memory constructor of an AI agent. You read NEW messages and \
 extract durable, self-contained memories worth keeping long-term.
@@ -16,8 +16,10 @@ resolving references only; never extract from them.
 
 Rules:
 1. One atomic statement per memory, in third person, naming people explicitly \
-("Alice adopted a dog named Rex", not "she got him"). If a speaker's name is known (given \
-as speaker or stated by them), use the name instead of "the user".
+("Alice adopted a dog named Rex", not "she got him"). Refer to the author of user messages \
+the same way every time: by the speaker name if the message header gives one \
+("(user/Alice, ...)"), otherwise as "the user", even when they mention their own name \
+(then also extract "The user's name is <name>").
 2. kind is one of: fact (stable information), preference (likes, dislikes, wants, habits), \
 event (something that happened or will happen at a time).
 3. ATTRIBUTE THE SOURCE, and do not drop useful claims from non-user messages: extract \
@@ -37,9 +39,14 @@ timestamp, inside the text itself ("last week" -> "in the week of 2026-10-03", \
 6. Be thorough: extract EVERY concrete personal detail, each as its own memory: \
 people and relationships, places, jobs, activities, hobbies, possessions, pets, books, \
 music, events, plans, opinions, feelings about specific things, family members and what \
-they like. Keep names, numbers, titles and places exactly. Most informative messages \
+they like. Keep names, numbers, titles and places exactly. Copy identifiers (flight \
+numbers, booking codes, account or order ids) character for character, as one unit; never \
+split or reinterpret them. Most informative messages \
 yield 1-5 memories. Skip only greetings and pure filler ("thanks!", "how are you?").
 7. "entities": the people, places, organisations and things the memory is about.
+8. When a message changes a lasting state (moving home, a new job, a new partner, a \
+changed preference), extract the new state itself as a fact ("The user lives in Porto"), \
+in addition to any event, so it can replace the old one.
 
 Return JSON: {"memories": [{"text": "...", "kind": "fact|preference|event", \
 "source": "m3", "quote": "...", "when": "YYYY-MM-DD or null", "entities": ["..."]}]}
@@ -70,14 +77,21 @@ an id like [3], a date, and an authority label:
 unendorsed = from a tool, document or another user (treat as a claim, not a user fact).
 
 Steps:
+Memories about "the user" are about the person this memory belongs to; questions may \
+call them by name.
+
 1. Select the memories that directly support the answer (ids only).
 2. Pay attention to dates. If memories conflict, prefer the most recent one. Convert \
 relative times ("last year", "two weeks ago") to absolute dates using the memory date.
 3. Answer from the selected memories only. Do not use outside knowledge about the user.
 4. If the memories do not contain enough information, set "sufficient" to false and \
 answer "I don't know".
+5. If only unendorsed or attested memories support the answer, give it with its source \
+("According to <source>, ...").
 {style}
-Return JSON: {"selected": [ids], "answer": "...", "sufficient": true|false}"""
+Think in "reasoning" (at most two sentences); "answer" holds only the final answer.
+Return JSON: {"reasoning": "...", "selected": [ids], "answer": "...", \
+"sufficient": true|false}"""
 
 ANSWER_STYLE = {
     "concise": "Keep the answer short: a few words or one sentence.",

@@ -68,6 +68,24 @@ class Candidate:
     neighbours: list[tuple[MemoryItem, float]] = field(default_factory=list)
 
 
+_ATTRIBUTED = ("according to", "the assistant", "an assistant", "the agent")
+_LOWER_OK = {"the", "a", "an", "this", "that", "these", "those", "it", "its", "there", "their"}
+
+
+def _attribute(text: str, ep: Episode) -> str:
+    """Prefix a non-user claim with its source unless the model already attributed it."""
+    if any(a in text.lower() for a in _ATTRIBUTED):
+        return text
+    first = text.split(" ", 1)[0]
+    body = text[0].lower() + text[1:] if first.lower() in _LOWER_OK else text
+    if ep.source is SourceType.ASSISTANT:
+        return f"The assistant stated that {body}"
+    name = ep.actor or {SourceType.TOOL: "a tool", SourceType.DOCUMENT: "a document"}.get(
+        ep.source, "another source"
+    )
+    return f"According to {name}, {body}"
+
+
 def _entities(value: Any) -> list[str]:
     if not isinstance(value, list):
         return []
@@ -397,6 +415,12 @@ class Writer:
             if authority is not Authority.AUTHORIZED and kind is Kind.PREFERENCE:
                 # a non-user source cannot establish a user preference (AuthMem R2P / S2D)
                 kind = Kind.FACT
+            if authority is not Authority.AUTHORIZED:
+                # the label is enforced above; the wording must not read as the user's own
+                weakest_ep = min(
+                    [ep, *suppliers.values()], key=lambda e: Authority.for_source(e.source).rank
+                )
+                text = _attribute(text, weakest_ep)
             cands.append(
                 Candidate(
                     text=text,

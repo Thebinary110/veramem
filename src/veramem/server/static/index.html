@@ -324,7 +324,20 @@ async function ask(searchOnly) {
     const a = await post("/v1/answer", { ...whoBody(), question: q });
     $("askOut").innerHTML = `<div class="answer">${esc(a.answer)}</div>
       <div class="meta">${a.abstained ? "abstained: not enough evidence" : a.citations.length + " citation(s)"}
-      · <span class="link" id="up">helpful</span> · <span class="link" id="down">wrong</span></div>`;
+      · <span class="link" id="up">helpful</span> · <span class="link" id="down">wrong</span></div>
+      <div id="cites"></div>`;
+    // show each cited memory with the verbatim source it rests on
+    const cites = await Promise.all(a.citations.map(async (id) => {
+      const qs = who().toString();
+      const [m, evs] = await Promise.all([
+        api(`/v1/memories/${encodeURIComponent(id)}?` + qs),
+        api(`/v1/memories/${encodeURIComponent(id)}/evidence?` + qs)]);
+      return `<div class="drawer cite"><div>${esc(m.text)}
+        <span class="badge ${esc(m.authority)}">${esc(m.authority)}</span></div>` +
+        evs.map(e => `<div class="meta">“${esc(e.quote)}” · ${esc(e.source)} · ${day(e.occurred_at)}
+          · ${e.intact ? "hash intact" : "<span class='err'>hash mismatch</span>"}</div>`).join("") + `</div>`;
+    }).map(p => p.catch(() => "")));
+    $("cites").innerHTML = cites.join("");
     const fb = async (r) => { await post("/v1/feedback", { ...whoBody(), trace_id: a.trace_id, reward: r }); refresh(); };
     $("up").onclick = () => fb(1); $("down").onclick = () => fb(-1);
   } catch (e) { $("askOut").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
