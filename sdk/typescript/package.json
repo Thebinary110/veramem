@@ -1,0 +1,49 @@
+{
+  "name": "veramem",
+  "version": "0.1.0",
+  "description": "TypeScript client for the VeraMem REST API: verifiable, outcome-aware, share-safe memory for AI agents.",
+  "license": "Apache-2.0",
+  "author": "Shhaurya Jaiswal",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thebinary110/veramem.git",
+    "directory": "sdk/typescript"
+  },
+  "homepage": "https://github.com/Thebinary110/veramem/tree/main/sdk/typescript#readme",
+  "bugs": "https://github.com/Thebinary110/veramem/issues",
+  "keywords": ["memory", "agents", "llm", "rag", "veramem", "sdk"],
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md"],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/clean.mjs && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && node scripts/write-cjs-package.mjs",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run lint && npm run build && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.11"
+  }
+}

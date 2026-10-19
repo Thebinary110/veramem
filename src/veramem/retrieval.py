@@ -12,11 +12,12 @@ from __future__ import annotations
 
 import math
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
 from . import ranking as rk
+from .ann import ANN_MIN
 from .policy import Principal
 from .types import (
     Authority,
@@ -27,6 +28,7 @@ from .types import (
     MemoryItem,
     SearchResult,
     Visibility,
+    clean_text,
     new_id,
     now,
 )
@@ -37,6 +39,7 @@ if TYPE_CHECKING:
 RRF_K = 60
 POOL = 60
 UTILITY_BETA = 3.0  # strength of the outcome prior
+FTS_SCOPE_FRACTION = 0.3
 RAW_WEIGHT = {"raw": 1.0, "dual": 0.85, "fact": 0.6, "summary": 0.5}
 
 _TEMPORAL = re.compile(
@@ -107,6 +110,27 @@ def query_entities(query: str) -> list[str]:
     return list(dict.fromkeys([e.lower() for e in ents] + words))[:12]
 
 
+def _selective(scopes: list[str] | None, n_scope: int, table: str, store: Any) -> list[str] | None:
+    """Narrow full-text search to the caller's scope tokens only when that is selective.
+
+    Intersecting with an owner token costs time proportional to that owner's postings,
+    so when one caller owns most of the store it is cheaper to let the SQL access
+    predicate (always applied) do the filtering. Correctness does not depend on this.
+    """
+    if not scopes:
+        return None
+    total = store.total_rows(table)
+    return scopes if total and n_scope / total < FTS_SCOPE_FRACTION else None
+
+
+def _top_k(sims: np.ndarray, k: int) -> np.ndarray:
+    """Indices of the k largest scores, best first (O(n) selection + O(k log k) sort)."""
+    if len(sims) <= k:
+        return np.argsort(-sims)
+    idx = np.argpartition(-sims, k)[:k]
+    return idx[np.argsort(-sims[idx])]
+
+
 def _rrf(rank_lists: list[list[str]]) -> dict[str, float]:
     scores: dict[str, float] = {}
     for ranks in rank_lists:
@@ -170,15 +194,16 @@ class Retriever:
         scopes: list[str] | None = None,
     ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
         signals: dict[str, dict[str, float]] = {}
-        ids, mat = self.m.store.memory_vectors(where, params)
+        ids, mat, n_scope = self._vectors("m", where, params, qv, scopes, pool)
         dense: list[str] = []
         if len(ids):
             sims = mat @ qv
-            order = np.argsort(-sims)[:pool]
+            order = _top_k(sims, pool)
             dense = [ids[i] for i in order]
             for i in order:
                 signals.setdefault(ids[i], {})["dense"] = round(float(sims[i]), 4)
-        lexical = [r["id"] for r in self.m.store.memory_fts(query, where, params, pool, scopes)]
+        narrow = _selective(scopes, n_scope, "memories", self.m.store)
+        lexical = [r["id"] for r in self.m.store.memory_fts(query, where, params, pool, narrow)]
         for r, i in enumerate(lexical):
             signals.setdefault(i, {})["bm25_rank"] = r + 1
         ent = [
@@ -188,6 +213,33 @@ class Retriever:
         for i in ent:
             signals.setdefault(i, {})["entity"] = 1.0
         return _rrf([dense, lexical, ent]), signals
+
+    def _vectors(
+        self,
+        kind: str,
+        where: str,
+        params: list,
+        qv: np.ndarray,
+        scopes: list[str] | None,
+        pool: int,
+    ) -> tuple[list[str], np.ndarray, int]:
+        """Candidate vectors for dense scoring: exact (all rows in scope) or HNSW candidates.
+
+        Either way only rows passing `where` (the access predicate) are returned.
+        """
+        ann = self.m.ann
+        if ann is not None and scopes:
+            size = ann.scope_size(kind, scopes)
+            if self.m.vector_index == "hnsw" or size >= ANN_MIN:
+                rowids = ann.search(kind, scopes, qv, pool * 4)
+                ids, mat = self.m.store.vectors_for_rowids(kind, rowids, where, params)
+                return ids, mat, size
+        ids, mat = (
+            self.m.store.memory_vectors(where, params)
+            if kind == "m"
+            else self.m.store.episode_vectors(where, params)
+        )
+        return ids, mat, len(ids)
 
     # ------------------------------------------------------------- episodes
     def _episode_where(self, p: Principal, live_only: bool = False) -> tuple[str, list]:
@@ -208,18 +260,24 @@ class Retriever:
     ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
         where, params = self._episode_where(p, live_only=live_only)
         signals: dict[str, dict[str, float]] = {}
-        ids, mat = self.m.store.episode_vectors(where, params)
+        ids, mat, n_scope = self._vectors(
+            "e", where, params, qv, self.m.policy.fts_scopes(p, False), pool
+        )
         dense: list[str] = []
         if len(ids):
             sims = mat @ qv
-            order = np.argsort(-sims)[:pool]
+            order = _top_k(sims, pool)
             dense = [ids[i] for i in order]
             for i in order:
                 signals.setdefault(ids[i], {})["dense"] = round(float(sims[i]), 4)
         lexical = [
             r["id"]
             for r in self.m.store.episode_fts(
-                query, where, params, pool, self.m.policy.fts_scopes(p, False)
+                query,
+                where,
+                params,
+                pool,
+                _selective(self.m.policy.fts_scopes(p, False), n_scope, "episodes", self.m.store),
             )
         ]
         for r, i in enumerate(lexical):
@@ -239,6 +297,7 @@ class Retriever:
         record: bool = True,
         include_raw: bool = True,
     ) -> SearchResult:
+        query = clean_text(query)
         g = route(query) if granularity == "auto" else granularity
         temporal = is_temporal(query)
         qv = self.m.embedder.embed_one(query)

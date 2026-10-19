@@ -105,6 +105,7 @@ def test_share_requires_consent_and_membership(mem):
         mem.share(user_id="wes", team_id="not-my-team")
 
 
+@pytest.mark.sqlite_only
 def test_forget_user_erases_and_withdraws(mem):
     mem.join_team("xena", "t")
     mem.add("Xena's secret phrase is purple-otter-42", user_id="xena")

@@ -1,0 +1,212 @@
+[
+ {
+  "seed": 0,
+  "train": [
+   "seat",
+   "airline",
+   "gym_time",
+   "phone_plan"
+  ],
+  "test": [
+   "diet",
+   "bank",
+   "home_city",
+   "shipping"
+  ],
+  "none": 0.14,
+  "genuine": 1.0,
+  "genuine_gate": {
+   "active": true,
+   "cv_gain_lower_95": 0.59858918157375,
+   "coef": {
+    "auth_authorized": 1.988,
+    "auth_unendorsed": -0.885,
+    "auth_attested": -1.179,
+    "kind_preference": 0.557,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  },
+  "shuffled": 0.14,
+  "shuffled_gate": {
+   "active": false,
+   "cv_gain_lower_95": -0.001210467706392451,
+   "coef": {
+    "auth_authorized": 0.001,
+    "auth_unendorsed": 0.009,
+    "auth_attested": -0.011,
+    "kind_preference": -0.001,
+    "bm25_rr": 0.0,
+    "dense": 0.009
+   }
+  }
+ },
+ {
+  "seed": 1,
+  "train": [
+   "bank",
+   "airline",
+   "seat",
+   "shipping"
+  ],
+  "test": [
+   "gym_time",
+   "phone_plan",
+   "home_city",
+   "diet"
+  ],
+  "none": 0.0,
+  "genuine": 1.0,
+  "genuine_gate": {
+   "active": true,
+   "cv_gain_lower_95": 0.6105478842017061,
+   "coef": {
+    "auth_authorized": 1.978,
+    "auth_unendorsed": -0.871,
+    "auth_attested": -1.182,
+    "kind_preference": 0.432,
+    "bm25_rr": 0.299,
+    "dense": 0.0
+   }
+  },
+  "shuffled": 0.0,
+  "shuffled_gate": {
+   "active": false,
+   "cv_gain_lower_95": -0.0013056200681322912,
+   "coef": {
+    "auth_authorized": 0.0,
+    "auth_unendorsed": -0.001,
+    "auth_attested": 0.001,
+    "kind_preference": 0.003,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  }
+ },
+ {
+  "seed": 2,
+  "train": [
+   "airline",
+   "shipping",
+   "diet",
+   "phone_plan"
+  ],
+  "test": [
+   "home_city",
+   "bank",
+   "seat",
+   "gym_time"
+  ],
+  "none": 0.12,
+  "genuine": 1.0,
+  "genuine_gate": {
+   "active": true,
+   "cv_gain_lower_95": 0.4895097130217047,
+   "coef": {
+    "auth_authorized": 2.088,
+    "auth_unendorsed": -0.798,
+    "auth_attested": -1.078,
+    "kind_preference": 0.35,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  },
+  "shuffled": 0.12,
+  "shuffled_gate": {
+   "active": false,
+   "cv_gain_lower_95": -0.0008817654306998034,
+   "coef": {
+    "auth_authorized": 0.008,
+    "auth_unendorsed": -0.009,
+    "auth_attested": 0.003,
+    "kind_preference": 0.006,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  }
+ },
+ {
+  "seed": 3,
+  "train": [
+   "shipping",
+   "gym_time",
+   "diet",
+   "seat"
+  ],
+  "test": [
+   "home_city",
+   "phone_plan",
+   "airline",
+   "bank"
+  ],
+  "none": 0.29,
+  "genuine": 1.0,
+  "genuine_gate": {
+   "active": true,
+   "cv_gain_lower_95": 0.503778667478735,
+   "coef": {
+    "auth_authorized": 1.988,
+    "auth_unendorsed": -0.826,
+    "auth_attested": -1.049,
+    "kind_preference": 0.466,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  },
+  "shuffled": 0.29,
+  "shuffled_gate": {
+   "active": false,
+   "cv_gain_lower_95": -0.001423165230175267,
+   "coef": {
+    "auth_authorized": -0.0,
+    "auth_unendorsed": -0.003,
+    "auth_attested": 0.004,
+    "kind_preference": -0.003,
+    "bm25_rr": 0.0,
+    "dense": 0.001
+   }
+  }
+ },
+ {
+  "seed": 4,
+  "train": [
+   "home_city",
+   "airline",
+   "diet",
+   "seat"
+  ],
+  "test": [
+   "gym_time",
+   "phone_plan",
+   "bank",
+   "shipping"
+  ],
+  "none": 0.17,
+  "genuine": 1.0,
+  "genuine_gate": {
+   "active": true,
+   "cv_gain_lower_95": 0.47112814888357624,
+   "coef": {
+    "auth_authorized": 1.467,
+    "auth_unendorsed": -0.63,
+    "auth_attested": -0.756,
+    "kind_preference": 0.66,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  },
+  "shuffled": 0.17,
+  "shuffled_gate": {
+   "active": false,
+   "cv_gain_lower_95": -0.005307392577816682,
+   "coef": {
+    "auth_authorized": 0.043,
+    "auth_unendorsed": -0.064,
+    "auth_attested": 0.038,
+    "kind_preference": 0.004,
+    "bm25_rr": 0.0,
+    "dense": 0.0
+   }
+  }
+ }
+]

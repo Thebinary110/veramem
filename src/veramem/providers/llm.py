@@ -24,7 +24,22 @@ _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
 _THINK = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 
+def _clean(obj: Any) -> Any:
+    """Strip NUL bytes from every string in model JSON (untrusted, and PostgreSQL rejects them)."""
+    if isinstance(obj, str):
+        return obj.replace("\x00", "")
+    if isinstance(obj, list):
+        return [_clean(x) for x in obj]
+    if isinstance(obj, dict):
+        return {_clean(k) if isinstance(k, str) else k: _clean(v) for k, v in obj.items()}
+    return obj
+
+
 def parse_json(text: str) -> Any:
+    return _clean(_parse_json(text))
+
+
+def _parse_json(text: str) -> Any:
     """Parse the first JSON object/array in a model response, tolerating fences and chatter."""
     text = _THINK.sub("", text).strip()
     text = _FENCE.sub("", text).strip()

@@ -34,7 +34,21 @@ dependencies = [
 
 [project.optional-dependencies]
 mcp = ["mcp>=1.2"]
-dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10", "build>=1.2"]
+auth = ["PyJWT[crypto]>=2.8"]
+ann = ["usearch>=2.12"]
+postgres = ["psycopg[binary]>=3.2"]
+langchain = ["langchain-core>=1.0"]
+langgraph = ["langgraph>=1.0"]
+dev = [
+  "pytest>=8",
+  "pytest-cov>=5",
+  "ruff>=0.6",
+  "mypy>=1.10",
+  "build>=1.2",
+  "hypothesis>=6.100",
+  "pytest-xdist>=3.6",
+  "PyJWT[crypto]>=2.8",
+]
 
 [project.scripts]
 veramem = "veramem.cli:app"
@@ -68,6 +82,7 @@ ignore = ["S101", "S608", "B008", "B905", "S311", "E501"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["sqlite_only: behaviour specific to the SQLite file backend"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -77,3 +92,7 @@ ignore_missing_imports = true
 # B608 (SQL built with f-strings) is a false positive here: every value is a bound "?"
 # parameter, and interpolated identifiers are checked against allowlists in store/sqlite.py.
 skips = ["B608"]
+
+[tool.coverage.run]
+# exercised in their own CI jobs (PostgreSQL service; framework extras), not the main matrix
+omit = ["src/veramem/integrations/*", "src/veramem/store/postgres.py"]

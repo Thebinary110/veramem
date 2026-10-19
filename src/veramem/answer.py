@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Any
 from . import prompts
 from .policy import Principal
 from .providers.llm import LLMError
-from .types import Answer, Hit, new_id, now
+from .types import Answer, Hit, day, new_id, now
 
 if TYPE_CHECKING:
     from .memory import Memory
@@ -34,7 +34,7 @@ def render(hits: list[Hit]) -> tuple[str, dict[str, Hit]]:
     lines, labels = [], {}
     for i, h in enumerate(hits, 1):
         m = h.memory
-        when = time.strftime("%Y-%m-%d", time.gmtime(m.valid_from or m.created_at))
+        when = day(m.valid_from or m.created_at)
         tag = "shared experience, auxiliary" if h.granularity == "shared" else m.authority.value
         kind = "raw message" if h.granularity == "raw" else m.kind.value
         lines.append(f"[{i}] ({when}; {kind}; {tag}) {m.text}")
@@ -80,7 +80,8 @@ class Answerer:
             hits = hits + new[:limit]
 
         cited = []
-        for c in out.get("selected") or []:
+        selected = out.get("selected")
+        for c in selected if isinstance(selected, list) else []:
             key = str(c).strip("[] ")
             if key in shown:  # citation lock
                 cited.append(shown[key].memory.id)

@@ -13,7 +13,14 @@ then `~/.veramem/config.json` (written by `veramem init`), then auto-detection.
 | `VERAMEM_EMBEDDER` | `ollama` · `openai` · `hash` | auto |
 | `VERAMEM_EMBED_MODEL` | embedding model | `nomic-embed-text` / `text-embedding-3-small` |
 | `VERAMEM_CACHE` | file for an LLM response cache (replayable runs) | off |
-| `VERAMEM_API_KEY` | bearer token for the REST API | unset (localhost only) |
+| `VERAMEM_DB` set to `postgresql://veramem@db.example.com/veramem` | use PostgreSQL instead of a SQLite file (`pip install "veramem[postgres]"`); give the password via `PGPASSWORD` or `~/.pgpass`, not in the URL | |
+| `VERAMEM_API_KEY` | an admin bearer token for the REST API | unset |
+| `VERAMEM_JWT_JWKS_URL` / `VERAMEM_JWT_SECRET` | accept OIDC/JWT bearer tokens (`sub` = user) | unset |
+| `VERAMEM_JWT_AUDIENCE` / `VERAMEM_JWT_ISSUER` | required JWT audience / issuer | unset |
+| `VERAMEM_RATE_LIMIT` | requests per minute per caller (0 = off) | `600` |
+| `VERAMEM_MAX_BODY_BYTES` | largest accepted request body | `2097152` |
+| `VERAMEM_CORS_ORIGINS` | comma-separated origins allowed to call the API from a browser | unset (CORS off) |
+| `VERAMEM_VECTOR_INDEX` | `exact` · `auto` · `hnsw` (`pip install "veramem[ann]"`) | `exact` |
 | `VERAMEM_RANKING` | `contextual` (default) · `ranker` · `global` · `none` | `contextual` |
 | `VERAMEM_EXPLORATION` | `none` · `thompson` · `ucb` | `none` |
 | `VERAMEM_USER` / `VERAMEM_AGENT` | identity used by the MCP server | `default` |
@@ -30,14 +37,14 @@ If you change the embedding model, the next start re-embeds stored data automati
 
 ## Limits
 
-Vector search is exact, with no approximate index. Measured on one machine
-(`python -m benchmarks.scale`):
+Measured on one machine (`python -m benchmarks.scale`, model-free, 768-d vectors):
 
-| Memories in one user's scope | Search p50 | Search p95 |
-|---:|---:|---:|
-| 10,000 | 13 ms | 32 ms |
-| 50,000 | 33 ms | 89 ms |
-| 100,000 | 69 ms | 117 ms |
+| Memories in one user's scope | Search p50, exact index |
+|---:|---:|
+| 100,000 | 11 ms |
+| 300,000 | 34 ms |
+| 1,000,000 | 171 ms |
 
-Many users in one database don't slow each other down: one user's search in a
-100,000-memory, 50-user store takes 12 ms p50.
+- **Writes are cheap:** about 0.5 ms per memory in raw mode. The first search after a write stays fast (30 ms at 100k), because caches append new rows instead of reloading.
+- **Many users share a database without slowing each other down:** one user's search in a 100,000-memory, 50-user store takes 12 ms p50.
+- **`vector_index="hnsw"` is experimental.** In the same tests it was *slower* than exact search up to 300k memories (19 ms vs 11 ms at 100k), with 69–82% top-10 agreement. Use it only when RAM, not latency, is the constraint, at millions of memories per scope. Exact search is the default because it is both faster and exact at every size measured.

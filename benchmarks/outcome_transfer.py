@@ -223,6 +223,45 @@ def evaluate(
     return agg, per_q, float(np.median(lat) * 1000)
 
 
+# --------------------------------------------------- static baseline
+STATIC_GRID = [(b, n) for b in (0.0, 1.0, 2.0, 4.0) for n in (0.0, 0.25, 0.5, 1.0)]
+
+
+def _static_ranker(w_bm25: float, w_len: float) -> str:
+    from veramem.ranking import FEATURES, LogisticRanker
+
+    w = [0.0] * len(FEATURES)
+    w[FEATURES.index("bm25_rr")] = w_bm25
+    w[FEATURES.index("log_len")] = w_len
+    model = LogisticRanker(
+        weights=w, bias=0.0, mean=[0.0] * len(FEATURES), scale=[1.0] * len(FEATURES), active=True
+    )
+    model.metrics = {"static": True, "w_bm25": w_bm25, "w_len": w_len}
+    return model.to_json()
+
+
+def tune_static(
+    base: Path, out: Path, turns: dict[str, str], sp: dict[str, Any], emb: OllamaEmbedder, seed: int
+) -> tuple[dict[str, float], Path]:
+    """No-feedback baseline: a fixed re-weighting of the same retrieval features the learned
+    ranker uses (BM25 rank, memory length), grid-tuned on the feedback families' questions
+    with *gold* labels (strictly more information than feedback provides)."""
+    db = out / f"static_s{seed}.db"
+    shutil.copy(base, db)
+    best, best_hit = (0.0, 0.0), -1.0
+    for wb, wl in STATIC_GRID:
+        m = Memory(str(db), llm=_no_llm(), embedder=emb)
+        m.store.meta_set("ranker", _static_ranker(wb, wl))
+        m.close()
+        agg, _, _ = evaluate(db, turns, sp["feedback"], "ranker", emb)
+        if agg["hit3"] > best_hit + 1e-9:
+            best, best_hit = (wb, wl), agg["hit3"]
+    m = Memory(str(db), llm=_no_llm(), embedder=emb)
+    m.store.meta_set("ranker", _static_ranker(*best))
+    m.close()
+    return {"w_bm25": best[0], "w_len": best[1], "tuned_hit3": round(best_hit, 4)}, db
+
+
 # ---------------------------------------------------------------- stats
 def t_ci(xs: list[float]) -> tuple[float, float, float]:
     m = statistics.mean(xs)
@@ -249,6 +288,11 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--methods", default=",".join(METHODS))
     ap.add_argument("--out", default="benchmarks/runs/outcome_transfer")
     ap.add_argument("--quick", action="store_true", help="1 epoch, global+ranker only")
+    ap.add_argument(
+        "--static-baseline",
+        action="store_true",
+        help="also run the gold-tuned static re-weighting baseline",
+    )
     a = ap.parse_args(argv)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -295,6 +339,24 @@ def main(argv: list[str] | None = None) -> None:
         for name in ("within", "test"):
             agg, per_q, ms = evaluate(base, turns, sp[name], "none", emb)
             record(seed, "none", "none", name, agg, per_q, {"search_ms": ms})
+        if a.static_baseline:
+            weights, tuned = tune_static(base, out, turns, sp, emb, seed)
+            for name in ("within", "test"):
+                agg, per_q, ms = evaluate(tuned, turns, sp[name], "ranker", emb)
+                record(
+                    seed,
+                    "static-tuned",
+                    "none",
+                    name,
+                    agg,
+                    per_q,
+                    {"search_ms": ms, "static_weights": weights},
+                )
+                print(
+                    f"  s{seed} static-tuned   {name:6} hit@3 {agg['hit3']:.3f} {weights}",
+                    flush=True,
+                )
+            tuned.unlink(missing_ok=True)
         for method in methods:
             genuine = None
             for cond in CONDITIONS:
@@ -378,6 +440,8 @@ def report(out: Path, results: list[dict[str, Any]]) -> None:
             cur = series(method, cond, split_name, "hit3")
             d_none = paired_bootstrap(cur, base) if method != "none" else None
             sh = series(method, "shuffled", split_name, "hit3")
+            if method == "static-tuned":
+                sh = []
             d_sh = (
                 paired_bootstrap(cur, sh)
                 if cond != "shuffled" and method != "none" and len(sh) == len(cur)

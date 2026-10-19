@@ -49,6 +49,8 @@ nav:
       - Quickstart: guide/quickstart.md
       - Concepts: guide/concepts.md
       - Integrations (MCP, REST, Docker): guide/integrations.md
+      - Agent frameworks: guide/frameworks.md
+      - Deploying for many users: guide/deployment.md
       - Configuration: guide/configuration.md
   - Design:
       - Architecture: ARCHITECTURE.md
@@ -57,3 +59,4 @@ nav:
   - What feedback learns: OUTCOME_LEARNING.md
   - API reference: api.md
   - Security: security.md
+  - Threat model: THREAT_MODEL.md

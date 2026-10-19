@@ -144,3 +144,86 @@ def same_proposition(a: str, b: str) -> bool:
     wa = {w.rstrip("s") for w in _norm(a).split() if w not in _FILLER}
     wb = {w.rstrip("s") for w in _norm(b).split() if w not in _FILLER}
     return wa == wb
+
+
+# ------------------------------------------------------------ value provenance
+_IDENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_\-./@]*\d[A-Za-z0-9_\-./@]*|\d{3,}")
+_NAME = re.compile(r"\b[A-Z][a-zA-Z]{2,}\b")
+_NOT_NAMES = {
+    "the",
+    "according",
+    "user",
+    "assistant",
+    "tool",
+    "document",
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+    "update",
+    "note",
+    "this",
+    "that",
+    "they",
+    "she",
+    "his",
+    "her",
+    "their",
+    "there",
+    "when",
+    "what",
+    "who",
+    "yes",
+    "and",
+    "but",
+    "also",
+    "she's",
+    "he's",
+    "it's",
+    "i'm",
+}
+
+
+def value_tokens(text: str) -> set[str]:
+    """Identifier-like values (account numbers, codes, amounts) a claim depends on.
+
+    Plausible years are excluded: models legitimately turn "last March" into a year.
+    """
+    out = set()
+    for t in _IDENT.findall(text):
+        t = t.strip("-./@").lower()
+        if len(t) < 3 or (t.isdigit() and len(t) == 4 and 1900 <= int(t) <= 2200):
+            continue
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", t):  # a normalised date
+            continue
+        out.add(t)
+    return out
+
+
+def name_tokens(text: str) -> set[str]:
+    return {t.lower() for t in _NAME.findall(text) if t.lower() not in _NOT_NAMES}
+
+
+def contains_token(token: str, text: str) -> bool:
+    return token in text.lower()
+
+
+def missing_values(text: str, sources: list[str]) -> set[str]:
+    """Value tokens of `text` that appear in none of `sources`."""
+    blob = "\n".join(sources).lower()
+    return {t for t in value_tokens(text) if t not in blob}

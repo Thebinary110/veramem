@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 
 import pytest
@@ -95,3 +96,49 @@ def raw_mem(tmp_path):
     m = Memory(str(tmp_path / "raw.db"), llm=NoLLM(), embedder=HashEmbedder())
     yield m
     m.close()
+
+
+# --------------------------------------------------------------------- PostgreSQL
+# Set VERAMEM_TEST_PG=postgresql://veramem@localhost:5432/veramem to run the whole suite against
+# PostgreSQL: every Memory(...) a test creates gets its own fresh schema (stable per path,
+# so tests that reopen a path see the same data).
+_PG = os.environ.get("VERAMEM_TEST_PG")
+
+
+@pytest.fixture(autouse=True)
+def _route_to_postgres(monkeypatch):
+    if not _PG:
+        yield
+        return
+    import uuid
+
+    import psycopg
+
+    import veramem.memory as vm
+    from veramem.store.postgres import PostgresStore
+
+    schemas: dict[str, str] = {}
+    admin = psycopg.connect(_PG, autocommit=True)
+
+    def make_store(path):
+        key = str(path) if str(path) != ":memory:" else uuid.uuid4().hex
+        if key not in schemas:
+            schemas[key] = "t_" + uuid.uuid4().hex[:12]
+            admin.execute(f"CREATE SCHEMA {schemas[key]}")
+        sep = "&" if "?" in _PG else "?"
+        return PostgresStore(f"{_PG}{sep}options=-csearch_path%3D{schemas[key]}")
+
+    monkeypatch.setattr(vm, "make_store", make_store)
+    yield
+    for schema in schemas.values():
+        admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+    admin.close()
+
+
+def pytest_collection_modifyitems(config, items):
+    if not _PG:
+        return
+    skip = pytest.mark.skip(reason="SQLite-specific (file layout / iterdump / v1 migration)")
+    for item in items:
+        if "sqlite_only" in item.keywords:
+            item.add_marker(skip)

@@ -94,7 +94,8 @@ class Sharer:
                         ],
                         max_tokens=900,
                     )
-                    content = str(d.get("content", "")).strip() if isinstance(d, dict) else ""
+                    raw = d.get("content") if isinstance(d, dict) else None
+                    content = raw.strip() if isinstance(raw, str) else ""
                 except LLMError as e:
                     report["rejected"].append({"id": c.id, "reason": f"abstraction failed: {e}"})
                     continue
@@ -125,7 +126,17 @@ class Sharer:
                     "contributor": contributor,
                     "derived_from_hash": pseudonym(c.id, self.secret),
                 },
+                # the pool manager may rewrite the text: gate what is actually stored
+                gate=lambda text: check_shareable(text, private_texts),
             )
+            if action == "rejected":
+                report["rejected"].append(
+                    {"id": c.id, "reason": "privacy gate", "findings": item.findings[:10]}
+                )
+                self.m.ledger.append(
+                    "SHARE_REJECTED", c.id, {"findings": len(item.findings)}, actor=user_id
+                )
+                continue
             if item is None:
                 report["skipped"].append({"id": c.id, "reason": "already covered by shared pool"})
                 continue

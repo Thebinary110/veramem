@@ -47,7 +47,8 @@ class Ledger:
     ) -> str:
         ts = now()
         body = _canon(payload)
-        with self.store._lock:
+        with self.store.tx():  # read tail + append atomically, across processes too
+            self.store.lock_ledger()
             _, prev = self.store.ledger_tail()
             h = _digest(prev, ts, actor, op, target, body)
             self.store.ledger_append(ts, actor, op, target, body, prev, h)

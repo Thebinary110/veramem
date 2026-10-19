@@ -85,7 +85,7 @@ def build(mem: Memory | None = None) -> Any:
     @server.tool()
     def check_action(memory_ids: list[str]) -> dict:
         """Check whether memories are authorized to drive a protected action."""
-        return mem.check_action(memory_ids)
+        return mem.check_action(memory_ids, user_id=user, agent_id=agent)
 
     @server.tool()
     def correct(memory_id: str, new_text: str) -> dict:

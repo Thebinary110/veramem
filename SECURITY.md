@@ -29,6 +29,9 @@ CI runs on every change:
 | Low-authority memories cannot drive protected actions | `check_action` returns `needs_confirmation`. |
 | History cannot be silently rewritten | Writes go to a SHA-256 hash-chained ledger. `veramem verify` also re-hashes episodes and memory text. |
 | Erasure is real | `forget` deletes content. The ledger keeps only hashes. |
+| A user key cannot act as another user | The server pins the key's user; a mismatched `user_id` gets a 403 (`tests/test_auth.py`). |
+| A compromised or prompt-injected LLM cannot break these guarantees | 190+ adversarial tests drive VeraMem with a hostile model on every prompt type (`tests/test_adversarial.py`, `tests/test_fuzz.py`). |
+| Values must come from a source, and carry that source's authority | Value provenance in `write.Writer._extract`: identifiers, numbers and names in a memory must appear in its sources, and the weakest supplying source sets the authority. |
 
 ## Out of scope
 
@@ -36,9 +39,12 @@ CI runs on every change:
   cannot prevent it. Protect the file with OS permissions or disk encryption.
 - Prompt injection *inside* a user's own messages affecting that same user's memory.
   Authority labels limit its effect on actions; they do not stop extraction.
-- The REST server's `user_id` parameter is trusted. Put VeraMem behind your own
-  authentication when exposing it to end users. Never bind it to a public interface
-  without `VERAMEM_API_KEY`; the CLI refuses to do so.
+- Open mode, where no API key, stored key or JWT is configured, trusts the `user_id` in
+  each request. The CLI only allows open mode on localhost. Production deployments use
+  per-user keys or JWT; see [docs/guide/deployment.md](docs/guide/deployment.md).
+
+The full STRIDE threat model, with the test covering each threat, is in
+[docs/THREAT_MODEL.md](docs/THREAT_MODEL.md).
 
 ## Supply chain
 

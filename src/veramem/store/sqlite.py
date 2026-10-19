@@ -32,7 +32,7 @@ from ..types import (
 
 # Bump SCHEMA_VERSION and add an entry to MIGRATIONS for every schema change. SCHEMA
 # always describes the newest layout; MIGRATIONS[n] upgrades a v(n-1) database to vn.
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 MIGRATIONS: dict[int, list[str]] = {
     # v2: scope tokens inside the full-text indexes, so lexical search only touches the
     # caller's rows instead of ranking every tenant's documents.
@@ -55,6 +55,12 @@ MIGRATIONS: dict[int, list[str]] = {
         " qvec BLOB, pos REAL NOT NULL, neg REAL NOT NULL, ts REAL NOT NULL)",
         "CREATE INDEX IF NOT EXISTS outcomes_mem ON outcomes(memory_id)",
     ],
+    # v4: hashed, per-user API keys for the REST server
+    4: [
+        "CREATE TABLE IF NOT EXISTS api_keys (key_hash TEXT PRIMARY KEY, prefix TEXT NOT NULL,"
+        " role TEXT NOT NULL, user_id TEXT, agent_id TEXT, label TEXT, created_at REAL NOT NULL,"
+        " revoked_at REAL, last_used_at REAL)",
+    ],
 }
 
 
@@ -76,6 +82,7 @@ PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
 PRAGMA secure_delete=ON;
 PRAGMA synchronous=NORMAL;
+PRAGMA busy_timeout=10000;
 
 CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 
@@ -169,6 +176,18 @@ CREATE TABLE IF NOT EXISTS outcomes (
 );
 CREATE INDEX IF NOT EXISTS outcomes_mem ON outcomes(memory_id);
 
+CREATE TABLE IF NOT EXISTS api_keys (
+  key_hash TEXT PRIMARY KEY,   -- sha256 of the key; the key itself is never stored
+  prefix TEXT NOT NULL,        -- first characters, for display and revocation
+  role TEXT NOT NULL,          -- admin | user
+  user_id TEXT,
+  agent_id TEXT,
+  label TEXT,
+  created_at REAL NOT NULL,
+  revoked_at REAL,
+  last_used_at REAL
+);
+
 CREATE TABLE IF NOT EXISTS grants (
   kind TEXT NOT NULL,        -- user_agent | agent_resource | team_member
   subject TEXT NOT NULL,
@@ -221,6 +240,19 @@ _MEMORY_COLUMNS = {
 
 Vector = Sequence[float] | np.ndarray
 VECTOR_CACHE_ENTRIES = 32
+# updating any of these can change which rows a cached vector query selects
+_MEMBERSHIP_COLUMNS = {
+    "status",
+    "visibility",
+    "user_id",
+    "agent_id",
+    "team_id",
+    "kind",
+    "created_at",
+    "valid_to",
+    "embedding",
+    "metadata",
+}
 
 _FTS_TOKEN = re.compile(r"[A-Za-z0-9_]+")
 
@@ -343,11 +375,9 @@ class SQLiteStore:
             self.path = str(Path(self.path).expanduser())
         self._lock = threading.RLock()
         self._tx_depth = 0
-        # bumped on every write that can change which vectors a query sees
-        self.generation = 0
-        self._vec_cache: OrderedDict[tuple[Any, ...], tuple[int, list[str], np.ndarray]] = (
-            OrderedDict()
-        )
+
+        # key -> (generation, max rowid seen, growable matrix with its ids)
+        self._vec_cache: OrderedDict[tuple[Any, ...], tuple[int, int, _VecBuffer]] = OrderedDict()
         self.raw = sqlite3.connect(self.path, check_same_thread=False, isolation_level=None)
         self.raw.row_factory = sqlite3.Row
         # every statement goes through the store lock: a transaction opened by one thread
@@ -363,6 +393,8 @@ class SQLiteStore:
             self.db.execute("INSERT INTO meta VALUES ('schema_version', '1')")
         self.db.executescript(SCHEMA)
         self._migrate()
+        for counter in ("generation", "owner_generation"):
+            self.db.execute("INSERT OR IGNORE INTO meta VALUES (?, ?)", (counter, "0"))
 
     # -------------------------------------------------------------- migrations
     def _migrate(self) -> None:
@@ -423,7 +455,7 @@ class SQLiteStore:
 
     # --------------------------------------------------------------- episodes
     def put_episode(self, ep: Episode, embedding: Vector | None = None) -> None:
-        self.generation += 1
+        # appends never invalidate cached vectors: caches catch up by rowid
         with self._lock:
             self.db.execute(
                 "INSERT OR IGNORE INTO episodes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -448,6 +480,8 @@ class SQLiteStore:
             )
 
     def get_episode(self, episode_id: str) -> Episode | None:
+        if not _printable(episode_id):
+            return None  # ids with control characters cannot exist
         r = self.db.execute("SELECT * FROM episodes WHERE id=?", (episode_id,)).fetchone()
         return self._row_episode(r) if r else None
 
@@ -476,7 +510,8 @@ class SQLiteStore:
     def episode_vectors(self, where: str, params: Iterable[Any]) -> tuple[list[str], np.ndarray]:
         return self._cached_vectors(
             "e",
-            f"SELECT e.id, e.embedding FROM episodes e WHERE e.embedding IS NOT NULL AND {where}",
+            f"SELECT e.id, e.embedding, e.rowid FROM episodes e WHERE e.embedding IS NOT NULL"
+            f" AND {where}",
             tuple(params),
         )
 
@@ -499,7 +534,6 @@ class SQLiteStore:
 
     # --------------------------------------------------------------- memories
     def put_memory(self, m: MemoryItem, embedding: Vector | None = None) -> None:
-        self.generation += 1
         with self._lock:
             self.db.execute(
                 "INSERT INTO memories VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -562,7 +596,10 @@ class SQLiteStore:
                 v = int(v)
             cols.append(f"{k}=?")
             vals.append(v)
-        self.generation += 1
+        if fields.keys() & _MEMBERSHIP_COLUMNS:
+            self.bump()  # may change which rows a cached query selects
+        if fields.keys() & {"user_id", "agent_id", "team_id", "visibility"}:
+            self.bump("owner_generation")
         with self._lock:
             self.db.execute(f"UPDATE memories SET {', '.join(cols)} WHERE id=?", (*vals, memory_id))
             if fields.keys() & {"text", "user_id", "agent_id", "team_id", "visibility"}:
@@ -578,7 +615,7 @@ class SQLiteStore:
                     )
 
     def add_evidence(self, memory_id: str, evs: list[Evidence]) -> None:
-        self.generation += 1
+        self.bump()
         with self._lock:
             for ev in evs:
                 self.db.execute(
@@ -587,6 +624,8 @@ class SQLiteStore:
                 )
 
     def get_memory(self, memory_id: str) -> MemoryItem | None:
+        if not _printable(memory_id):
+            return None  # ids with control characters cannot exist
         r = self.db.execute("SELECT * FROM memories WHERE id=?", (memory_id,)).fetchone()
         return self._row_memory(r) if r else None
 
@@ -608,27 +647,94 @@ class SQLiteStore:
         r = self.db.execute("SELECT embedding FROM memories WHERE id=?", (memory_id,)).fetchone()
         return _vec(r[0]) if r else None
 
-    def bump(self) -> None:
-        self.generation += 1
+    # Generation counters live in the database, not the process: a change made by another
+    # process (or server replica) must invalidate this process's caches too.
+    def bump(self, counter: str = "generation") -> None:
+        self.db.execute(
+            "UPDATE meta SET value = CAST(CAST(value AS INTEGER) + 1 AS TEXT) WHERE key = ?",
+            (counter,),
+        )
+
+    def _counter(self, counter: str) -> int:
+        r = self.db.execute("SELECT value FROM meta WHERE key = ?", (counter,)).fetchone()
+        return int(r[0]) if r else 0
+
+    @property
+    def generation(self) -> int:
+        """Bumped on every write that can change which rows a cached vector query sees."""
+        return self._counter("generation")
+
+    @property
+    def owner_generation(self) -> int:
+        """Bumped when a row changes owner or visibility (approximate indexes are per scope)."""
+        return self._counter("owner_generation")
 
     def _cached_vectors(self, kind: str, sql: str, params: tuple[Any, ...]):
+        """Vectors selected by `sql`, cached per query.
+
+        Inserts are append-only, so a cached entry is brought up to date by fetching only
+        rows with a larger rowid. Updates that can change membership (status, visibility,
+        owner, ...) and erasure bump `generation`, which forces a full reload.
+        """
         key = (kind, sql, params)
-        hit = self._vec_cache.get(key)
-        if hit is not None and hit[0] == self.generation:
-            self._vec_cache.move_to_end(key)
-            return hit[1], hit[2]
-        ids, mat = _stack(self.db.execute(sql, params).fetchall())
-        self._vec_cache[key] = (self.generation, ids, mat)
-        while len(self._vec_cache) > VECTOR_CACHE_ENTRIES:
-            self._vec_cache.popitem(last=False)
-        return ids, mat
+        alias = "m" if kind == "m" else "e"
+        table = "memories" if kind == "m" else "episodes"
+        with self._lock:
+            gen_now = self.generation
+            hit = self._vec_cache.get(key)
+            if hit is not None and hit[0] == gen_now:
+                gen, max_rowid, buf = hit
+                # cheap check first: usually nothing new has been written
+                newer = self.db.execute(
+                    f"SELECT rowid FROM {table} WHERE rowid > ?", (max_rowid,)
+                ).fetchall()
+                if newer:  # fetch just those rows by rowid, then apply the query's filter
+                    marks = ",".join("?" * len(newer))
+                    rows = self.db.execute(
+                        f"{sql} AND {alias}.rowid IN ({marks})", (*params, *[r[0] for r in newer])
+                    ).fetchall()
+                    if rows:
+                        new_ids, new_mat, _ = _stack(rows)
+                        buf.append(new_ids, new_mat)
+                    max_rowid = max(int(r[0]) for r in newer)
+                    self._vec_cache[key] = (gen, max_rowid, buf)
+                self._vec_cache.move_to_end(key)
+                return buf.ids, buf.view()
+            ids0, mat0, max_rowid = _stack(self.db.execute(sql, params).fetchall())
+            if not ids0:
+                r = self.db.execute(f"SELECT MAX(rowid) FROM {table}").fetchone()
+                max_rowid = int(r[0] or 0) if r else 0
+            buf = _VecBuffer(ids0, mat0)
+            self._vec_cache[key] = (gen_now, max_rowid, buf)
+            while len(self._vec_cache) > VECTOR_CACHE_ENTRIES:
+                self._vec_cache.popitem(last=False)
+            return buf.ids, buf.view()
 
     def memory_vectors(self, where: str, params: Iterable[Any]) -> tuple[list[str], np.ndarray]:
         return self._cached_vectors(
             "m",
-            f"SELECT m.id, m.embedding FROM memories m WHERE m.embedding IS NOT NULL AND {where}",
+            f"SELECT m.id, m.embedding, m.rowid FROM memories m WHERE m.embedding IS NOT NULL"
+            f" AND {where}",
             tuple(params),
         )
+
+    def vectors_for_rowids(
+        self, kind: str, rowids: list[int], where: str, params: Iterable[Any]
+    ) -> tuple[list[str], np.ndarray]:
+        """Embeddings of the given rows that also satisfy `where` (the access predicate)."""
+        if not rowids:
+            return [], np.zeros((0, 0), dtype=np.float32)
+        alias, table = ("m", "memories") if kind == "m" else ("e", "episodes")
+        rows: list[sqlite3.Row] = []
+        for chunk in _chunks([str(r) for r in rowids], 500):
+            marks = ",".join("?" * len(chunk))
+            rows += self.db.execute(
+                f"SELECT {alias}.id, {alias}.embedding, {alias}.rowid FROM {table} {alias}"
+                f" WHERE {alias}.rowid IN ({marks}) AND {alias}.embedding IS NOT NULL AND {where}",
+                (*[int(r) for r in chunk], *params),
+            ).fetchall()
+        ids, mat, _ = _stack(rows)
+        return ids, mat
 
     def get_memories(self, ids: list[str]) -> dict[str, MemoryItem]:
         """Batch fetch (2 queries instead of 2 per id)."""
@@ -749,6 +855,8 @@ class SQLiteStore:
             )
 
     def get_trace(self, trace_id: str) -> dict[str, Any] | None:
+        if not _printable(trace_id):
+            return None  # ids with control characters cannot exist
         r = self.db.execute("SELECT * FROM traces WHERE id=?", (trace_id,)).fetchone()
         if not r:
             return None
@@ -872,6 +980,25 @@ class SQLiteStore:
             ).fetchall()
         return self.db.execute("SELECT * FROM ledger ORDER BY seq").fetchall()
 
+    # ------------------------------------------------------------ dialect bits
+    @staticmethod
+    def resources_subset_sql(alias: str) -> str:
+        """Every resource in a row's provenance is in the allowed JSON list bound as `?`."""
+        return (
+            f"NOT EXISTS (SELECT 1 FROM json_each(COALESCE(json_extract({alias}.metadata,"
+            f"'$.resources'),'[]')) r WHERE r.value NOT IN (SELECT value FROM json_each(?)))"
+        )
+
+    def lock_ledger(self) -> None:
+        """Serialise ledger appends across processes (BEGIN IMMEDIATE already does)."""
+
+    def total_rows(self, table: str) -> int:
+        """Cheap upper bound on a table's size (max rowid)."""
+        if table not in ("memories", "episodes"):
+            raise ValueError(table)
+        r = self.db.execute(f"SELECT MAX(rowid) FROM {table}").fetchone()
+        return int(r[0] or 0) if r else 0
+
     def count(self, sql: str) -> int:
         row = self.db.execute(sql).fetchone()
         return int(row[0]) if row else 0
@@ -884,6 +1011,39 @@ class SQLiteStore:
             "traces": self.count("SELECT COUNT(*) FROM traces"),
             "ledger_entries": self.count("SELECT COUNT(*) FROM ledger"),
         }
+
+
+class _VecBuffer:
+    """Row-growable float32 matrix: appends are amortised O(new rows), reads are views."""
+
+    def __init__(self, ids: list[str], mat: np.ndarray):
+        self.ids = list(ids)
+        self.n = len(ids)
+        dim = mat.shape[1] if mat.ndim == 2 and mat.size else 0
+        self.buf = np.empty((max(16, self.n * 5 // 4), dim), dtype=np.float32)
+        if self.n:
+            self.buf[: self.n] = mat
+
+    def append(self, ids: list[str], rows: np.ndarray) -> None:
+        if not ids:
+            return
+        if self.buf.shape[1] == 0:  # first vectors decide the width
+            self.buf = np.empty((max(16, len(ids) * 2), rows.shape[1]), dtype=np.float32)
+        if rows.shape[1] != self.buf.shape[1]:
+            return  # mixed dimensions (mid-reindex): skipped; a reindex reloads everything
+        need = self.n + len(ids)
+        if need > len(self.buf):
+            grown = np.empty((max(need, len(self.buf) * 2), self.buf.shape[1]), dtype=np.float32)
+            grown[: self.n] = self.buf[: self.n]
+            self.buf = grown
+        self.buf[self.n : need] = rows
+        self.ids.extend(ids)
+        self.n = need
+
+    def view(self) -> np.ndarray:
+        if self.n == 0:
+            return np.zeros((0, 0), dtype=np.float32)
+        return self.buf[: self.n]
 
 
 class _Result:
@@ -934,7 +1094,9 @@ class _Tx:
     def __enter__(self):
         self.s._lock.acquire()
         if self.s._tx_depth == 0:
-            self.s.db.execute("BEGIN")
+            # IMMEDIATE takes the write lock up front: another *process* can't interleave
+            # (e.g. two writers forking the ledger hash chain)
+            self.s.db.execute("BEGIN IMMEDIATE")
         self.s._tx_depth += 1
         return self.s
 
@@ -945,6 +1107,10 @@ class _Tx:
                 self.s.db.execute("ROLLBACK" if et else "COMMIT")
         finally:
             self.s._lock.release()
+
+
+def _printable(value: object) -> bool:
+    return isinstance(value, str) and not any(ord(c) < 32 or c == "\x7f" for c in value)
 
 
 def _chunks(items: list[str], n: int):
@@ -962,9 +1128,17 @@ def _row_evidence(r: sqlite3.Row) -> Evidence:
     )
 
 
-def _stack(rows: list[sqlite3.Row]) -> tuple[list[str], np.ndarray]:
+def _stack(rows: list[sqlite3.Row]) -> tuple[list[str], np.ndarray, int]:
+    """(ids, matrix, max rowid) from (id, embedding blob, rowid) rows, in one buffer copy."""
     if not rows:
-        return [], np.zeros((0, 0), dtype=np.float32)
+        return [], np.zeros((0, 0), dtype=np.float32), 0
     ids = [r[0] for r in rows]
-    mat = np.vstack([np.frombuffer(r[1], dtype=np.float32) for r in rows])
-    return ids, mat
+    blobs = [r[1] for r in rows]
+    width = len(blobs[0])
+    if all(len(b) == width for b in blobs):
+        mat = np.frombuffer(b"".join(blobs), dtype=np.float32).reshape(len(blobs), -1)
+    else:  # mixed dimensions (mid-reindex): keep the rows that match the first
+        keep = [i for i, b in enumerate(blobs) if len(b) == width]
+        ids = [ids[i] for i in keep]
+        mat = np.vstack([np.frombuffer(blobs[i], dtype=np.float32) for i in keep])
+    return ids, mat, max(int(r[2]) for r in rows)

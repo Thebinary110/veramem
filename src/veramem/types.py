@@ -24,6 +24,39 @@ _last_now = 0.0
 _now_lock = threading.Lock()
 
 
+_CONTROL = set(map(chr, range(32))) | {"\x7f"}
+
+
+def check_id(value: str | None, what: str = "id") -> str | None:
+    """Identifiers (user, agent, team, memory, trace ids) must be printable and short.
+
+    They are rejected rather than cleaned: silently stripping a NUL from "victim\x00"
+    would turn an attacker's id into the victim's.
+    """
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value or len(value) > 256:
+        raise ValueError(f"invalid {what}")
+    if any(c in _CONTROL for c in value):
+        raise ValueError(f"invalid {what}: control characters are not allowed")
+    return value
+
+
+def clean_text(value: str) -> str:
+    """Drop NUL bytes: meaningless in text, and rejected by PostgreSQL."""
+    return value.replace("\x00", "") if "\x00" in value else value
+
+
+def day(ts: float | None) -> str:
+    """YYYY-MM-DD for a timestamp; never raises (stored values may be hostile)."""
+    if ts is None:
+        return "unknown date"
+    try:
+        return time.strftime("%Y-%m-%d", time.gmtime(ts))
+    except (OverflowError, OSError, ValueError):
+        return "unknown date"
+
+
 def now() -> float:
     """Wall-clock time that never repeats or goes backwards within a process.
 
@@ -181,7 +214,7 @@ class SearchResult(BaseModel):
         lines = []
         for h in self.hits[:max_items]:
             m = h.memory
-            when = time.strftime("%Y-%m-%d", time.gmtime(m.valid_from or m.created_at))
+            when = day(m.valid_from or m.created_at)
             line = f"[{m.id}] ({when}, {m.authority.value}) {m.text}"
             if with_evidence and m.evidence:
                 line += f'\n    evidence: "{m.evidence[0].quote[:200]}"'

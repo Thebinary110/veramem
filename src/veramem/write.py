@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import time
+import math
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
@@ -13,7 +13,14 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from . import prompts
-from .grounding import locate, same_proposition
+from .grounding import (
+    contains_token,
+    locate,
+    missing_values,
+    name_tokens,
+    same_proposition,
+    value_tokens,
+)
 from .ledger import content_hash
 from .providers.llm import LLMError
 from .types import (
@@ -28,6 +35,9 @@ from .types import (
     SourceType,
     Status,
     Visibility,
+    check_id,
+    clean_text,
+    day,
     new_id,
     now,
 )
@@ -37,7 +47,9 @@ if TYPE_CHECKING:
 
 log = logging.getLogger("veramem")
 
-DUP_COS = 0.95  # near-identical -> NOOP + extra evidence
+DUP_COS = 0.95
+MAX_CANDIDATES = 50  # memories one extraction call may create
+MAX_MEMORY_CHARS = 2000  # near-identical -> NOOP + extra evidence
 NEIGHBOURS = 5
 EXTRACT_BATCH = 12
 CONTEXT_TURNS = 6
@@ -52,66 +64,127 @@ class Candidate:
     entities: list[str]
     valid_from: float | None
     vec: np.ndarray | None = None
+    extra_evidence: list[Evidence] = field(default_factory=list)
     neighbours: list[tuple[MemoryItem, float]] = field(default_factory=list)
 
 
+def _entities(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [e.strip()[:80] for e in value if isinstance(e, str) and e.strip()][:8]
+
+
 def normalise_messages(messages: Any, default_role: str = "user") -> list[dict[str, Any]]:
+    """Validate and normalise `add()` input. Raises ValueError on anything malformed."""
     if isinstance(messages, str):
-        return [{"role": default_role, "content": messages}]
+        return [{"role": default_role, "content": clean_text(messages)}]
     if isinstance(messages, dict):
-        return [messages]
+        messages = [messages]
+    if not isinstance(messages, (list, tuple)):
+        raise ValueError("messages must be a string, a message dict, or a list of them")
     out = []
     for m in messages:
-        out.append({"role": default_role, "content": m} if isinstance(m, str) else dict(m))
+        if isinstance(m, str):
+            out.append({"role": default_role, "content": clean_text(m)})
+            continue
+        if not isinstance(m, dict):
+            raise ValueError("each message must be a string or a dict")
+        role = m.get("role", default_role)
+        if not isinstance(role, str):
+            raise ValueError("message role must be a string")
+        _role(role)  # unknown roles are rejected, never trusted as the user
+        content = m.get("content", "")
+        if content is None:
+            content = ""
+        if not isinstance(content, str):
+            raise ValueError("message content must be a string")
+        name = m.get("name")
+        if name is not None and not isinstance(name, str):
+            raise ValueError("message name must be a string")
+        out.append(
+            {
+                **m,
+                "role": role,
+                "content": clean_text(content),
+                **({"name": clean_text(name)} if name is not None else {}),
+            }
+        )
     return out
 
 
+_ROLES = {
+    **dict.fromkeys(("user", "human"), SourceType.USER),
+    **dict.fromkeys(("assistant", "ai", "agent", "model"), SourceType.ASSISTANT),
+    **dict.fromkeys(("tool", "function", "observation"), SourceType.TOOL),
+    **dict.fromkeys(("document", "doc", "file", "web"), SourceType.DOCUMENT),
+    "system": SourceType.SYSTEM,
+}
+
+
 def _role(role: str) -> SourceType:
-    r = (role or "user").lower()
-    if r in ("user", "human"):
-        return SourceType.USER
-    if r in ("assistant", "ai", "agent", "model"):
-        return SourceType.ASSISTANT
-    if r in ("tool", "function", "observation"):
-        return SourceType.TOOL
-    if r in ("document", "doc", "file", "web"):
-        return SourceType.DOCUMENT
-    if r == "system":
-        return SourceType.SYSTEM
-    return SourceType.USER
+    """Map a message role to its source. Unknown roles raise: authority is never guessed."""
+    r = (role or "user").strip().lower()
+    if r not in _ROLES:
+        raise ValueError(
+            f"unknown message role {role!r}; use user, assistant, tool, document or system"
+        )
+    return _ROLES[r]
 
 
-def _ts(value: Any, fallback: float) -> float:
+# plausible event times: 1900-01-01 .. 2200-01-01
+MIN_TS, MAX_TS = -2208988800.0, 7258118400.0
+
+
+def _valid_ts(t: float) -> bool:
+    return math.isfinite(t) and MIN_TS <= t <= MAX_TS
+
+
+def _ts(value: Any, fallback: float, strict: bool = False) -> float:
+    """Parse a timestamp. Invalid/out-of-range values give `fallback`, or raise if strict."""
     if value is None:
         return fallback
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, datetime):
-        return value.timestamp()
-    s = str(value).strip()
-    for fmt in (
-        "%Y-%m-%dT%H:%M:%S%z",
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%d %H:%M",
-        "%Y-%m-%d",
-        "%I:%M %p on %d %B, %Y",
-    ):
-        try:
-            dt = datetime.strptime(s, fmt)
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
-            return dt.timestamp()
-        except ValueError:
-            continue
-    try:
-        return datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
-    except ValueError:
-        return fallback
+    t: float | None = None
+    if isinstance(value, bool):
+        t = None
+    elif isinstance(value, (int, float)):
+        t = float(value)
+    elif isinstance(value, datetime):
+        t = value.timestamp()
+    else:
+        s = str(value).strip()[:64]
+        for fmt in (
+            "%Y-%m-%dT%H:%M:%S%z",
+            "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d %H:%M",
+            "%Y-%m-%d",
+            "%I:%M %p on %d %B, %Y",
+        ):
+            try:
+                dt = datetime.strptime(s, fmt)
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                t = dt.timestamp()
+                break
+            except ValueError:
+                continue
+        if t is None:
+            try:
+                t = datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()
+            except ValueError:
+                t = None
+    if t is not None and _valid_ts(t):
+        return t
+    if strict:
+        raise ValueError(f"invalid or out-of-range timestamp: {str(value)[:40]!r}")
+    return fallback
 
 
 def _fmt(ts: float) -> str:
-    return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d %H:%M")
+    try:
+        return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d %H:%M")
+    except (OverflowError, OSError, ValueError):
+        return "unknown date"
 
 
 class Writer:
@@ -134,14 +207,21 @@ class Writer:
         actor: str | None,
         episodes_only: bool = False,
     ) -> AddResult:
+        for value, what in (
+            (user_id, "user_id"),
+            (agent_id, "agent_id"),
+            (session_id, "session_id"),
+            (team_id, "team_id"),
+        ):
+            check_id(value, what)
         msgs = normalise_messages(messages)
-        base_ts = _ts(timestamp, now())
+        base_ts = _ts(timestamp, now(), strict=True)
         episodes: list[Episode] = []
         for i, msg in enumerate(msgs):
             content = str(msg.get("content", "")).strip()
             if not content:
                 continue
-            occurred = _ts(msg.get("timestamp"), base_ts + i * 1e-3)
+            occurred = _ts(msg.get("timestamp"), base_ts + i * 1e-3, strict=True)
             ep = Episode(
                 content=content,
                 source=_role(msg.get("role", "user")),
@@ -200,6 +280,7 @@ class Writer:
         self, batch: list[Episode], session_id: str | None, user_id: str | None
     ) -> tuple[list[Candidate], list[dict[str, Any]]]:
         ctx = []
+        prev: list[Episode] = []
         if session_id:
             prev = self.m.store.episodes(
                 "session_id=? AND user_id IS ? AND occurred_at<? ",
@@ -233,10 +314,14 @@ class Writer:
             log.warning("extraction failed, storing raw turns: %s", e)
             return [], [{"reason": f"extraction failed: {e}"}]
         items = data.get("memories", []) if isinstance(data, dict) else data
+        if not isinstance(items, list):
+            items = []  # model output is untrusted: wrong shapes are ignored, never raised
         cands: list[Candidate] = []
         rejected: list[dict[str, Any]] = []
-        for it in items or []:
-            if not isinstance(it, dict) or not str(it.get("text", "")).strip():
+        for it in items[:MAX_CANDIDATES]:
+            if not isinstance(it, dict) or not isinstance(it.get("text"), str):
+                continue
+            if not it["text"].strip() or len(it["text"]) > MAX_MEMORY_CHARS:
                 continue
             ep = labels.get(str(it.get("source", "")).strip("[] "))
             quote = str(it.get("quote", "")).strip()
@@ -268,13 +353,53 @@ class Writer:
                 kind = Kind.FACT
             when = it.get("when")
             valid_from = _ts(when, ep.occurred_at) if when and when != "null" else ep.occurred_at
-            authority = Authority.for_source(ep.source)
+            text = it["text"].strip()
+            # Value provenance (AuthMem "MIX"): the label follows the source that supplies
+            # the claim's values, not the message whose words happen to be quoted.
+            cited = f"{ep.content}\n{ep.actor or ''}"
+            pool = [e for e in [*batch, *prev] if e.id != ep.id]
+            needed = {
+                t for t in (value_tokens(text) | name_tokens(text)) if not contains_token(t, cited)
+            }
+            suppliers: dict[str, Episode] = {}
+            unsupported = set()
+            for t in needed:
+                found = [e for e in pool if contains_token(t, f"{e.content}\n{e.actor or ''}")]
+                if found:
+                    weakest = min(found, key=lambda e: Authority.for_source(e.source).rank)
+                    suppliers[weakest.id] = weakest
+                elif t in value_tokens(text):
+                    unsupported.add(t)
+            if unsupported:
+                rejected.append(
+                    {
+                        "text": text,
+                        "reason": "values not found in any source: "
+                        + ", ".join(sorted(unsupported)),
+                    }
+                )
+                continue
+            authority = Authority.weakest(
+                [Authority.for_source(ep.source)]
+                + [Authority.for_source(e.source) for e in suppliers.values()]
+            )
+            extra = [
+                Evidence(
+                    episode_id=e.id,
+                    quote=e.content[:200],
+                    start=0,
+                    end=min(200, len(e.content)),
+                    source=e.source,
+                )
+                for e in suppliers.values()
+                if Authority.for_source(e.source).rank < Authority.for_source(ep.source).rank
+            ]
             if authority is not Authority.AUTHORIZED and kind is Kind.PREFERENCE:
                 # a non-user source cannot establish a user preference (AuthMem R2P / S2D)
                 kind = Kind.FACT
             cands.append(
                 Candidate(
-                    text=str(it["text"]).strip(),
+                    text=text,
                     kind=kind,
                     evidence=Evidence(
                         episode_id=ep.id,
@@ -284,8 +409,9 @@ class Writer:
                         source=ep.source,
                     ),
                     authority=authority,
-                    entities=[str(e) for e in (it.get("entities") or []) if str(e).strip()][:8],
+                    entities=_entities(it.get("entities")),
                     valid_from=valid_from,
+                    extra_evidence=extra,
                 )
             )
         return cands, rejected
@@ -404,12 +530,18 @@ class Writer:
         except LLMError as e:
             log.warning("reconcile failed, defaulting to ADD: %s", e)
             ops = []
+        if not isinstance(ops, list):
+            ops = []
         by_fact: dict[int, dict[str, Any]] = {}
         for op in ops:
-            try:
-                by_fact.setdefault(int(op.get("fact")), op)
-            except (TypeError, ValueError):
+            if not isinstance(op, dict):
                 continue
+            try:
+                idx = int(op.get("fact"))  # type: ignore[arg-type]
+            except (TypeError, ValueError, OverflowError):
+                continue
+            if 0 <= idx < len(cands):
+                by_fact.setdefault(idx, op)
         changes: list[Change] = []
         with self.m.store.tx():
             for i, c in enumerate(cands):
@@ -471,7 +603,7 @@ class Writer:
             team_id=scope.get("team_id"),
             visibility=Visibility.PRIVATE,
             authority=c.authority,
-            evidence=[c.evidence],
+            evidence=[c.evidence, *c.extra_evidence],
             entities=c.entities,
             valid_from=c.valid_from,
             supersedes=supersedes,
@@ -507,11 +639,20 @@ class Writer:
             self.m.store.update_memory(ch.memory_id, metadata={"conflicts_with": [old.id]})
             ch.reason = f"kept separate: {c.authority.value} source cannot update {old.authority.value} memory"
             return ch
+        # The merged text is model output: every value in it must come from the new
+        # evidence, the old memory or their sources. Otherwise keep the grounded statement.
+        if text.strip().lower() != c.text.strip().lower():
+            ep_ids = [e.episode_id for e in [c.evidence, *c.extra_evidence, *old.evidence]]
+            sources = [c.text, old.text] + [
+                e.content for e in self.m.store.get_episodes(ep_ids).values()
+            ]
+            if missing_values(text, sources):
+                text = c.text
         # No authority upgrade: if the merged text still carries the old content, the
         # weakest authority among the retained evidence wins.
         merged_keeps_old = text.strip().lower() != c.text.strip().lower()
         auth = Authority.weakest([c.authority, old.authority]) if merged_keeps_old else c.authority
-        evidence = [c.evidence] + (old.evidence if merged_keeps_old else [])
+        evidence = [c.evidence, *c.extra_evidence] + (old.evidence if merged_keeps_old else [])
         item = MemoryItem(
             text=text,
             kind=c.kind if c.kind is not Kind.FACT else old.kind,
@@ -610,4 +751,4 @@ class Writer:
 
 
 def iso(ts: float | None) -> str | None:
-    return None if ts is None else time.strftime("%Y-%m-%d", time.gmtime(ts))
+    return None if ts is None else day(ts)
