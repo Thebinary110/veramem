@@ -1,24 +1,29 @@
 # VeraMem
 
-**Long-term memory for AI agents that you can verify, that uses task outcomes to rank
-memories, and that is safe to share.**
+![VeraMem: agent memory with receipts](assets/banner-light.png#only-light)
+![VeraMem: agent memory with receipts](assets/banner-dark.png#only-dark)
 
-- One SQLite file, no servers to run.
-- Works offline with Ollama, or with OpenAI / Anthropic / any OpenAI-compatible server
-  (vLLM, SGLang, LM Studio).
+VeraMem is long-term memory for AI agents that keeps track of where every memory came from.
+Each memory cites the exact words it was built from, carries a label for who said them
+(the user, the assistant, or a tool), and is written to a tamper-evident ledger. Tool claims
+stay tool claims, private memory stays private, and an agent can check whether a memory is
+safe to act on before it acts.
+
+It runs on a single SQLite file, works offline with Ollama, and needs no server.
 
 ```bash
 pip install "veramem[mcp]"
 veramem init
-veramem add "I'm vegetarian and I moved to Lisbon last week"
-veramem ask "where do I live?"
+veramem add "I'm vegetarian and I just moved to Lisbon"
+veramem ask "Where do I live?"
 ```
 
-| Gap in today's memory systems | What VeraMem does |
-|---|---|
-| Whether a memory actually helped is never recorded | Outcome-informed ranking: query-aware utility, plus a gated learned ranker that transfers to unseen tasks ([evidence](OUTCOME_LEARNING.md)). |
-| Facts lose the link to what was said; a tool's claim becomes "the user's preference" | Verified quotes and source-authority labels on every memory, a hash-chained ledger, and an action gate for low-authority memories |
-| Sharing leaks private data | Access is enforced in SQL before ranking, grants are revocable, preferences are never shared, and a PII/canary gate runs before sharing |
+![Real veramem ask output with cited memories](assets/terminal.png)
 
-Start with the [Quickstart](guide/quickstart.md), or read how it works in
+## How it works
+
+![How VeraMem writes and reads memory](assets/how-it-works-light.png#only-light)
+![How VeraMem writes and reads memory](assets/how-it-works-dark.png#only-dark)
+
+Start with the [Quickstart](guide/quickstart.md), or read the ideas behind it in
 [Concepts](guide/concepts.md).

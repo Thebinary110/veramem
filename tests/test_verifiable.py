@@ -2,23 +2,43 @@
 
 import pytest
 
-from veramem import Authority, Kind
+from veramem import Authority, Kind, Memory
+from veramem.providers import HashEmbedder, ScriptedLLM
 
 
 def test_role_policy_authority_labels(mem):
     mem.add(
         [
             {"role": "user", "content": "My seat preference is aisle"},
-            {"role": "assistant", "content": "I suggest the Gold plan"},
+            {"role": "assistant", "content": "the Gold plan suits the user"},
             {"role": "tool", "name": "crm", "content": "home city is Asterhaven"},
         ],
         user_id="u1",
     )
     by_text = {m.text: m for m in mem.get_all(user_id="u1")}
     assert by_text["My seat preference is aisle"].authority is Authority.AUTHORIZED
-    assert by_text["I suggest the Gold plan"].authority is Authority.ATTESTED
+    # non-user claims are worded as claims even when the extractor forgets to attribute them
+    assert (
+        by_text["The assistant stated that the Gold plan suits the user"].authority
+        is Authority.ATTESTED
+    )
     tool = by_text["According to the tool, home city is Asterhaven"]
     assert tool.authority is Authority.UNENDORSED
+
+
+def test_unattributed_tool_claim_is_reworded(tmp_path):
+    def extractor(messages):
+        if not messages[0]["content"].startswith("You are the memory constructor"):
+            return {"operations": []}
+        q = "bank is Barclays"
+        return {"memories": [{"text": "The user's bank is Barclays", "source": "m0", "quote": q}]}
+
+    m = Memory(str(tmp_path / "m.db"), llm=ScriptedLLM(extractor), embedder=HashEmbedder(dim=64))
+    m.add({"role": "tool", "name": "crm", "content": "Profile: bank is Barclays"}, user_id="u3")
+    (item,) = m.get_all(user_id="u3")
+    assert item.text == "According to crm, the user's bank is Barclays"
+    assert item.authority is Authority.UNENDORSED
+    m.close()
 
 
 def test_non_user_source_cannot_create_preference(mem):
