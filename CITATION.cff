@@ -7,6 +7,6 @@ authors:
     given-names: Shhaurya
 repository-code: "https://github.com/Thebinary110/veramem"
 license: Apache-2.0
-version: 0.1.0
-date-released: 2026-10-17
+version: 0.1.1
+date-released: 2026-10-28
 keywords: [llm, agents, memory, provenance, retrieval, privacy]

@@ -4,7 +4,25 @@ All notable changes are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - unreleased
+## [0.1.1] - 2026-10-28
+
+### Fixed
+- A user who stated their name in one session and not in the next was written about as two
+  different people ("Maya lives in Lisbon" vs "The user moved to Porto"), so moves and other
+  changes were added as new memories instead of updating the old ones. User messages are now
+  always written about as "the user" (or the named speaker), and a changed state is also
+  extracted as a current-state fact.
+- Tool, document and assistant claims are now always worded as claims ("According to
+  crm_lookup, ..."), enforced in code rather than left to the model. Their authority label
+  was already correct; the text could read like the user's own statement.
+- Answers no longer spill the model's reasoning into the answer text.
+
+### Changed
+- The web UI shows each cited memory under an answer, with the quote it rests on and whether
+  its hash is intact.
+- README and docs home redesigned, with real screenshots and output.
+
+## [0.1.0] - 2026-10-19
 
 ### Added
 - **Outcome-informed ranking:** contextual (query-aware) utility, damped Thompson/UCB
