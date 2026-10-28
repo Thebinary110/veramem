@@ -1,0 +1,152 @@
+{"qid": 0, "category": "temporal", "pred": "No information provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 1, "category": "temporal", "pred": "2023-08-02", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 2, "category": "multi_hop", "pred": "Taekwondo", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.02, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "Community center renovation", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 4, "category": "temporal", "pred": "2023-08-03", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 5, "category": "temporal", "pred": "December 2022", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 6, "category": "multi_hop", "pred": "church, gym, and yoga studio", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.03, "context_items": 20}
+{"qid": 7, "category": "multi_hop", "pred": "film camera and a little doll", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.75, "latency_s": 1.37, "context_items": 20}
+{"qid": 8, "category": "open_domain", "pred": "Experiencing financial strain.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 9, "category": "multi_hop", "pred": "Maria's aunt", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.25, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "2023-02-24", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 11, "category": "multi_hop", "pred": "Jean, Cindy, and veterans", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.15, "context_items": 20}
+{"qid": 12, "category": "multi_hop", "pred": "Military aptitude test", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 13, "category": "temporal", "pred": "Week prior to 2023-03-06", "judge": 1, "f1": 0.22222222222222224, "bleu1": 0.19470019576785122, "latency_s": 1.16, "context_items": 20}
+{"qid": 14, "category": "open_domain", "pred": "Yes, he feels drawn to serve his country.", "judge": 1, "f1": 0.2222222222222222, "bleu1": 0.125, "latency_s": 1.42, "context_items": 20}
+{"qid": 15, "category": "multi_hop", "pred": "poetry and creative writing", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 16, "category": "temporal", "pred": "2023-03-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 17, "category": "open_domain", "pred": "Mechanical engineering", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "a colleague", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 19, "category": "multi_hop", "pred": "It broke down on April 7, 2023.", "judge": 0, "f1": 0.3333333333333333, "bleu1": 0.2857142857142857, "latency_s": 1.44, "context_items": 20}
+{"qid": 20, "category": "temporal", "pred": "2022", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 21, "category": "multi_hop", "pred": "East Coast", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.18, "context_items": 20}
+{"qid": 22, "category": "temporal", "pred": "February 2023", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.09, "context_items": 20}
+{"qid": 23, "category": "multi_hop", "pred": "Peach cobbler and cakes", "judge": 1, "f1": 0.5, "bleu1": 0.3422780793550613, "latency_s": 0.96, "context_items": 20}
+{"qid": 24, "category": "temporal", "pred": "April 2023", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.33, "context_items": 20}
+{"qid": 25, "category": "multi_hop", "pred": "Spain and London", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.99, "context_items": 20}
+{"qid": 26, "category": "multi_hop", "pred": "Bought a cross necklace", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.24525296078096157, "latency_s": 1.08, "context_items": 20}
+{"qid": 27, "category": "temporal", "pred": "2023-05-20", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 28, "category": "multi_hop", "pred": "Education, infrastructure, veterans, and fire-fighting.", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.42, "context_items": 20}
+{"qid": 29, "category": "multi_hop", "pred": "ring-toss tournament and chili cook-off", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 30, "category": "multi_hop", "pred": "homeless shelter and dog shelter", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 31, "category": "temporal", "pred": "10 years before 2023", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 32, "category": "multi_hop", "pred": "None mentioned", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 33, "category": "multi_hop", "pred": "Aerial yoga and kundalini yoga", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.01, "context_items": 20}
+{"qid": 34, "category": "temporal", "pred": "Week of 2023-06-09", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.07, "context_items": 20}
+{"qid": 35, "category": "multi_hop", "pred": "California, Florida, Spain", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 0.97, "context_items": 20}
+{"qid": 36, "category": "multi_hop", "pred": "Live music event and marching event.", "judge": 0, "f1": 0.6, "bleu1": 0.6, "latency_s": 1.04, "context_items": 20}
+{"qid": 37, "category": "multi_hop", "pred": "5K charity run, marching event, fire-fighting brigade", "judge": 0, "f1": 0.375, "bleu1": 0.3220616970322654, "latency_s": 1.11, "context_items": 20}
+{"qid": 38, "category": "temporal", "pred": "2023-07-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 39, "category": "open_domain", "pred": "Independence Day", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 40, "category": "multi_hop", "pred": "Kyle and Sara", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 41, "category": "open_domain", "pred": "John lives close to the mountains.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.45, "context_items": 20}
+{"qid": 42, "category": "multi_hop", "pred": "John's old area", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 43, "category": "temporal", "pred": "Week of 2023-06-30", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.46, "context_items": 20}
+{"qid": 44, "category": "multi_hop", "pred": "hiking, camping, picnic", "judge": 0, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.04, "context_items": 20}
+{"qid": 45, "category": "open_domain", "pred": "No information available.", "judge": 0, "f1": 0.125, "bleu1": 0.011891331115750803, "latency_s": 1.24, "context_items": 20}
+{"qid": 46, "category": "temporal", "pred": "2023-07-15", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 47, "category": "multi_hop", "pred": "Yoga, weight training, taekwondo", "judge": 0, "f1": 0.6, "bleu1": 0.45489799478447507, "latency_s": 1.15, "context_items": 20}
+{"qid": 48, "category": "temporal", "pred": "2023-07-30", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 49, "category": "multi_hop", "pred": "Baked goods", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 50, "category": "open_domain", "pred": "Supportive, family-oriented, inspiring", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.2388437701912631, "latency_s": 1.31, "context_items": 20}
+{"qid": 51, "category": "temporal", "pred": "About a year ago", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 52, "category": "multi_hop", "pred": "Laura", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.92, "context_items": 20}
+{"qid": 53, "category": "temporal", "pred": "2021", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 54, "category": "temporal", "pred": "2023-08-04", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 55, "category": "temporal", "pred": "2023-08-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 56, "category": "temporal", "pred": "2023-08-06", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 57, "category": "multi_hop", "pred": "Veterans' rights and community improvement", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.18393972058572117, "latency_s": 1.02, "context_items": 20}
+{"qid": 58, "category": "temporal", "pred": "The memories do not state when Maria got Coco.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 59, "category": "temporal", "pred": "Last summer (2021)", "judge": 0, "f1": 0.3333333333333333, "bleu1": 0.3333333333333333, "latency_s": 1.17, "context_items": 20}
+{"qid": 60, "category": "multi_hop", "pred": "Shadow and Max", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.94, "context_items": 20}
+{"qid": 61, "category": "temporal", "pred": "2023-08-06", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 62, "category": "multi_hop", "pred": "One", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.31, "context_items": 20}
+{"qid": 63, "category": "temporal", "pred": "0 weeks", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.94, "context_items": 20}
+{"qid": 64, "category": "open_domain", "pred": "Volunteer at shelters", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 65, "category": "single_hop", "pred": "Education reform and infrastructure development", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.24, "context_items": 20}
+{"qid": 66, "category": "single_hop", "pred": "Lack of education and crumbling infrastructure", "judge": 1, "f1": 0.5555555555555556, "bleu1": 0.20189651799465538, "latency_s": 1.45, "context_items": 20}
+{"qid": 67, "category": "single_hop", "pred": "Enabled needed repairs and renovations", "judge": 1, "f1": 0.5, "bleu1": 0.1353352832366127, "latency_s": 1.13, "context_items": 20}
+{"qid": 68, "category": "single_hop", "pred": "No information found", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 69, "category": "single_hop", "pred": "No information provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 70, "category": "single_hop", "pred": "Pizza", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 71, "category": "single_hop", "pred": "service-focused online group", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "Toy drive and homeless shelter events", "judge": 1, "f1": 0.4210526315789473, "bleu1": 0.13223911057726925, "latency_s": 4.06, "context_items": 20}
+{"qid": 73, "category": "single_hop", "pred": "Maria's aunt", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.12, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "She seemed sad and had no family", "judge": 1, "f1": 0.7692307692307692, "bleu1": 0.705401437408845, "latency_s": 1.22, "context_items": 20}
+{"qid": 75, "category": "single_hop", "pred": "Divorce, job loss, homelessness", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 76, "category": "single_hop", "pred": "He saw the impact he could make.", "judge": 1, "f1": 0.6666666666666667, "bleu1": 0.5054422164271944, "latency_s": 1.13, "context_items": 20}
+{"qid": 77, "category": "single_hop", "pred": "beginner's yoga class", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 78, "category": "single_hop", "pred": "Kyle", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 79, "category": "single_hop", "pred": "A few times a week", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 80, "category": "single_hop", "pred": "A picture of castles", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 0.99, "context_items": 20}
+{"qid": 81, "category": "single_hop", "pred": "London's captivating architecture", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 82, "category": "single_hop", "pred": "University degree", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.97, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "Education reform and infrastructure development", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.34, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "5K charity run", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "Marching event for veterans' rights", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "Car repair costs", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.2388437701912631, "latency_s": 1.05, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "Pacific Northwest", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "Politics and the government", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "To create positive change", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.15, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "Politics and the government", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 91, "category": "temporal", "pred": "A convention", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.93, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "Three times a week", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.32, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "John feels great mentally and physically.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "No information about dinner with mother", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "No information found.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Joined a nearby church", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "To feel closer to community and faith.", "judge": 1, "f1": 0.923076923076923, "bleu1": 0.846481724890614, "latency_s": 1.08, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "A small party", "judge": 1, "f1": 0.5, "bleu1": 0.1353352832366127, "latency_s": 1.06, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "share their stories", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.05, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "Friendship and camaraderie", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "Chili cook-off fundraiser", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.08, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "Maria's fundraiser", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "Max", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "10 years", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "Make a list of organizations", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "responsibility and compassion", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.32, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "No new activity mentioned on that date.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "Awesome and breathtaking", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "Free and light", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "No information found.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Aerial yoga", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.21, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "Assistant manager", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "Overcoming obstacles symbolized by a golden trophy", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "Super encouraging and inspiring team", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "Live music event", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "Cousin had to leave in a hurry", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 1.09, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "Marching event for veterans' rights", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4, "latency_s": 1.09, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "His passion for veterans and their rights", "judge": 1, "f1": 0.15384615384615383, "bleu1": 0.141080287481769, "latency_s": 0.98, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "Last week", "judge": 0, "f1": 0.3333333333333333, "bleu1": 0.18393972058572117, "latency_s": 1.05, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "No natural disaster occurred.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "It hit the area.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "Making their community better", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "Bake some cakes", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "Picnic, charades, scavenger hunt", "judge": 1, "f1": 0.6, "bleu1": 0.45489799478447507, "latency_s": 1.31, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "John's passion for veterans' rights", "judge": 0, "f1": 0.1818181818181818, "bleu1": 0.1637461506155964, "latency_s": 1.21, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "New friendships and camaraderie", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "He realized the importance of helping veterans.", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 1.01, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "Hiking and picnic", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.09, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "John thinks it sounds like a fun way to switch up his routine.", "judge": 1, "f1": 0.5217391304347826, "bleu1": 0.5, "latency_s": 1.13, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "Kickboxing", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "Community work with church friends", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Witnessing a family struggling", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.0902235221577418, "latency_s": 1.06, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "Visited a military memorial", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.24525296078096157, "latency_s": 1.31, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "No information provided.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.3, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "To remember and appreciate those who served.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "Teaching kids about veterans", "judge": 1, "f1": 0.16666666666666666, "bleu1": 0.09196986029286058, "latency_s": 1.27, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "He lost his job and found a new one.", "judge": 1, "f1": 0.39999999999999997, "bleu1": 0.371519099892935, "latency_s": 1.15, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "Community work", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "He renovated a community center", "judge": 1, "f1": 0.4444444444444445, "bleu1": 0.38940039153570244, "latency_s": 1.29, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "veterans and their families", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "a local organization", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "A medal for her efforts", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.25, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "Shadow", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "Camping", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "Uncomplicated and helps him be at one with nature", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "He feels he is not making much of an impact.", "judge": 1, "f1": 0.6250000000000001, "bleu1": 0.5555555555555556, "latency_s": 1.43, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "Shadow", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "Maria finds joy in having her puppy around.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "Mentor for a local school", "judge": 1, "f1": 0.4444444444444445, "bleu1": 0.38940039153570244, "latency_s": 1.09, "context_items": 20}
+{"qid": 150, "category": "single_hop", "pred": "Climbing, sliding, playing games", "judge": 0, "f1": 0.2105263157894737, "bleu1": 0.031963930603353785, "latency_s": 1.46, "context_items": 20}
+{"qid": 151, "category": "single_hop", "pred": "A community center", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}

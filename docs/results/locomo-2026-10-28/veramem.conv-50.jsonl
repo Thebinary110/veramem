@@ -1,0 +1,158 @@
+{"qid": 0, "category": "temporal", "pred": "August 2022", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 1, "category": "multi_hop", "pred": "No items mentioned.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 2, "category": "temporal", "pred": "2023-03-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "Aerosmith and The Fireworks", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 4, "category": "open_domain", "pred": "Japan", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 5, "category": "multi_hop", "pred": "Working on classic cars", "judge": 1, "f1": 0.3529411764705882, "bleu1": 0.07904941842139825, "latency_s": 0.9, "context_items": 20}
+{"qid": 6, "category": "multi_hop", "pred": "Classic cars", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.12, "context_items": 20}
+{"qid": 7, "category": "open_domain", "pred": "Not mentioned in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 8, "category": "temporal", "pred": "Week prior to 2023-05-16", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 9, "category": "temporal", "pred": "2023-05-09", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "Week prior to 2023-05-16", "judge": 1, "f1": 0.2, "bleu1": 0.15163266492815836, "latency_s": 1.23, "context_items": 20}
+{"qid": 11, "category": "multi_hop", "pred": "No mishaps mentioned.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 12, "category": "temporal", "pred": "2023-05-24", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.33, "context_items": 20}
+{"qid": 13, "category": "open_domain", "pred": "Yes, he loves performing live.", "judge": 1, "f1": 0.37499999999999994, "bleu1": 0.18071652714732123, "latency_s": 1.1, "context_items": 20}
+{"qid": 14, "category": "temporal", "pred": "2023-06-08", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 15, "category": "multi_hop", "pred": "To relax and explore.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 16, "category": "temporal", "pred": "Next month after 2023-06-09", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 17, "category": "temporal", "pred": "Friday prior to 2023-06-21", "judge": 1, "f1": 0.2, "bleu1": 0.15163266492815836, "latency_s": 1.13, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "Once", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 19, "category": "multi_hop", "pred": "Shibuya Crossing, Shinjuku, music festival", "judge": 1, "f1": 0.8333333333333333, "bleu1": 0.6703200460356393, "latency_s": 1.3, "context_items": 20}
+{"qid": 20, "category": "multi_hop", "pred": "Dave's dad", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.13, "context_items": 20}
+{"qid": 21, "category": "open_domain", "pred": "Yes, Calvin wants to grow his fanbase.", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.8571428571428571, "latency_s": 1.17, "context_items": 20}
+{"qid": 22, "category": "multi_hop", "pred": "Yes, Calvin wants to expand his brand.", "judge": 1, "f1": 0.25, "bleu1": 0.14285714285714285, "latency_s": 1.12, "context_items": 20}
+{"qid": 23, "category": "multi_hop", "pred": "Working on cars", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "Yes, Dave works on engines.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.17, "context_items": 20}
+{"qid": 25, "category": "temporal", "pred": "Friday before 2023-08-22", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.24525296078096157, "latency_s": 1.12, "context_items": 20}
+{"qid": 26, "category": "temporal", "pred": "2023-08-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 27, "category": "temporal", "pred": "Boston", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 28, "category": "multi_hop", "pred": "Driving his car", "judge": 1, "f1": 0.30769230769230765, "bleu1": 0.06464797857627004, "latency_s": 0.91, "context_items": 20}
+{"qid": 29, "category": "multi_hop", "pred": "Photography", "judge": 1, "f1": 0.16666666666666669, "bleu1": 4.5399929762484854e-05, "latency_s": 1.1, "context_items": 20}
+{"qid": 30, "category": "multi_hop", "pred": "Japanese, classic rock, and Aerosmith", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 0.97, "context_items": 20}
+{"qid": 31, "category": "temporal", "pred": "Boston", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 32, "category": "multi_hop", "pred": "San Francisco car workshop", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.18, "context_items": 20}
+{"qid": 33, "category": "multi_hop", "pred": "No information about San Francisco.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 34, "category": "temporal", "pred": "2023-09-01", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 35, "category": "temporal", "pred": "2023-11-17", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 36, "category": "temporal", "pred": "2023-09-11", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 37, "category": "open_domain", "pred": "Yes, Calvin loves performing live.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.13, "context_items": 20}
+{"qid": 38, "category": "temporal", "pred": "2023-09-14", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 39, "category": "open_domain", "pred": "Subaru Forester", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 40, "category": "multi_hop", "pred": "No information about Calvin's childhood music.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 41, "category": "multi_hop", "pred": "Calvin's dad", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.14, "context_items": 20}
+{"qid": 42, "category": "open_domain", "pred": "No", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 43, "category": "temporal", "pred": "Boston", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 44, "category": "temporal", "pred": "2023-10-03", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 45, "category": "multi_hop", "pred": "Music jam sessions and collaborating on music.", "judge": 0, "f1": 0.2222222222222222, "bleu1": 0.16666666666666666, "latency_s": 1.01, "context_items": 20}
+{"qid": 46, "category": "multi_hop", "pred": "Working on cars", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 0.89, "context_items": 20}
+{"qid": 47, "category": "multi_hop", "pred": "At least three.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 48, "category": "temporal", "pred": "Attended a music festival", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 49, "category": "multi_hop", "pred": "Restored an old car", "judge": 1, "f1": 0.2, "bleu1": 0.08786571270524224, "latency_s": 1.06, "context_items": 20}
+{"qid": 50, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 51, "category": "temporal", "pred": "August 2022", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 52, "category": "temporal", "pred": "November 2023", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 53, "category": "multi_hop", "pred": "His friends and team", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.06, "context_items": 20}
+{"qid": 54, "category": "multi_hop", "pred": "Collaborating with others", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 55, "category": "temporal", "pred": "2023-10-24", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 56, "category": "multi_hop", "pred": "Boston, Detroit", "judge": 0, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.0, "context_items": 20}
+{"qid": 57, "category": "temporal", "pred": "Photography", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 58, "category": "multi_hop", "pred": "Fixing an old car in a neighbor's garage", "judge": 1, "f1": 0.3448275862068966, "bleu1": 0.049013726368691564, "latency_s": 1.26, "context_items": 20}
+{"qid": 59, "category": "multi_hop", "pred": "Not specified", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 60, "category": "multi_hop", "pred": "Gold necklace with diamond pendant", "judge": 0, "f1": 0.3076923076923077, "bleu1": 0.21952465443761054, "latency_s": 1.15, "context_items": 20}
+{"qid": 61, "category": "temporal", "pred": "Not mentioned in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 62, "category": "temporal", "pred": "Information not provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 63, "category": "multi_hop", "pred": "Custom guitar with octopus design", "judge": 1, "f1": 0.4, "bleu1": 0.2207276647028654, "latency_s": 1.06, "context_items": 20}
+{"qid": 64, "category": "multi_hop", "pred": "Taking walks and card night", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 65, "category": "temporal", "pred": "September 2023", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 66, "category": "multi_hop", "pred": "No, he finds one challenging.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.27, "context_items": 20}
+{"qid": 67, "category": "temporal", "pred": "Japanese house", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 68, "category": "temporal", "pred": "2023-10-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.36, "context_items": 20}
+{"qid": 69, "category": "temporal", "pred": "October 2023", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.97, "context_items": 20}
+{"qid": 70, "category": "temporal", "pred": "2023-11-16", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 71, "category": "single_hop", "pred": "a few months", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "Aerosmith", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 73, "category": "single_hop", "pred": "Tokyo", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "Stay true to himself and sound unique.", "judge": 1, "f1": 0.923076923076923, "bleu1": 0.846481724890614, "latency_s": 1.06, "context_items": 20}
+{"qid": 75, "category": "single_hop", "pred": "Car maintenance shop", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 76, "category": "single_hop", "pred": "Regular maintenance and classic car restorations", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.1615172143957243, "latency_s": 1.2, "context_items": 20}
+{"qid": 77, "category": "single_hop", "pred": "A gold necklace with a diamond pendant", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 78, "category": "single_hop", "pred": "No information in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 79, "category": "single_hop", "pred": "Dave works on cars.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 80, "category": "single_hop", "pred": "immersing in concerts or favorite albums", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 81, "category": "single_hop", "pred": "Music gear and favorite microphone", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 82, "category": "single_hop", "pred": "His own car shop", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.03, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "Transforming broken items into working ones", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "Performing live", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "Taking walks and exploring parks", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 0.96, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "No sports activity mentioned.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "Get back on the road", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "Regular walks with friends", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.15, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "Music with Japanese artists", "judge": 0, "f1": 0.25, "bleu1": 0.25, "latency_s": 0.95, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "Ferrari", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "Expand his music brand worldwide", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5362560368285114, "latency_s": 1.04, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "Keep pursuing your passion and keep dreaming.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "Car modification workshop", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.6666666666666666, "latency_s": 1.01, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Body modifications", "judge": 1, "f1": 0.5, "bleu1": 0.1353352832366127, "latency_s": 1.1, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Red car with black engine", "judge": 0, "f1": 0.25, "bleu1": 0.2, "latency_s": 1.17, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "Dave's love for car engineering", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "The audience sang along.", "judge": 1, "f1": 0.4, "bleu1": 0.17573142541048448, "latency_s": 1.24, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "At a music festival in Tokyo", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "Calvin's mansion", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.99, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "A podcast about the rap industry", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.11, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "Miami", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "Octopus design", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.05, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "Dave asked why it was so shiny.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "Purple", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "San Francisco", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "Satisfaction", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "Flight ticket to Boston", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 1.21, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "Visiting a small town in Japan", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "Music jam session together", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Ratatouille", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "He finds satisfaction in their positive reactions.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "Cruising around in his car", "judge": 0, "f1": 0.1818181818181818, "bleu1": 0.1637461506155964, "latency_s": 1.03, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "California Love", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "A shiny orange car", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "Ford Mustang", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "giving old cars a new life", "judge": 1, "f1": 0.16666666666666666, "bleu1": 0.13406400920712785, "latency_s": 1.19, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "Hard work and determination", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "Therapeutic, purpose, and pride", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "Build a custom car from scratch", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "Custom guitar with octopus design", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "The Fireworks", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "Collaborating with others and positive energy", "judge": 0, "f1": 0.1, "bleu1": 0.027067056647322542, "latency_s": 1.08, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "Working on cars", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "Tokyo music festival", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 1.14, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "Shibuya Crossing", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "Shibuya Crossing and Shinjuku", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.3, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "Ramen", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "performing and connecting with the crowd", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "He finds it tough to balance them.", "judge": 0, "f1": 0.15384615384615383, "bleu1": 0.14285714285714285, "latency_s": 1.11, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "People's struggles", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.11156508007421491, "latency_s": 1.03, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Inspired by people's struggles", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "He fixed an old car found in a neighbor's garage.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.3, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "No information provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "Supportive people", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "No information about selling a car.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "2023-03-26", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "He felt it was a dream come true.", "judge": 1, "f1": 0.5, "bleu1": 0.42857142857142855, "latency_s": 1.19, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "Calvin feels alive when performing.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "Progress keeps them motivated", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "Tokyo", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "Threw a small party", "judge": 1, "f1": 0.6, "bleu1": 0.2635971381157267, "latency_s": 1.02, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "Car modifications", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.87, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "Restoring and modifying cars", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "Music videos, concerts, documentaries", "judge": 1, "f1": 0.6153846153846153, "bleu1": 0.2865047968601901, "latency_s": 1.04, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "Classic rock", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "Collaborating with others and positive energy", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "A photo of a blue Subaru", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "No information provided.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 150, "category": "single_hop", "pred": "His old high school buddy", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 151, "category": "single_hop", "pred": "Photography", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 152, "category": "single_hop", "pred": "vintage camera", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 153, "category": "single_hop", "pred": "scenery, sunsets, beaches, waves", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.05, "context_items": 20}
+{"qid": 154, "category": "single_hop", "pred": "Networking event", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 155, "category": "single_hop", "pred": "Music and art", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 156, "category": "single_hop", "pred": "nearby park", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 157, "category": "single_hop", "pred": "No mention of nature's impact.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}

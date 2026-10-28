@@ -1,0 +1,123 @@
+{"qid": 0, "category": "temporal", "pred": "2020", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.71, "context_items": 20}
+{"qid": 1, "category": "temporal", "pred": "Week of 2023-03-20", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.42, "context_items": 20}
+{"qid": 2, "category": "multi_hop", "pred": "Wine tasting", "judge": 1, "f1": 0.3636363636363636, "bleu1": 0.0301973834223185, "latency_s": 1.01, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "New places to eat", "judge": 1, "f1": 0.4210526315789474, "bleu1": 0.06392786120670757, "latency_s": 0.99, "context_items": 20}
+{"qid": 4, "category": "temporal", "pred": "Last week of March 2023", "judge": 0, "f1": 0.3636363636363636, "bleu1": 0.3274923012311928, "latency_s": 1.07, "context_items": 20}
+{"qid": 5, "category": "temporal", "pred": "Week of 2023-04-26", "judge": 0, "f1": 0.5, "bleu1": 0.3422780793550613, "latency_s": 1.34, "context_items": 20}
+{"qid": 6, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.71, "context_items": 20}
+{"qid": 7, "category": "temporal", "pred": "Zero years.", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.6, "context_items": 20}
+{"qid": 8, "category": "temporal", "pred": "No, he was considering it.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 2.01, "context_items": 20}
+{"qid": 9, "category": "multi_hop", "pred": "dog owners group and agility classes", "judge": 1, "f1": 0.2608695652173913, "bleu1": 0.04456414692860032, "latency_s": 1.32, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "2023-06-11", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 11, "category": "temporal", "pred": "2023-06-11", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.53, "context_items": 20}
+{"qid": 12, "category": "multi_hop", "pred": "Rock climbing, kayaking, bungee jumping", "judge": 0, "f1": 0.4444444444444445, "bleu1": 0.4, "latency_s": 1.58, "context_items": 20}
+{"qid": 13, "category": "temporal", "pred": "2023-06-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 14, "category": "multi_hop", "pred": "Nature and hiking", "judge": 1, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.55, "context_items": 20}
+{"qid": 15, "category": "multi_hop", "pred": "Finding pet-friendly spots", "judge": 1, "f1": 0.18181818181818182, "bleu1": 0.06295853427918728, "latency_s": 1.66, "context_items": 20}
+{"qid": 16, "category": "temporal", "pred": "Saturday, 2023-10-28", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.42, "context_items": 20}
+{"qid": 17, "category": "multi_hop", "pred": "Once", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 19, "category": "open_domain", "pred": "Dog grooming", "judge": 0, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.4, "context_items": 20}
+{"qid": 20, "category": "open_domain", "pred": "Chicken", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.87, "context_items": 20}
+{"qid": 21, "category": "multi_hop", "pred": "dog training and agility", "judge": 1, "f1": 0.42857142857142855, "bleu1": 0.06948345122280154, "latency_s": 0.94, "context_items": 20}
+{"qid": 22, "category": "temporal", "pred": "He didn't go anywhere specific.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 23, "category": "multi_hop", "pred": "No prior dog ownership experience.", "judge": 0, "f1": 0.14285714285714285, "bleu1": 0.08986579282344431, "latency_s": 1.72, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "No information about their childhood.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.63, "context_items": 20}
+{"qid": 25, "category": "temporal", "pred": "2023-08-18", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 26, "category": "multi_hop", "pred": "His job and living situation", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.42, "context_items": 20}
+{"qid": 27, "category": "multi_hop", "pred": "Tough and stressful", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.44, "context_items": 20}
+{"qid": 28, "category": "multi_hop", "pred": "Party hats", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 0.89, "context_items": 20}
+{"qid": 29, "category": "multi_hop", "pred": "Pepper, Pixie, Precious, Panda", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.41, "context_items": 20}
+{"qid": 30, "category": "temporal", "pred": "Next month from 2023-11-01", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 31, "category": "multi_hop", "pred": "Andrew enjoys taking walks with his dogs.", "judge": 1, "f1": 0.4, "bleu1": 0.2857142857142857, "latency_s": 1.79, "context_items": 20}
+{"qid": 32, "category": "multi_hop", "pred": "Dog and sunflowers", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 33, "category": "open_domain", "pred": "Move to a dog-friendly place near a park.", "judge": 1, "f1": 0.13333333333333333, "bleu1": 0.01659568945595465, "latency_s": 1.74, "context_items": 20}
+{"qid": 34, "category": "temporal", "pred": "Two months", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.64, "context_items": 20}
+{"qid": 35, "category": "multi_hop", "pred": "Scout, Toby, and Buddy", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.84, "context_items": 20}
+{"qid": 36, "category": "multi_hop", "pred": "Roasted Chicken, sushi", "judge": 1, "f1": 0.36363636363636365, "bleu1": 0.12591706855837456, "latency_s": 1.04, "context_items": 20}
+{"qid": 37, "category": "temporal", "pred": "2023-10-17", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 38, "category": "temporal", "pred": "Week of 2023-10-17", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 39, "category": "multi_hop", "pred": "tons of energy", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.68, "context_items": 20}
+{"qid": 40, "category": "multi_hop", "pred": "dog park", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.35, "context_items": 20}
+{"qid": 41, "category": "multi_hop", "pred": "Jack Russell and Chihuahua mixes", "judge": 0, "f1": 0.11111111111111112, "bleu1": 0.0205212496559747, "latency_s": 1.34, "context_items": 20}
+{"qid": 42, "category": "multi_hop", "pred": "Positive reinforcement techniques", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.03, "context_items": 20}
+{"qid": 43, "category": "open_domain", "pred": "Cannot be determined from memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 44, "category": "open_domain", "pred": "Not specified in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 45, "category": "temporal", "pred": "Three dogs.", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 2.07, "context_items": 20}
+{"qid": 46, "category": "temporal", "pred": "Two dogs.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 2.07, "context_items": 20}
+{"qid": 47, "category": "temporal", "pred": "One month", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.58, "context_items": 20}
+{"qid": 48, "category": "multi_hop", "pred": "family", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.56, "context_items": 20}
+{"qid": 49, "category": "multi_hop", "pred": "Family and essential to her life", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.35, "context_items": 20}
+{"qid": 50, "category": "multi_hop", "pred": "Dog grooming", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.22, "context_items": 20}
+{"qid": 51, "category": "multi_hop", "pred": "shoes, party hats, toys", "judge": 0, "f1": 0.2, "bleu1": 0.15163266492815836, "latency_s": 1.38, "context_items": 20}
+{"qid": 52, "category": "open_domain", "pred": "Go to nearby parks or nature reserves", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.52, "context_items": 20}
+{"qid": 53, "category": "open_domain", "pred": "Wildlife conservationist", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.56, "context_items": 20}
+{"qid": 54, "category": "multi_hop", "pred": "meet new dogs", "judge": 1, "f1": 0.30769230769230765, "bleu1": 0.06464797857627004, "latency_s": 0.96, "context_items": 20}
+{"qid": 55, "category": "temporal", "pred": "2023-06-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.75, "context_items": 20}
+{"qid": 56, "category": "multi_hop", "pred": "Yes, as of 2023-05-06.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.96, "context_items": 20}
+{"qid": 57, "category": "temporal", "pred": "2023-11-22", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.67, "context_items": 20}
+{"qid": 58, "category": "temporal", "pred": "Sushi", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 59, "category": "temporal", "pred": "7 months", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.78, "context_items": 20}
+{"qid": 60, "category": "multi_hop", "pred": "One", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 61, "category": "single_hop", "pred": "Eagles", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 62, "category": "single_hop", "pred": "The connection and peace it brings.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.72, "context_items": 20}
+{"qid": 63, "category": "single_hop", "pred": "croissants, muffins, and tarts", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 64, "category": "single_hop", "pred": "Sunflowers", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 65, "category": "single_hop", "pred": "Audrey meets other dog owners.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 66, "category": "single_hop", "pred": "Dog near a park or woods", "judge": 0, "f1": 0.28571428571428575, "bleu1": 0.2, "latency_s": 1.74, "context_items": 20}
+{"qid": 67, "category": "single_hop", "pred": "near a park or woods", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.68, "context_items": 20}
+{"qid": 68, "category": "single_hop", "pred": "To bond with her pet", "judge": 1, "f1": 0.6, "bleu1": 0.6, "latency_s": 1.09, "context_items": 20}
+{"qid": 69, "category": "single_hop", "pred": "From a flyer at her local pet store.", "judge": 1, "f1": 0.7142857142857143, "bleu1": 0.7142857142857143, "latency_s": 1.31, "context_items": 20}
+{"qid": 70, "category": "single_hop", "pred": "Positive reinforcement training", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 71, "category": "single_hop", "pred": "Precious and Pixie are Chihuahua mixes.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "To bond with her dogs", "judge": 0, "f1": 0.13333333333333333, "bleu1": 0.07357588823428847, "latency_s": 1.35, "context_items": 20}
+{"qid": 73, "category": "single_hop", "pred": "Finding a pet-friendly place to live", "judge": 1, "f1": 0.4000000000000001, "bleu1": 0.4, "latency_s": 1.92, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "He finds it difficult.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.53, "context_items": 20}
+{"qid": 75, "category": "single_hop", "pred": "bungee jumping and kayaking", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 76, "category": "single_hop", "pred": "About an hour.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 77, "category": "single_hop", "pred": "A doggy play area", "judge": 1, "f1": 0.6, "bleu1": 0.2635971381157267, "latency_s": 1.42, "context_items": 20}
+{"qid": 78, "category": "single_hop", "pred": "A stunning lake in the mountains", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 79, "category": "single_hop", "pred": "Chicken Pot Pie", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 80, "category": "single_hop", "pred": "Roasted Chicken", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 81, "category": "single_hop", "pred": "Nothing specific is recorded.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 82, "category": "single_hop", "pred": "Max", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "Playing fetch and taking long walks.", "judge": 0, "f1": 0.26666666666666666, "bleu1": 0.14715177646857694, "latency_s": 1.04, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "Energetic, naughty, love cuddles", "judge": 0, "f1": 0.1818181818181818, "bleu1": 0.01509869171115925, "latency_s": 1.46, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "agility classes", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.43, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "Twice a week", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "Two hours", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "No specific grooming advice was given.", "judge": 0, "f1": 0.08, "bleu1": 0.019093140665447955, "latency_s": 1.71, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "Regular grooming", "judge": 1, "f1": 0.1818181818181818, "bleu1": 0.01509869171115925, "latency_s": 1.26, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "doggy playdate", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "Got new beds for her dogs", "judge": 1, "f1": 0.7272727272727272, "bleu1": 0.6666666666666666, "latency_s": 1.28, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "Extra comfort", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "Memories do not specify how she calmed her dog.", "judge": 0, "f1": 0.125, "bleu1": 0.1111111111111111, "latency_s": 1.11, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "Multiple times a day", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Two white flowers on a cactus", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Animals, plants, and ecosystems", "judge": 1, "f1": 0.5454545454545454, "bleu1": 0.18887560283756186, "latency_s": 1.51, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "No information in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "Hiking in nature", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.43, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "She made cookies for neighbors.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.42, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "Broken arm from an accident", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "Jewelry from recycled materials", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.5841005873035536, "latency_s": 1.04, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "To show love of creativity and sustainability.", "judge": 1, "f1": 0.8333333333333334, "bleu1": 0.8333333333333334, "latency_s": 1.12, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "an animal shelter", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.32, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "She donates jewelry profits.", "judge": 1, "f1": 0.15384615384615383, "bleu1": 0.07162619921504752, "latency_s": 1.07, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "Chasing balls and frisbees", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "Cookies", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "They hate snow.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "They hate snow.", "judge": 0, "f1": 0.18181818181818182, "bleu1": 0.06295853427918728, "latency_s": 1.18, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "outdoor adventures", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "Taking walks and hiking trails", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.38, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Checking out new hiking trails", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.69, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "Sushi", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "California or salmon rolls", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 0.94, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "picnic date", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "Nothing, they planned to hike on October 28.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.32, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "Autumn colors", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "She considered them family.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.54, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "Once a week", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "Doggy playdate with neighbors", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "puzzles, training, and hide-and-seek", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "Take them to a nearby park.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.76, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "bed, toys, and puppy pads", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.04, "context_items": 20}

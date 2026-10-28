@@ -1,0 +1,622 @@
+  [veramem] conv-26 session_1 ingested (18 turns, 24s)
+  [veramem] conv-26 session_2 ingested (17 turns, 51s)
+  [veramem] conv-26 session_3 ingested (23 turns, 80s)
+  [veramem] conv-26 session_4 ingested (18 turns, 117s)
+  [veramem] conv-26 session_5 ingested (16 turns, 143s)
+  [veramem] conv-26 session_6 ingested (16 turns, 185s)
+  [veramem] conv-26 session_7 ingested (27 turns, 235s)
+  [veramem] conv-26 session_8 ingested (39 turns, 299s)
+  [veramem] conv-26 session_9 ingested (17 turns, 332s)
+  [veramem] conv-26 session_10 ingested (24 turns, 359s)
+  [veramem] conv-26 session_11 ingested (17 turns, 387s)
+  [veramem] conv-26 session_12 ingested (21 turns, 416s)
+  [veramem] conv-26 session_13 ingested (18 turns, 459s)
+  [veramem] conv-26 session_14 ingested (35 turns, 516s)
+  [veramem] conv-26 session_15 ingested (28 turns, 571s)
+  [veramem] conv-26 session_16 ingested (20 turns, 612s)
+  [veramem] conv-26 session_17 ingested (26 turns, 668s)
+  [veramem] conv-26 session_18 ingested (24 turns, 702s)
+  [veramem] conv-26 session_19 ingested (15 turns, 740s)
+[veramem] conv-26: ingest 740s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 37,
+   "judge": 72.97,
+   "f1": 23.39,
+   "bleu1": 20.97
+  },
+  "overall": {
+   "n": 152,
+   "judge": 68.42,
+   "f1": 36.23,
+   "bleu1": 30.08
+  },
+  "open_domain": {
+   "n": 13,
+   "judge": 53.85,
+   "f1": 22.35,
+   "bleu1": 15.96
+  },
+  "multi_hop": {
+   "n": 32,
+   "judge": 65.62,
+   "f1": 40.24,
+   "bleu1": 31.77
+  },
+  "single_hop": {
+   "n": 70,
+   "judge": 70.0,
+   "f1": 43.76,
+   "bleu1": 36.74
+  }
+ }
+}
+  [veramem] conv-30 session_1 ingested (28 turns, 39s)
+  [veramem] conv-30 session_2 ingested (16 turns, 58s)
+  [veramem] conv-30 session_3 ingested (14 turns, 73s)
+  [veramem] conv-30 session_4 ingested (19 turns, 98s)
+  [veramem] conv-30 session_5 ingested (23 turns, 138s)
+  [veramem] conv-30 session_6 ingested (19 turns, 163s)
+  [veramem] conv-30 session_7 ingested (17 turns, 178s)
+  [veramem] conv-30 session_8 ingested (26 turns, 224s)
+  [veramem] conv-30 session_9 ingested (14 turns, 253s)
+  [veramem] conv-30 session_10 ingested (14 turns, 272s)
+  [veramem] conv-30 session_11 ingested (22 turns, 301s)
+  [veramem] conv-30 session_12 ingested (19 turns, 328s)
+  [veramem] conv-30 session_13 ingested (23 turns, 371s)
+  [veramem] conv-30 session_14 ingested (20 turns, 398s)
+  [veramem] conv-30 session_15 ingested (22 turns, 428s)
+  [veramem] conv-30 session_16 ingested (16 turns, 462s)
+  [veramem] conv-30 session_17 ingested (21 turns, 486s)
+  [veramem] conv-30 session_18 ingested (22 turns, 545s)
+  [veramem] conv-30 session_19 ingested (14 turns, 569s)
+[veramem] conv-30: ingest 569s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 63,
+   "judge": 74.6,
+   "f1": 18.34,
+   "bleu1": 16.77
+  },
+  "overall": {
+   "n": 233,
+   "judge": 67.81,
+   "f1": 34.32,
+   "bleu1": 28.88
+  },
+  "open_domain": {
+   "n": 13,
+   "judge": 53.85,
+   "f1": 22.35,
+   "bleu1": 15.96
+  },
+  "multi_hop": {
+   "n": 43,
+   "judge": 65.12,
+   "f1": 39.68,
+   "bleu1": 30.45
+  },
+  "single_hop": {
+   "n": 114,
+   "judge": 66.67,
+   "f1": 42.49,
+   "bleu1": 36.45
+  }
+ }
+}
+  [veramem] conv-41 session_1 ingested (16 turns, 21s)
+  [veramem] conv-41 session_2 ingested (28 turns, 60s)
+  [veramem] conv-41 session_3 ingested (17 turns, 95s)
+  [veramem] conv-41 session_4 ingested (26 turns, 128s)
+  [veramem] conv-41 session_5 ingested (16 turns, 160s)
+  [veramem] conv-41 session_6 ingested (22 turns, 198s)
+  [veramem] conv-41 session_7 ingested (17 turns, 225s)
+  [veramem] conv-41 session_8 ingested (26 turns, 290s)
+  [veramem] conv-41 session_9 ingested (18 turns, 314s)
+  [veramem] conv-41 session_10 ingested (18 turns, 350s)
+  [veramem] conv-41 session_11 ingested (21 turns, 381s)
+  [veramem] conv-41 session_12 ingested (23 turns, 415s)
+  [veramem] conv-41 session_13 ingested (37 turns, 476s)
+  [veramem] conv-41 session_14 ingested (23 turns, 510s)
+  [veramem] conv-41 session_15 ingested (19 turns, 542s)
+  [veramem] conv-41 session_16 ingested (19 turns, 570s)
+  [veramem] conv-41 session_17 ingested (16 turns, 586s)
+  [veramem] conv-41 session_18 ingested (23 turns, 630s)
+  [veramem] conv-41 session_19 ingested (26 turns, 667s)
+  [veramem] conv-41 session_20 ingested (18 turns, 688s)
+  [veramem] conv-41 session_21 ingested (29 turns, 721s)
+  [veramem] conv-41 session_22 ingested (21 turns, 749s)
+  [veramem] conv-41 session_23 ingested (14 turns, 776s)
+  [veramem] conv-41 session_24 ingested (17 turns, 801s)
+  [veramem] conv-41 session_25 ingested (20 turns, 823s)
+  [veramem] conv-41 session_26 ingested (17 turns, 859s)
+  [veramem] conv-41 session_27 ingested (16 turns, 879s)
+  [veramem] conv-41 session_28 ingested (19 turns, 897s)
+  [veramem] conv-41 session_29 ingested (18 turns, 913s)
+  [veramem] conv-41 session_30 ingested (23 turns, 951s)
+  [veramem] conv-41 session_31 ingested (23 turns, 988s)
+  [veramem] conv-41 session_32 ingested (17 turns, 1027s)
+[veramem] conv-41: ingest 1027s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 90,
+   "judge": 70.0,
+   "f1": 18.09,
+   "bleu1": 16.45
+  },
+  "overall": {
+   "n": 385,
+   "judge": 65.97,
+   "f1": 37.01,
+   "bleu1": 31.68
+  },
+  "open_domain": {
+   "n": 21,
+   "judge": 52.38,
+   "f1": 21.61,
+   "bleu1": 16.43
+  },
+  "multi_hop": {
+   "n": 74,
+   "judge": 63.51,
+   "f1": 44.44,
+   "bleu1": 36.04
+  },
+  "single_hop": {
+   "n": 200,
+   "judge": 66.5,
+   "f1": 44.38,
+   "bleu1": 38.52
+  }
+ }
+}
+  [veramem] conv-42 session_1 ingested (22 turns, 35s)
+  [veramem] conv-42 session_2 ingested (29 turns, 98s)
+  [veramem] conv-42 session_3 ingested (25 turns, 130s)
+  [veramem] conv-42 session_4 ingested (19 turns, 167s)
+  [veramem] conv-42 session_5 ingested (21 turns, 197s)
+  [veramem] conv-42 session_6 ingested (13 turns, 217s)
+  [veramem] conv-42 session_7 ingested (13 turns, 234s)
+  [veramem] conv-42 session_8 ingested (22 turns, 274s)
+  [veramem] conv-42 session_9 ingested (18 turns, 328s)
+  [veramem] conv-42 session_10 ingested (16 turns, 368s)
+  [veramem] conv-42 session_11 ingested (20 turns, 395s)
+  [veramem] conv-42 session_12 ingested (19 turns, 436s)
+  [veramem] conv-42 session_13 ingested (23 turns, 459s)
+  [veramem] conv-42 session_14 ingested (27 turns, 506s)
+  [veramem] conv-42 session_15 ingested (17 turns, 544s)
+  [veramem] conv-42 session_16 ingested (16 turns, 575s)
+  [veramem] conv-42 session_17 ingested (21 turns, 612s)
+  [veramem] conv-42 session_18 ingested (16 turns, 645s)
+  [veramem] conv-42 session_19 ingested (22 turns, 701s)
+  [veramem] conv-42 session_20 ingested (19 turns, 740s)
+  [veramem] conv-42 session_21 ingested (20 turns, 789s)
+  [veramem] conv-42 session_22 ingested (23 turns, 834s)
+  [veramem] conv-42 session_23 ingested (30 turns, 888s)
+  [veramem] conv-42 session_24 ingested (19 turns, 913s)
+  [veramem] conv-42 session_25 ingested (29 turns, 954s)
+  [veramem] conv-42 session_26 ingested (24 turns, 1009s)
+  [veramem] conv-42 session_27 ingested (38 turns, 1102s)
+  [veramem] conv-42 session_28 ingested (33 turns, 1163s)
+  [veramem] conv-42 session_29 ingested (15 turns, 1186s)
+[veramem] conv-42: ingest 1186s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 130,
+   "judge": 69.23,
+   "f1": 17.77,
+   "bleu1": 15.65
+  },
+  "overall": {
+   "n": 584,
+   "judge": 65.07,
+   "f1": 36.28,
+   "bleu1": 31.22
+  },
+  "open_domain": {
+   "n": 32,
+   "judge": 43.75,
+   "f1": 15.02,
+   "bleu1": 10.86
+  },
+  "multi_hop": {
+   "n": 111,
+   "judge": 64.86,
+   "f1": 38.89,
+   "bleu1": 31.21
+  },
+  "single_hop": {
+   "n": 311,
+   "judge": 65.59,
+   "f1": 45.28,
+   "bleu1": 39.83
+  }
+ }
+}
+  [veramem] conv-43 session_1 ingested (20 turns, 27s)
+  [veramem] conv-43 session_2 ingested (19 turns, 53s)
+  [veramem] conv-43 session_3 ingested (35 turns, 108s)
+  [veramem] conv-43 session_4 ingested (15 turns, 126s)
+  [veramem] conv-43 session_5 ingested (20 turns, 172s)
+  [veramem] conv-43 session_6 ingested (23 turns, 213s)
+  [veramem] conv-43 session_7 ingested (16 turns, 232s)
+  [veramem] conv-43 session_8 ingested (37 turns, 288s)
+  [veramem] conv-43 session_9 ingested (15 turns, 321s)
+  [veramem] conv-43 session_10 ingested (17 turns, 347s)
+  [veramem] conv-43 session_11 ingested (30 turns, 406s)
+  [veramem] conv-43 session_12 ingested (29 turns, 447s)
+  [veramem] conv-43 session_13 ingested (22 turns, 474s)
+  [veramem] conv-43 session_14 ingested (23 turns, 499s)
+  [veramem] conv-43 session_15 ingested (38 turns, 567s)
+  [veramem] conv-43 session_16 ingested (17 turns, 592s)
+  [veramem] conv-43 session_17 ingested (19 turns, 611s)
+  [veramem] conv-43 session_18 ingested (15 turns, 631s)
+  [veramem] conv-43 session_19 ingested (23 turns, 680s)
+  [veramem] conv-43 session_20 ingested (43 turns, 774s)
+  [veramem] conv-43 session_21 ingested (19 turns, 818s)
+  [veramem] conv-43 session_22 ingested (18 turns, 864s)
+  [veramem] conv-43 session_23 ingested (16 turns, 888s)
+  [veramem] conv-43 session_24 ingested (20 turns, 915s)
+  [veramem] conv-43 session_25 ingested (17 turns, 935s)
+  [veramem] conv-43 session_26 ingested (38 turns, 1001s)
+  [veramem] conv-43 session_27 ingested (40 turns, 1105s)
+  [veramem] conv-43 session_28 ingested (21 turns, 1135s)
+  [veramem] conv-43 session_29 ingested (15 turns, 1153s)
+[veramem] conv-43: ingest 1153s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 156,
+   "judge": 66.67,
+   "f1": 21.5,
+   "bleu1": 19.54
+  },
+  "overall": {
+   "n": 762,
+   "judge": 65.35,
+   "f1": 38.51,
+   "bleu1": 33.49
+  },
+  "open_domain": {
+   "n": 46,
+   "judge": 41.3,
+   "f1": 16.61,
+   "bleu1": 11.8
+  },
+  "multi_hop": {
+   "n": 142,
+   "judge": 66.2,
+   "f1": 39.86,
+   "bleu1": 31.72
+  },
+  "single_hop": {
+   "n": 418,
+   "judge": 67.22,
+   "f1": 46.82,
+   "bleu1": 41.68
+  }
+ }
+}
+  [veramem] conv-44 session_1 ingested (24 turns, 25s)
+  [veramem] conv-44 session_2 ingested (26 turns, 57s)
+  [veramem] conv-44 session_3 ingested (31 turns, 98s)
+  [veramem] conv-44 session_4 ingested (30 turns, 158s)
+  [veramem] conv-44 session_5 ingested (22 turns, 202s)
+  [veramem] conv-44 session_6 ingested (16 turns, 226s)
+  [veramem] conv-44 session_7 ingested (13 turns, 245s)
+  [veramem] conv-44 session_8 ingested (28 turns, 285s)
+  [veramem] conv-44 session_9 ingested (27 turns, 331s)
+  [veramem] conv-44 session_10 ingested (29 turns, 412s)
+  [veramem] conv-44 session_11 ingested (38 turns, 488s)
+  [veramem] conv-44 session_12 ingested (17 turns, 519s)
+  [veramem] conv-44 session_13 ingested (16 turns, 563s)
+  [veramem] conv-44 session_14 ingested (27 turns, 632s)
+  [veramem] conv-44 session_15 ingested (19 turns, 683s)
+  [veramem] conv-44 session_16 ingested (19 turns, 732s)
+  [veramem] conv-44 session_17 ingested (21 turns, 782s)
+  [veramem] conv-44 session_18 ingested (22 turns, 815s)
+  [veramem] conv-44 session_19 ingested (30 turns, 908s)
+  [veramem] conv-44 session_20 ingested (40 turns, 966s)
+  [veramem] conv-44 session_21 ingested (18 turns, 1002s)
+  [veramem] conv-44 session_22 ingested (13 turns, 1019s)
+  [veramem] conv-44 session_23 ingested (28 turns, 1086s)
+  [veramem] conv-44 session_24 ingested (22 turns, 1140s)
+  [veramem] conv-44 session_25 ingested (16 turns, 1165s)
+  [veramem] conv-44 session_26 ingested (47 turns, 1249s)
+  [veramem] conv-44 session_27 ingested (18 turns, 1288s)
+  [veramem] conv-44 session_28 ingested (18 turns, 1333s)
+[veramem] conv-44: ingest 1333s, qa done
+{
+ "veramem": {
+  "temporal": {
+   "n": 180,
+   "judge": 64.44,
+   "f1": 22.31,
+   "bleu1": 20.29
+  },
+  "overall": {
+   "n": 885,
+   "judge": 65.31,
+   "f1": 38.98,
+   "bleu1": 34.01
+  },
+  "open_domain": {
+   "n": 53,
+   "judge": 41.51,
+   "f1": 17.31,
+   "bleu1": 12.73
+  },
+  "multi_hop": {
+   "n": 172,
+   "judge": 66.28,
+   "f1": 39.4,
+   "bleu1": 30.88
+  },
+  "single_hop": {
+   "n": 480,
+   "judge": 67.92,
+   "f1": 47.48,
+   "bleu1": 42.62
+  }
+ }
+}
+  [veramem] conv-47 session_1 ingested (37 turns, 64s)
+  [veramem] conv-47 session_2 ingested (21 turns, 97s)
+  [veramem] conv-47 session_3 ingested (23 turns, 132s)
+  [veramem] conv-47 session_4 ingested (25 turns, 161s)
+  [veramem] conv-47 session_5 ingested (16 turns, 192s)
+  [veramem] conv-47 session_6 ingested (19 turns, 239s)
+  [veramem] conv-47 session_7 ingested (21 turns, 269s)
+  [veramem] conv-47 session_8 ingested (40 turns, 315s)
+  [veramem] conv-47 session_9 ingested (25 turns, 361s)
+  [veramem] conv-47 session_10 ingested (15 turns, 377s)
+  [veramem] conv-47 session_11 ingested (19 turns, 398s)
+  [veramem] conv-47 session_12 ingested (14 turns, 421s)
+  [veramem] conv-47 session_13 ingested (20 turns, 452s)
+  [veramem] conv-47 session_14 ingested (34 turns, 532s)
+  [veramem] conv-47 session_15 ingested (19 turns, 576s)
+  [veramem] conv-47 session_16 ingested (16 turns, 613s)
+  [veramem] conv-47 session_17 ingested (37 turns, 678s)
+  [veramem] conv-47 session_18 ingested (20 turns, 712s)
+  [veramem] conv-47 session_19 ingested (17 turns, 744s)
+  [veramem] conv-47 session_20 ingested (22 turns, 788s)
+  [veramem] conv-47 session_21 ingested (19 turns, 823s)
+  [veramem] conv-47 session_22 ingested (19 turns, 852s)
+  [veramem] conv-47 session_23 ingested (21 turns, 903s)
+  [veramem] conv-47 session_24 ingested (21 turns, 941s)
+  [veramem] conv-47 session_25 ingested (25 turns, 982s)
+  [veramem] conv-47 session_26 ingested (15 turns, 1009s)
+  [veramem] conv-47 session_27 ingested (14 turns, 1026s)
+  [veramem] conv-47 session_28 ingested (35 turns, 1092s)
+  [veramem] conv-47 session_29 ingested (16 turns, 1110s)
+  [veramem] conv-47 session_30 ingested (19 turns, 1144s)
+  [veramem] conv-47 session_31 ingested (25 turns, 1181s)
+[veramem] conv-47: ingest 1181s, qa done
+{
+ "veramem": {
+  "open_domain": {
+   "n": 66,
+   "judge": 40.91,
+   "f1": 16.3,
+   "bleu1": 12.15
+  },
+  "overall": {
+   "n": 1035,
+   "judge": 64.93,
+   "f1": 39.28,
+   "bleu1": 34.41
+  },
+  "temporal": {
+   "n": 214,
+   "judge": 62.15,
+   "f1": 20.88,
+   "bleu1": 18.84
+  },
+  "multi_hop": {
+   "n": 192,
+   "judge": 65.62,
+   "f1": 39.95,
+   "bleu1": 31.46
+  },
+  "single_hop": {
+   "n": 563,
+   "judge": 68.56,
+   "f1": 48.73,
+   "bleu1": 43.95
+  }
+ }
+}
+  [veramem] conv-48 session_1 ingested (18 turns, 22s)
+  [veramem] conv-48 session_2 ingested (32 turns, 74s)
+  [veramem] conv-48 session_3 ingested (15 turns, 92s)
+  [veramem] conv-48 session_4 ingested (44 turns, 155s)
+  [veramem] conv-48 session_5 ingested (17 turns, 177s)
+  [veramem] conv-48 session_6 ingested (16 turns, 201s)
+  [veramem] conv-48 session_7 ingested (23 turns, 250s)
+  [veramem] conv-48 session_8 ingested (23 turns, 287s)
+  [veramem] conv-48 session_9 ingested (20 turns, 315s)
+  [veramem] conv-48 session_10 ingested (24 turns, 349s)
+  [veramem] conv-48 session_11 ingested (14 turns, 387s)
+  [veramem] conv-48 session_12 ingested (16 turns, 412s)
+  [veramem] conv-48 session_13 ingested (27 turns, 451s)
+  [veramem] conv-48 session_14 ingested (23 turns, 487s)
+  [veramem] conv-48 session_15 ingested (39 turns, 552s)
+  [veramem] conv-48 session_16 ingested (20 turns, 584s)
+  [veramem] conv-48 session_17 ingested (15 turns, 609s)
+  [veramem] conv-48 session_18 ingested (15 turns, 629s)
+  [veramem] conv-48 session_19 ingested (24 turns, 691s)
+  [veramem] conv-48 session_20 ingested (26 turns, 732s)
+  [veramem] conv-48 session_21 ingested (17 turns, 755s)
+  [veramem] conv-48 session_22 ingested (30 turns, 823s)
+  [veramem] conv-48 session_23 ingested (32 turns, 891s)
+  [veramem] conv-48 session_24 ingested (15 turns, 936s)
+  [veramem] conv-48 session_25 ingested (20 turns, 963s)
+  [veramem] conv-48 session_26 ingested (21 turns, 1006s)
+  [veramem] conv-48 session_27 ingested (13 turns, 1044s)
+  [veramem] conv-48 session_28 ingested (30 turns, 1112s)
+  [veramem] conv-48 session_29 ingested (34 turns, 1166s)
+  [veramem] conv-48 session_30 ingested (18 turns, 1209s)
+[veramem] conv-48: ingest 1209s, qa done
+{
+ "veramem": {
+  "open_domain": {
+   "n": 76,
+   "judge": 42.11,
+   "f1": 16.76,
+   "bleu1": 12.68
+  },
+  "overall": {
+   "n": 1226,
+   "judge": 65.58,
+   "f1": 39.64,
+   "bleu1": 34.5
+  },
+  "temporal": {
+   "n": 256,
+   "judge": 62.89,
+   "f1": 22.76,
+   "bleu1": 20.02
+  },
+  "multi_hop": {
+   "n": 213,
+   "judge": 67.61,
+   "f1": 39.28,
+   "bleu1": 30.54
+  },
+  "single_hop": {
+   "n": 681,
+   "judge": 68.58,
+   "f1": 48.65,
+   "bleu1": 43.61
+  }
+ }
+}
+  [veramem] conv-49 session_1 ingested (22 turns, 25s)
+  [veramem] conv-49 session_2 ingested (17 turns, 47s)
+  [veramem] conv-49 session_3 ingested (18 turns, 79s)
+  [veramem] conv-49 session_4 ingested (20 turns, 113s)
+  [veramem] conv-49 session_5 ingested (25 turns, 151s)
+  [veramem] conv-49 session_6 ingested (19 turns, 181s)
+  [veramem] conv-49 session_7 ingested (16 turns, 210s)
+  [veramem] conv-49 session_8 ingested (33 turns, 273s)
+  [veramem] conv-49 session_9 ingested (19 turns, 313s)
+  [veramem] conv-49 session_10 ingested (14 turns, 349s)
+  [veramem] conv-49 session_11 ingested (20 turns, 395s)
+  [veramem] conv-49 session_12 ingested (17 turns, 410s)
+  [veramem] conv-49 session_13 ingested (16 turns, 441s)
+  [veramem] conv-49 session_14 ingested (16 turns, 472s)
+  [veramem] conv-49 session_15 ingested (18 turns, 500s)
+  [veramem] conv-49 session_16 ingested (24 turns, 539s)
+  [veramem] conv-49 session_17 ingested (28 turns, 592s)
+  [veramem] conv-49 session_18 ingested (15 turns, 612s)
+  [veramem] conv-49 session_19 ingested (15 turns, 626s)
+  [veramem] conv-49 session_20 ingested (17 turns, 654s)
+  [veramem] conv-49 session_21 ingested (22 turns, 692s)
+  [veramem] conv-49 session_22 ingested (21 turns, 734s)
+  [veramem] conv-49 session_23 ingested (33 turns, 772s)
+  [veramem] conv-49 session_24 ingested (24 turns, 839s)
+  [veramem] conv-49 session_25 ingested (20 turns, 887s)
+[veramem] conv-49: ingest 887s, qa done
+{
+ "veramem": {
+  "open_domain": {
+   "n": 89,
+   "judge": 47.19,
+   "f1": 18.59,
+   "bleu1": 14.07
+  },
+  "overall": {
+   "n": 1382,
+   "judge": 65.7,
+   "f1": 39.83,
+   "bleu1": 34.76
+  },
+  "temporal": {
+   "n": 289,
+   "judge": 61.94,
+   "f1": 22.67,
+   "bleu1": 20.0
+  },
+  "multi_hop": {
+   "n": 250,
+   "judge": 67.2,
+   "f1": 38.8,
+   "bleu1": 30.21
+  },
+  "single_hop": {
+   "n": 754,
+   "judge": 68.83,
+   "f1": 49.26,
+   "bleu1": 44.36
+  }
+ }
+}
+  [veramem] conv-50 session_1 ingested (19 turns, 31s)
+  [veramem] conv-50 session_2 ingested (21 turns, 69s)
+  [veramem] conv-50 session_3 ingested (18 turns, 114s)
+  [veramem] conv-50 session_4 ingested (28 turns, 146s)
+  [veramem] conv-50 session_5 ingested (15 turns, 175s)
+  [veramem] conv-50 session_6 ingested (18 turns, 200s)
+  [veramem] conv-50 session_7 ingested (19 turns, 252s)
+  [veramem] conv-50 session_8 ingested (14 turns, 279s)
+  [veramem] conv-50 session_9 ingested (21 turns, 302s)
+  [veramem] conv-50 session_10 ingested (17 turns, 334s)
+  [veramem] conv-50 session_11 ingested (14 turns, 355s)
+  [veramem] conv-50 session_12 ingested (17 turns, 395s)
+  [veramem] conv-50 session_13 ingested (19 turns, 428s)
+  [veramem] conv-50 session_14 ingested (16 turns, 444s)
+  [veramem] conv-50 session_15 ingested (15 turns, 472s)
+  [veramem] conv-50 session_16 ingested (25 turns, 505s)
+  [veramem] conv-50 session_17 ingested (10 turns, 523s)
+  [veramem] conv-50 session_18 ingested (16 turns, 542s)
+  [veramem] conv-50 session_19 ingested (12 turns, 562s)
+  [veramem] conv-50 session_20 ingested (17 turns, 591s)
+  [veramem] conv-50 session_21 ingested (18 turns, 612s)
+  [veramem] conv-50 session_22 ingested (14 turns, 628s)
+  [veramem] conv-50 session_23 ingested (18 turns, 650s)
+  [veramem] conv-50 session_24 ingested (23 turns, 682s)
+  [veramem] conv-50 session_25 ingested (31 turns, 759s)
+  [veramem] conv-50 session_26 ingested (15 turns, 776s)
+  [veramem] conv-50 session_27 ingested (13 turns, 801s)
+  [veramem] conv-50 session_28 ingested (43 turns, 852s)
+  [veramem] conv-50 session_29 ingested (18 turns, 888s)
+  [veramem] conv-50 session_30 ingested (24 turns, 921s)
+[veramem] conv-50: ingest 921s, qa done
+{
+ "veramem": {
+  "open_domain": {
+   "n": 96,
+   "judge": 47.92,
+   "f1": 19.91,
+   "bleu1": 15.38
+  },
+  "overall": {
+   "n": 1540,
+   "judge": 65.91,
+   "f1": 39.65,
+   "bleu1": 34.65
+  },
+  "temporal": {
+   "n": 321,
+   "judge": 62.62,
+   "f1": 22.39,
+   "bleu1": 19.89
+  },
+  "multi_hop": {
+   "n": 282,
+   "judge": 67.02,
+   "f1": 37.96,
+   "bleu1": 29.35
+  },
+  "single_hop": {
+   "n": 841,
+   "judge": 68.85,
+   "f1": 49.06,
+   "bleu1": 44.25
+  }
+ }
+}

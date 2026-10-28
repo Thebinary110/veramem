@@ -1,0 +1,81 @@
+{"qid": 0, "category": "temporal", "pred": "2023-01-19", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 1, "category": "temporal", "pred": "January 2023", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 2, "category": "single_hop", "pred": "Dancing", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.99, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "They both face challenges and dance.", "judge": 0, "f1": 0.13333333333333333, "bleu1": 0.07357588823428847, "latency_s": 1.07, "context_items": 20}
+{"qid": 4, "category": "single_hop", "pred": "He lost his job.", "judge": 1, "f1": 0.4444444444444445, "bleu1": 0.0820849986238988, "latency_s": 1.32, "context_items": 20}
+{"qid": 5, "category": "multi_hop", "pred": "A place of support and encouragement", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 6, "category": "temporal", "pred": "July 2023", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.95, "context_items": 20}
+{"qid": 7, "category": "temporal", "pred": "2023-01-29", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 8, "category": "temporal", "pred": "2023-01-28", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 9, "category": "multi_hop", "pred": "Rome", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "2023-02-08", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 11, "category": "temporal", "pred": "A few years ago", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 12, "category": "temporal", "pred": "Week of 2023-03-09", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.31, "context_items": 20}
+{"qid": 13, "category": "temporal", "pred": "January 2023", "judge": 0, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.22, "context_items": 20}
+{"qid": 14, "category": "temporal", "pred": "2023-04-03", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 15, "category": "temporal", "pred": "Next month from 2023-04-03", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.48, "context_items": 20}
+{"qid": 16, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.32, "context_items": 20}
+{"qid": 17, "category": "multi_hop", "pred": "She lost her job at DoorDash.", "judge": 0, "f1": 0.28571428571428575, "bleu1": 0.04632230081520103, "latency_s": 1.24, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "Yes, Jon does.", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.41, "context_items": 20}
+{"qid": 19, "category": "temporal", "pred": "2023-05-10", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 20, "category": "temporal", "pred": "2023-05-10", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 21, "category": "temporal", "pred": "2023-05-27", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 22, "category": "temporal", "pred": "2023-06-13", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 23, "category": "multi_hop", "pred": "Launched an ad campaign", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "Dance competition, networking event", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.5841005873035536, "latency_s": 1.39, "context_items": 20}
+{"qid": 25, "category": "multi_hop", "pred": "workshops, classes, and mentoring", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.04632230081520103, "latency_s": 1.37, "context_items": 20}
+{"qid": 26, "category": "temporal", "pred": "2023-06-15", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 27, "category": "multi_hop", "pred": "Yes, Jon's crew won; Gina has a trophy.", "judge": 1, "f1": 0.25, "bleu1": 0.14285714285714285, "latency_s": 1.35, "context_items": 20}
+{"qid": 28, "category": "temporal", "pred": "2023-06-12", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 29, "category": "multi_hop", "pred": "Paris", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.88, "context_items": 20}
+{"qid": 30, "category": "temporal", "pred": "2023-06-20", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.44, "context_items": 20}
+{"qid": 31, "category": "multi_hop", "pred": "Approximately 5 months", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 1.36, "context_items": 20}
+{"qid": 32, "category": "temporal", "pred": "2023-06-07", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 33, "category": "temporal", "pred": "2023-07-21", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 34, "category": "temporal", "pred": "Week of 2023-07-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 35, "category": "temporal", "pred": "2023-07-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.36, "context_items": 20}
+{"qid": 36, "category": "temporal", "pred": "2023-07-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.47, "context_items": 20}
+{"qid": 37, "category": "temporal", "pred": "2023-07-23", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 38, "category": "temporal", "pred": "2023-07-12", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 39, "category": "single_hop", "pred": "Contemporary", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.88, "context_items": 20}
+{"qid": 40, "category": "single_hop", "pred": "Contemporary", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 41, "category": "single_hop", "pred": "Performing \"Finding Freedom\"", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 42, "category": "single_hop", "pred": "Contemporary dance piece", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 43, "category": "single_hop", "pred": "Group of young dancers", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 44, "category": "single_hop", "pred": "They have their arms in the air.", "judge": 0, "f1": 0.2222222222222222, "bleu1": 0.16666666666666666, "latency_s": 1.03, "context_items": 20}
+{"qid": 45, "category": "single_hop", "pred": "He hopes to receive recognition.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 46, "category": "single_hop", "pred": "Marley flooring", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 47, "category": "single_hop", "pred": "A local artist", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 4.02, "context_items": 20}
+{"qid": 48, "category": "single_hop", "pred": "A chandelier for a glam feel", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 49, "category": "single_hop", "pred": "Cozy and inviting", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.06, "context_items": 20}
+{"qid": 50, "category": "single_hop", "pred": "Congrats on your store's great look", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 51, "category": "single_hop", "pred": "A fashion magazine", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 52, "category": "single_hop", "pred": "It is the key to making them feel welcome.", "judge": 1, "f1": 0.7058823529411765, "bleu1": 0.6618726769384466, "latency_s": 1.45, "context_items": 20}
+{"qid": 53, "category": "single_hop", "pred": "It's key to making them come back.", "judge": 1, "f1": 0.7692307692307692, "bleu1": 0.7142857142857143, "latency_s": 1.48, "context_items": 20}
+{"qid": 54, "category": "single_hop", "pred": "Growing customer base and sales.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 55, "category": "single_hop", "pred": "Freedom and self-expression", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.11156508007421491, "latency_s": 0.93, "context_items": 20}
+{"qid": 56, "category": "single_hop", "pred": "A journey to success", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 57, "category": "single_hop", "pred": "Gina offers no specific business advice.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.56, "context_items": 20}
+{"qid": 58, "category": "single_hop", "pred": "To help his business grow.", "judge": 1, "f1": 0.5, "bleu1": 0.4, "latency_s": 1.19, "context_items": 20}
+{"qid": 59, "category": "single_hop", "pred": "She combines her passion for dance and fashion.", "judge": 1, "f1": 0.4615384615384615, "bleu1": 0.42857142857142855, "latency_s": 1.18, "context_items": 20}
+{"qid": 60, "category": "single_hop", "pred": "Happy and allows him to express himself", "judge": 1, "f1": 0.2857142857142857, "bleu1": 0.16666666666666666, "latency_s": 1.36, "context_items": 20}
+{"qid": 61, "category": "single_hop", "pred": "A trophy", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 62, "category": "single_hop", "pred": "Networking was a lifesaver for her.", "judge": 0, "f1": 0.1, "bleu1": 0.027067056647322542, "latency_s": 1.29, "context_items": 20}
+{"qid": 63, "category": "single_hop", "pred": "Fashion internship", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 64, "category": "single_hop", "pred": "International company fashion department", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.7788007830714049, "latency_s": 0.96, "context_items": 20}
+{"qid": 65, "category": "single_hop", "pred": "The Lean Startup", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 66, "category": "single_hop", "pred": "One-on-one mentoring and training", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.35, "context_items": 20}
+{"qid": 67, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 68, "category": "single_hop", "pred": "Quit, give up, or let anything get him down", "judge": 1, "f1": 0.19999999999999998, "bleu1": 0.1111111111111111, "latency_s": 1.3, "context_items": 20}
+{"qid": 69, "category": "single_hop", "pred": "To clear his mind", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 70, "category": "single_hop", "pred": "a dance studio", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 71, "category": "single_hop", "pred": "A place of support and encouragement", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.43, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "Excited and passionate", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.27, "context_items": 20}
+{"qid": 73, "category": "single_hop", "pred": "Stress relief", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "Attend the grand opening event", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 75, "category": "single_hop", "pred": "Can't wait for tomorrow's grand opening!", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.35, "context_items": 20}
+{"qid": 76, "category": "single_hop", "pred": "Excited and enthusiastic", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.33, "context_items": 20}
+{"qid": 77, "category": "single_hop", "pred": "Clothing", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.89, "context_items": 20}
+{"qid": 78, "category": "single_hop", "pred": "His positivity and determination", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 80, "category": "single_hop", "pred": "Wrapping up business plan and looking for investors", "judge": 1, "f1": 0.38095238095238093, "bleu1": 0.21021682352653848, "latency_s": 1.31, "context_items": 20}
+{"qid": 81, "category": "single_hop", "pred": "Gina offered to help Jon with making content and managing his social media accounts.", "judge": 1, "f1": 0.7272727272727274, "bleu1": 0.6153846153846154, "latency_s": 1.5, "context_items": 20}

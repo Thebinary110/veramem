@@ -1,0 +1,150 @@
+{"qid": 0, "category": "open_domain", "pred": "No information about health problems.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 1, "category": "temporal", "pred": "Bowling", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 2, "category": "multi_hop", "pred": "McGee's Pub", "judge": 0, "f1": 0.28571428571428575, "bleu1": 0.11156508007421491, "latency_s": 1.0, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "No, only James has pets.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.35, "context_items": 20}
+{"qid": 4, "category": "temporal", "pred": "2022-09-18", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 5, "category": "multi_hop", "pred": "Apex Legends and The Witcher 3", "judge": 0, "f1": 0.30769230769230765, "bleu1": 0.14325239843009505, "latency_s": 1.11, "context_items": 20}
+{"qid": 6, "category": "open_domain", "pred": "Not mentioned in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 7, "category": "open_domain", "pred": "Connecticut", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.65, "context_items": 20}
+{"qid": 8, "category": "multi_hop", "pred": "Three dogs.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 9, "category": "multi_hop", "pred": "Max, Daisy, and Ned", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.52, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "2022-06-13", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.84, "context_items": 20}
+{"qid": 11, "category": "temporal", "pred": "No information available.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 12, "category": "open_domain", "pred": "No, he asked Samantha in September.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 13, "category": "temporal", "pred": "2022-07-22", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 14, "category": "temporal", "pred": "2022-04-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 15, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 16, "category": "open_domain", "pred": "Dungeons of the Dragon", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 17, "category": "open_domain", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "The Expanse, Stormlight Archive, Kingkiller Chronicle", "judge": 1, "f1": 0.6153846153846154, "bleu1": 0.4390493088752211, "latency_s": 1.1, "context_items": 20}
+{"qid": 19, "category": "open_domain", "pred": "No, he felt part of a community.", "judge": 0, "f1": 0.07407407407407407, "bleu1": 0.013680833103983133, "latency_s": 1.05, "context_items": 20}
+{"qid": 20, "category": "multi_hop", "pred": "Two", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 21, "category": "temporal", "pred": "2022-10-30", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 22, "category": "multi_hop", "pred": "Children's hospital, dog shelter, homeless people", "judge": 1, "f1": 0.7272727272727272, "bleu1": 0.6666666666666666, "latency_s": 1.05, "context_items": 20}
+{"qid": 23, "category": "temporal", "pred": "September 2022", "judge": 0, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.06, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "Strategy games", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 25, "category": "open_domain", "pred": "No, they support different teams.", "judge": 1, "f1": 0.13333333333333333, "bleu1": 0.07357588823428847, "latency_s": 1.02, "context_items": 20}
+{"qid": 26, "category": "multi_hop", "pred": "Italy, Turkey, Mexico, Nuuk", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.5841005873035536, "latency_s": 1.14, "context_items": 20}
+{"qid": 27, "category": "multi_hop", "pred": "Cooking classes", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.98, "context_items": 20}
+{"qid": 28, "category": "temporal", "pred": "week of 2022-06-12", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 29, "category": "temporal", "pred": "2022-07-22", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 30, "category": "open_domain", "pred": "Toronto", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 31, "category": "temporal", "pred": "9 days", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.98, "context_items": 20}
+{"qid": 32, "category": "temporal", "pred": "Toronto", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.1, "context_items": 20}
+{"qid": 33, "category": "open_domain", "pred": "No, they planned to play chess.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 34, "category": "multi_hop", "pred": "Italy, Turkey, Mexico, Nuuk", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 35, "category": "open_domain", "pred": "Vancouver", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 36, "category": "open_domain", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.87, "context_items": 20}
+{"qid": 37, "category": "temporal", "pred": "2022-07-22", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.82, "context_items": 20}
+{"qid": 38, "category": "multi_hop", "pred": "He got a new job offer.", "judge": 0, "f1": 0.10526315789473682, "bleu1": 0.03305977764431731, "latency_s": 1.12, "context_items": 20}
+{"qid": 39, "category": "temporal", "pred": "2019", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 40, "category": "multi_hop", "pred": "sit, stay, paw, rollover", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 1.72, "context_items": 20}
+{"qid": 41, "category": "temporal", "pred": "2022-09-03", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 42, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.58, "context_items": 20}
+{"qid": 43, "category": "temporal", "pred": "2022-09-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 44, "category": "open_domain", "pred": "He prefers to have a beer.", "judge": 1, "f1": 0.37499999999999994, "bleu1": 0.18071652714732123, "latency_s": 0.96, "context_items": 20}
+{"qid": 45, "category": "multi_hop", "pred": "Stout and light beers", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 0.89, "context_items": 20}
+{"qid": 46, "category": "temporal", "pred": "2022-08-27", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 47, "category": "temporal", "pred": "2022-09-03", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 48, "category": "temporal", "pred": "They never went together.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 49, "category": "multi_hop", "pred": "New devices and refurbished gaming desk", "judge": 1, "f1": 0.3636363636363636, "bleu1": 0.3274923012311928, "latency_s": 1.18, "context_items": 20}
+{"qid": 50, "category": "temporal", "pred": "2022-09-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 51, "category": "multi_hop", "pred": "Fortnite, Overwatch, Apex Legends", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 52, "category": "temporal", "pred": "September 2022", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.18393972058572117, "latency_s": 1.18, "context_items": 20}
+{"qid": 53, "category": "temporal", "pred": "April 2022", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 54, "category": "multi_hop", "pred": "Fortnite competitions", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 55, "category": "temporal", "pred": "Week of 2022-10-06", "judge": 1, "f1": 0.2222222222222222, "bleu1": 0.12262648039048078, "latency_s": 1.24, "context_items": 20}
+{"qid": 56, "category": "multi_hop", "pred": "No family members visited him.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 57, "category": "temporal", "pred": "2022-10-19", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 58, "category": "temporal", "pred": "2022-10-20", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 59, "category": "temporal", "pred": "2022-10-30", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 60, "category": "multi_hop", "pred": "CS:GO, Fortnite, Overwatch, Apex Legends", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 61, "category": "temporal", "pred": "No memory for October 2023.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 62, "category": "temporal", "pred": "Six months", "judge": 0, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 0.9, "context_items": 20}
+{"qid": 63, "category": "temporal", "pred": "2022-11-04", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.36, "context_items": 20}
+{"qid": 64, "category": "temporal", "pred": "Not mentioned", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 65, "category": "temporal", "pred": "2022-11-07", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 66, "category": "temporal", "pred": "2022-11-07", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 67, "category": "single_hop", "pred": "Python, C++, and a new language.", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.24, "context_items": 20}
+{"qid": 68, "category": "single_hop", "pred": "Dog walking and pet care app", "judge": 1, "f1": 0.9090909090909091, "bleu1": 0.8187307530779819, "latency_s": 1.07, "context_items": 20}
+{"qid": 69, "category": "single_hop", "pred": "Customize experience for each owner and pet", "judge": 1, "f1": 0.14285714285714288, "bleu1": 0.11942188509563155, "latency_s": 1.77, "context_items": 20}
+{"qid": 70, "category": "single_hop", "pred": "A gold ring", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.89, "context_items": 20}
+{"qid": 71, "category": "single_hop", "pred": "Help find the perfect one", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.39, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "Drums", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 73, "category": "single_hop", "pred": "A month", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.96, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "CS:GO", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 75, "category": "single_hop", "pred": "Not specified", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 76, "category": "single_hop", "pred": "Voice chat", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 77, "category": "single_hop", "pred": "Communicating correctly and not putting ego above team success.", "judge": 1, "f1": 0.5333333333333333, "bleu1": 0.5, "latency_s": 1.16, "context_items": 20}
+{"qid": 78, "category": "single_hop", "pred": "A dog", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 79, "category": "single_hop", "pred": "Ned", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 80, "category": "single_hop", "pred": "No memory supports this event.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 81, "category": "single_hop", "pred": "The Witcher 3", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 82, "category": "single_hop", "pred": "No information provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "Technologically advanced nature and huge screens", "judge": 0, "f1": 0.3636363636363636, "bleu1": 0.3274923012311928, "latency_s": 0.99, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "coding assignment involving a new algorithm", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4, "latency_s": 1.01, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "Labrador", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.72, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "Pepperoni", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "Hawaiian pizza", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 0.9, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "A gaming tournament for charity", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.19, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "They raised money for a children's hospital.", "judge": 0, "f1": 0.16666666666666666, "bleu1": 0.16666666666666666, "latency_s": 1.53, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "Support a dog shelter near John's home.", "judge": 1, "f1": 0.3636363636363636, "bleu1": 0.3333333333333333, "latency_s": 1.16, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "Track inventory, resources, and donations", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.11, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "software tool", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "Money and a trophy", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "Unity strategy game", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Liverpool", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Manchester City", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.86, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "Which team finishes higher", "judge": 1, "f1": 0.30769230769230765, "bleu1": 0.14325239843009505, "latency_s": 0.91, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "Catching frisbees in mid-air", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.77, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "Providing necessary items to the less fortunate.", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.15, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "No, the organization does not require an interview.", "judge": 1, "f1": 0.2857142857142857, "bleu1": 0.16666666666666666, "latency_s": 1.24, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "Reading", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "Reading under the covers", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 1.19, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "No information found.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "Vancouver", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "July 20, 2022", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.18, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "Chess", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "He got a new job offer.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "Strategy and RPG games.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "It was vaccinated.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.36, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "Strategy and RPG games", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "The Witcher 3", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "The immersive world", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.18393972058572117, "latency_s": 1.06, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "No memory of phone number.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "Call Samantha", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.93, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "A coding project", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "Dark beer", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.84, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "Perseverance and patience", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "Coding", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.89, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "Basic games and stories", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "Sennheiser", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "Love the bar", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "$10 per class", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.19, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "dough", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "He wanted to create a strategy game.", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.08, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "Several simple dishes", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "Dungeons of the Dragon", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "Books, movies, and dreams.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "Medieval castle with labyrinth", "judge": 1, "f1": 0.5, "bleu1": 0.27590958087858175, "latency_s": 1.02, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "Electronic and rock music", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "No information provided", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "Drums", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Making his first mobile game", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "2D adventure game with puzzles", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4, "latency_s": 1.07, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "Watching tutorials and reading a magazine", "judge": 0, "f1": 0.18181818181818182, "bleu1": 0.11809163818525367, "latency_s": 1.23, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "Volunteer gig", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "John feels a real sense of purpose.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "Complicated and in-depth strategy games", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "The Witcher 3", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "His first gaming system", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "His game progress", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.2, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "Fortnite, Overwatch, and Apex Legends", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "To raise money for a children's hospital.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "They decided to move in together.", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.23, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "Near McGee's bar", "judge": 1, "f1": 0.4, "bleu1": 0.17573142541048448, "latency_s": 1.04, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "They love the bar.", "judge": 1, "f1": 0.6, "bleu1": 0.2635971381157267, "latency_s": 1.07, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "FIFA 23", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "A little", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "An online board game", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "Luna", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.22, "context_items": 20}

@@ -1,0 +1,152 @@
+{"qid": 0, "category": "temporal", "pred": "2023-05-07", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 1, "category": "temporal", "pred": "Last year", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.85, "context_items": 20}
+{"qid": 2, "category": "open_domain", "pred": "Counseling and mental health", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.3333333333333333, "latency_s": 1.06, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "adoption agencies", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 4, "category": "multi_hop", "pred": "Caroline is transgender.", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 0.99, "context_items": 20}
+{"qid": 5, "category": "temporal", "pred": "Saturday before 2023-05-25", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.09, "context_items": 20}
+{"qid": 6, "category": "temporal", "pred": "Summer", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 7, "category": "multi_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 8, "category": "temporal", "pred": "2023-06-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 9, "category": "temporal", "pred": "2023-06-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "4 years", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 11, "category": "multi_hop", "pred": "Her home country", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 12, "category": "temporal", "pred": "10 years ago", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 13, "category": "multi_hop", "pred": "Counseling and mental health", "judge": 1, "f1": 0.6, "bleu1": 0.2635971381157267, "latency_s": 1.04, "context_items": 20}
+{"qid": 14, "category": "open_domain", "pred": "Cannot be determined from memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 15, "category": "multi_hop", "pred": "Clarinet, hiking, pottery, camping", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.01, "context_items": 20}
+{"qid": 16, "category": "temporal", "pred": "2023-07-02", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 17, "category": "temporal", "pred": "July 2023", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "Forest, mountains, and beach", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 19, "category": "multi_hop", "pred": "Painting nature-inspired projects", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 20, "category": "temporal", "pred": "2023-07-05", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 21, "category": "temporal", "pred": "2023-06-22", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 22, "category": "open_domain", "pred": "Yes, she has kids' classics.", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.2681280184142557, "latency_s": 1.04, "context_items": 20}
+{"qid": 23, "category": "multi_hop", "pred": "Charlotte's Web", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.92, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "Running, pottery, and painting", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 0.95, "context_items": 20}
+{"qid": 25, "category": "temporal", "pred": "2023-07-10", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 26, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 27, "category": "open_domain", "pred": "No, she pursues counseling.", "judge": 1, "f1": 0.26666666666666666, "bleu1": 0.08688697172522257, "latency_s": 1.07, "context_items": 20}
+{"qid": 28, "category": "temporal", "pred": "July 14, 2023", "judge": 1, "f1": 0.5, "bleu1": 0.3422780793550613, "latency_s": 1.12, "context_items": 20}
+{"qid": 29, "category": "temporal", "pred": "Friday, July 14, 2023", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.5841005873035536, "latency_s": 1.09, "context_items": 20}
+{"qid": 30, "category": "open_domain", "pred": "Not mentioned in memories.", "judge": 0, "f1": 0.125, "bleu1": 0.033833820809153176, "latency_s": 1.02, "context_items": 20}
+{"qid": 31, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 32, "category": "multi_hop", "pred": "LGBTQ conference, pride parade, art show", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.3333333333333333, "latency_s": 1.09, "context_items": 20}
+{"qid": 33, "category": "temporal", "pred": "2023-08-07", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 34, "category": "multi_hop", "pred": "Adoption agencies, mentorship program", "judge": 1, "f1": 0.25, "bleu1": 0.25, "latency_s": 1.05, "context_items": 20}
+{"qid": 35, "category": "temporal", "pred": "July 14, 2023", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.24525296078096157, "latency_s": 1.1, "context_items": 20}
+{"qid": 36, "category": "temporal", "pred": "2023-07-10", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 37, "category": "multi_hop", "pred": "A sunset with a pink sky", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 0.95, "context_items": 20}
+{"qid": 38, "category": "multi_hop", "pred": "Camping, hiking, volunteering", "judge": 0, "f1": 0.4444444444444444, "bleu1": 0.24525296078096157, "latency_s": 1.01, "context_items": 20}
+{"qid": 39, "category": "multi_hop", "pred": "Volunteering, mentoring, and organizing art shows.", "judge": 1, "f1": 0.2222222222222222, "bleu1": 0.08075860719786215, "latency_s": 1.13, "context_items": 20}
+{"qid": 40, "category": "multi_hop", "pred": "At least three times", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 41, "category": "temporal", "pred": "2023-07-18", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 42, "category": "open_domain", "pred": "National park", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.9, "context_items": 20}
+{"qid": 43, "category": "multi_hop", "pred": "Painting, drawing, and abstract art", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.0, "context_items": 20}
+{"qid": 44, "category": "temporal", "pred": "2023-08-13", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 45, "category": "temporal", "pred": "2023-08-07", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 46, "category": "open_domain", "pred": "Yes, she supports Caroline.", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.02, "context_items": 20}
+{"qid": 47, "category": "multi_hop", "pred": "Melanie and her friends", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.16, "context_items": 20}
+{"qid": 48, "category": "multi_hop", "pred": "Bowl with black and white flower design", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 49, "category": "temporal", "pred": "2022", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 50, "category": "open_domain", "pred": "Progressive, LGBTQ+ rights advocate", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 51, "category": "multi_hop", "pred": "Lake sunrise, sunset, horse", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.75, "latency_s": 0.93, "context_items": 20}
+{"qid": 52, "category": "multi_hop", "pred": "Luna and Bailey", "judge": 0, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 0.9, "context_items": 20}
+{"qid": 53, "category": "temporal", "pred": "2023-10-16", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 54, "category": "temporal", "pred": "August 2023", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.96, "context_items": 20}
+{"qid": 55, "category": "multi_hop", "pred": "Landscapes", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 56, "category": "multi_hop", "pred": "Red, blue, and mixed colors", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 57, "category": "temporal", "pred": "2023-08-17", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.33, "context_items": 20}
+{"qid": 58, "category": "temporal", "pred": "2023-08-24", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 59, "category": "open_domain", "pred": "No, she encountered religious conservatives.", "judge": 0, "f1": 0.20000000000000004, "bleu1": 0.2, "latency_s": 1.02, "context_items": 20}
+{"qid": 60, "category": "multi_hop", "pred": "Clarinet", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.92, "context_items": 20}
+{"qid": 61, "category": "multi_hop", "pred": "Summer Sounds", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 0.91, "context_items": 20}
+{"qid": 62, "category": "temporal", "pred": "2023-08-27", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 63, "category": "temporal", "pred": "November 2023", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.96, "context_items": 20}
+{"qid": 64, "category": "open_domain", "pred": "Unlikely, she prefers modern music.", "judge": 0, "f1": 0.22222222222222224, "bleu1": 0.2, "latency_s": 1.03, "context_items": 20}
+{"qid": 65, "category": "multi_hop", "pred": "Changing body, identity exploration", "judge": 0, "f1": 0.18181818181818182, "bleu1": 0.11809163818525367, "latency_s": 1.08, "context_items": 20}
+{"qid": 66, "category": "multi_hop", "pred": "She enjoys hiking in the mountains.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 67, "category": "temporal", "pred": "Last weekend of 2023-09-06", "judge": 0, "f1": 0.22222222222222224, "bleu1": 0.19470019576785122, "latency_s": 1.05, "context_items": 20}
+{"qid": 68, "category": "temporal", "pred": "Seven years", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.88, "context_items": 20}
+{"qid": 69, "category": "open_domain", "pred": "Supportive and encouraging", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 70, "category": "multi_hop", "pred": "School event, pride event, poetry reading", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.3333333333333333, "latency_s": 1.36, "context_items": 20}
+{"qid": 71, "category": "multi_hop", "pred": "Becoming Nicole", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 72, "category": "temporal", "pred": "2022", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 73, "category": "temporal", "pred": "August 2023", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.97, "context_items": 20}
+{"qid": 74, "category": "temporal", "pred": "2023-10-19", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 75, "category": "multi_hop", "pred": "Two children", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 76, "category": "multi_hop", "pred": "2023-10-20", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 77, "category": "open_domain", "pred": "No information available.", "judge": 0, "f1": 0.2, "bleu1": 0.08786571270524224, "latency_s": 0.93, "context_items": 20}
+{"qid": 78, "category": "multi_hop", "pred": "Wooden figurines", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.88, "context_items": 20}
+{"qid": 79, "category": "temporal", "pred": "2023-10-16", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 80, "category": "temporal", "pred": "2023-10-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 81, "category": "open_domain", "pred": "No, she is focused on adoption.", "judge": 1, "f1": 0.15384615384615383, "bleu1": 0.141080287481769, "latency_s": 1.14, "context_items": 20}
+{"qid": 82, "category": "single_hop", "pred": "Mental health", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "Running is beneficial for her mental health.", "judge": 1, "f1": 0.2, "bleu1": 0.14285714285714285, "latency_s": 1.03, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "Running, painting, pottery, and hiking.", "judge": 1, "f1": 0.10526315789473685, "bleu1": 0.015981965301676893, "latency_s": 1.02, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "Plan a special outing with Melanie", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "LGBTQ+ folks", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.2, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "It helps LGBTQ+ folks with adoption.", "judge": 1, "f1": 0.14285714285714288, "bleu1": 0.11942188509563155, "latency_s": 1.14, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "Reading to her future children", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "She thinks it's great and supportive.", "judge": 1, "f1": 0.25000000000000006, "bleu1": 0.12047768476488081, "latency_s": 1.23, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "5 years", "judge": 1, "f1": 0.3636363636363636, "bleu1": 0.0301973834223185, "latency_s": 1.0, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "Love, faith, and strength", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "Sweden", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.87, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "A necklace with a cross and a heart", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 1.02, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "Caroline's 18th birthday", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Roasted marshmallows and told stories", "judge": 1, "f1": 0.36363636363636365, "bleu1": 0.23618327637050734, "latency_s": 1.1, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Counseling for trans people", "judge": 1, "f1": 0.25, "bleu1": 0.06766764161830635, "latency_s": 1.13, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "LGBTQ+ counseling workshop", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "LGBTQ+ counseling and support", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "Her personal journey and support", "judge": 1, "f1": 0.39999999999999997, "bleu1": 0.13033045758783385, "latency_s": 1.2, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "safe, inviting place for people to grow", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "Yes, Melanie made it.", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 1.05, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "Kids' classics, stories, educational books", "judge": 1, "f1": 0.7142857142857143, "bleu1": 0.44932896411722156, "latency_s": 1.01, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "Charlotte's Web", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.87, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "Becoming Nicole", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "Melanie owns pink sneakers.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "destressing and to clear her mind", "judge": 1, "f1": 0.8000000000000002, "bleu1": 0.8, "latency_s": 0.99, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "Mental health", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 0.92, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "A cup with a dog face", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "A cup with a dog face", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.04, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Painting nature-inspired projects", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.0, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "A painting similar to a previous one", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "No specific details provided.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "Freedom, being real, staying true to herself", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "They were part of her wedding decor.", "judge": 1, "f1": 0.7000000000000001, "bleu1": 0.42437284567694994, "latency_s": 1.01, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "visiting an LGBTQ center", "judge": 1, "f1": 0.5454545454545454, "bleu1": 0.18887560283756186, "latency_s": 0.96, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "Once or twice a year", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "The Perseid meteor shower", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "No information about a meteor shower.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "Melanie's daughter", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "Matt Patterson", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "She found it relaxing and creative", "judge": 0, "f1": 0.15384615384615385, "bleu1": 0.10976232721880527, "latency_s": 1.08, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "Dog, guinea pig named Oscar", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4, "latency_s": 0.97, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "A dog named Luna and a cat named Bailey.", "judge": 0, "f1": 0.2222222222222222, "bleu1": 0.16666666666666666, "latency_s": 1.0, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "In Melanie's slipper.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "Horseback riding", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "A stained glass window", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "A rainbow sidewalk painted for Pride Month", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 0.99, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "Brave by Sara Bareilles", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "Bach and Mozart", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.91, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "Ed Sheeran", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Seven years", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.9, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "No memory of this event.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "Contact your mentor for advice.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "Son's car accident", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "She paints to keep busy.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "A sunset with a pink sky", "judge": 1, "f1": 0.5454545454545454, "bleu1": 0.354274914555761, "latency_s": 1.11, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "Abstract painting", "judge": 1, "f1": 0.4444444444444445, "bleu1": 0.0820849986238988, "latency_s": 0.97, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "Transgender poetry reading", "judge": 1, "f1": 0.42857142857142855, "bleu1": 0.06948345122280154, "latency_s": 0.93, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "Pride and strength", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "Freedom, authenticity, and womanhood", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 0.99, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "A trip together", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.88, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "He was involved in a car accident.", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 1.02, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "He was unharmed.", "judge": 0, "f1": 0.36363636363636365, "bleu1": 0.12591706855837456, "latency_s": 0.99, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "She felt lucky to have their love and joy.", "judge": 1, "f1": 0.13333333333333333, "bleu1": 0.125, "latency_s": 1.12, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "They were unharmed.", "judge": 0, "f1": 0.5, "bleu1": 0.3422780793550613, "latency_s": 0.91, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "Unharmed", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "Love and support", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 150, "category": "single_hop", "pred": "She felt lucky and valued their love.", "judge": 1, "f1": 0.2, "bleu1": 0.16666666666666666, "latency_s": 1.12, "context_items": 20}
+{"qid": 151, "category": "single_hop", "pred": "She went hiking in the mountains.", "judge": 1, "f1": 0.1818181818181818, "bleu1": 0.1637461506155964, "latency_s": 1.03, "context_items": 20}

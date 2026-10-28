@@ -1,0 +1,43 @@
+{
+  "veramem": {
+    "open_domain": {
+      "n": 96,
+      "judge": 47.92,
+      "f1": 19.91,
+      "bleu1": 15.38
+    },
+    "overall": {
+      "n": 1540,
+      "judge": 65.91,
+      "f1": 39.65,
+      "bleu1": 34.65
+    },
+    "temporal": {
+      "n": 321,
+      "judge": 62.62,
+      "f1": 22.39,
+      "bleu1": 19.89
+    },
+    "multi_hop": {
+      "n": 282,
+      "judge": 67.02,
+      "f1": 37.96,
+      "bleu1": 29.35
+    },
+    "single_hop": {
+      "n": 841,
+      "judge": 68.85,
+      "f1": 49.06,
+      "bleu1": 44.25
+    }
+  },
+  "_meta": {
+    "date": "2026-10-28",
+    "commit": "223f72f77ece16fc0d5c4f73cbe32cf7f3c659a1",
+    "llm": "qwen3.6:35b via Ollama (thinking off, temperature 0); same model answers and judges",
+    "embedder": "nomic-embed-text",
+    "k": 20,
+    "questions": "categories 1-4 (1,540); adversarial category 5 excluded",
+    "command": "python -m benchmarks.locomo --systems veramem --convs all --out benchmarks/runs/locomo-2026-10-28"
+  }
+}

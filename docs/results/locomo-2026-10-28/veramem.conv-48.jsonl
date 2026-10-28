@@ -1,0 +1,191 @@
+{"qid": 0, "category": "temporal", "pred": "Avalanche book", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.61, "context_items": 20}
+{"qid": 1, "category": "multi_hop", "pred": "Father, mother, and friend Karlie.", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.7788007830714049, "latency_s": 1.07, "context_items": 20}
+{"qid": 2, "category": "temporal", "pred": "A few years before January 2023.", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.8, "latency_s": 1.1, "context_items": 20}
+{"qid": 3, "category": "temporal", "pred": "2022", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.0, "context_items": 20}
+{"qid": 4, "category": "temporal", "pred": "2010", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.08, "context_items": 20}
+{"qid": 5, "category": "open_domain", "pred": "Paris", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 6, "category": "multi_hop", "pred": "Deborah's pendant and Jolene's heart-shaped pendant", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.3, "context_items": 20}
+{"qid": 7, "category": "temporal", "pred": "France", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 8, "category": "multi_hop", "pred": "Yoga and visiting her mom's spot", "judge": 1, "f1": 0.14285714285714285, "bleu1": 0.08986579282344431, "latency_s": 1.33, "context_items": 20}
+{"qid": 9, "category": "temporal", "pred": "2023-01-25", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 10, "category": "temporal", "pred": "1993", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.01, "context_items": 20}
+{"qid": 11, "category": "open_domain", "pred": "Yes, Deborah is married.", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 0.9, "context_items": 20}
+{"qid": 12, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 13, "category": "multi_hop", "pred": "Beach, Bali, park bench", "judge": 1, "f1": 0.27272727272727276, "bleu1": 0.022648037566738874, "latency_s": 1.38, "context_items": 20}
+{"qid": 14, "category": "multi_hop", "pred": "Traveling, yoga, baking, reading, art", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.6, "latency_s": 1.13, "context_items": 20}
+{"qid": 15, "category": "single_hop", "pred": "Susie, Seraphim, and a dog.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 16, "category": "single_hop", "pred": "Susie and Seraphim", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 17, "category": "temporal", "pred": "2022", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.13, "context_items": 20}
+{"qid": 18, "category": "open_domain", "pred": "Not mentioned", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 19, "category": "multi_hop", "pred": "At least once.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 20, "category": "multi_hop", "pred": "It Takes Two, Overcooked 2, Detroit", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 1.05, "context_items": 20}
+{"qid": 21, "category": "temporal", "pred": "Next Saturday after 2023-02-04", "judge": 1, "f1": 0.4444444444444445, "bleu1": 0.38940039153570244, "latency_s": 1.15, "context_items": 20}
+{"qid": 22, "category": "temporal", "pred": "2023-02-03", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 23, "category": "open_domain", "pred": "She was overwhelmed", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 24, "category": "multi_hop", "pred": "Warrior II and tree pose", "judge": 1, "f1": 0.7272727272727273, "bleu1": 0.4723665527410147, "latency_s": 1.17, "context_items": 20}
+{"qid": 25, "category": "single_hop", "pred": "Avalanche, Sapiens", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.99, "context_items": 20}
+{"qid": 26, "category": "temporal", "pred": "Avalanche", "judge": 1, "f1": 0.4, "bleu1": 0.049787068367863944, "latency_s": 1.27, "context_items": 20}
+{"qid": 27, "category": "temporal", "pred": "Last summer in 2022", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.75, "latency_s": 0.99, "context_items": 20}
+{"qid": 28, "category": "open_domain", "pred": "Colombia", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 29, "category": "temporal", "pred": "2023-02-09", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 30, "category": "temporal", "pred": "2023-02-21", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 31, "category": "temporal", "pred": "Last summer", "judge": 1, "f1": 0.4, "bleu1": 0.3032653298563167, "latency_s": 1.07, "context_items": 20}
+{"qid": 32, "category": "temporal", "pred": "2023-02-22", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 33, "category": "single_hop", "pred": "Three years as of February 2023.", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.3333333333333333, "latency_s": 1.17, "context_items": 20}
+{"qid": 34, "category": "temporal", "pred": "2020", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 35, "category": "temporal", "pred": "2023-02-24", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 36, "category": "open_domain", "pred": "Information not available", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.9, "context_items": 20}
+{"qid": 37, "category": "temporal", "pred": "2023-02-26", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 38, "category": "temporal", "pred": "2023-03-13", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.25, "context_items": 20}
+{"qid": 39, "category": "multi_hop", "pred": "Deborah schedules; Jolene uses Pomodoro and bullet journal.", "judge": 1, "f1": 0.27272727272727276, "bleu1": 0.13667423885313018, "latency_s": 1.15, "context_items": 20}
+{"qid": 40, "category": "open_domain", "pred": "Deborah lives close to the beach.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.15, "context_items": 20}
+{"qid": 41, "category": "multi_hop", "pred": "Candles, oils, music, nature", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.49, "context_items": 20}
+{"qid": 42, "category": "single_hop", "pred": "\"Savana\" and \"Sleep\"", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.6, "context_items": 20}
+{"qid": 43, "category": "temporal", "pred": "Before 2023-04-09", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 44, "category": "temporal", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 45, "category": "temporal", "pred": "May 2023", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.59, "context_items": 20}
+{"qid": 46, "category": "temporal", "pred": "From February to March 2023", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.67, "context_items": 20}
+{"qid": 47, "category": "temporal", "pred": "2023-06-05", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 48, "category": "open_domain", "pred": "Rio de Janeiro is not a US state.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 49, "category": "single_hop", "pred": "About 3 years.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.39, "context_items": 20}
+{"qid": 50, "category": "temporal", "pred": "2020", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.42, "context_items": 20}
+{"qid": 51, "category": "temporal", "pred": "2023-06-25", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 52, "category": "temporal", "pred": "August 12, 2023", "judge": 0, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.79, "context_items": 20}
+{"qid": 53, "category": "temporal", "pred": "2021", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.2, "context_items": 20}
+{"qid": 54, "category": "temporal", "pred": "Susie", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 55, "category": "temporal", "pred": "Seraphim", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 56, "category": "temporal", "pred": "2023-08-19", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.45, "context_items": 20}
+{"qid": 57, "category": "temporal", "pred": "2023-08-17", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 58, "category": "single_hop", "pred": "No games recommended by Jolene.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
+{"qid": 59, "category": "single_hop", "pred": "Play video games", "judge": 0, "f1": 0.3333333333333333, "bleu1": 0.0902235221577418, "latency_s": 0.88, "context_items": 20}
+{"qid": 60, "category": "temporal", "pred": "In the week prior to 2023-08-24", "judge": 1, "f1": 0.22222222222222224, "bleu1": 0.2, "latency_s": 1.43, "context_items": 20}
+{"qid": 61, "category": "single_hop", "pred": "Clean water and renewable energy projects", "judge": 1, "f1": 0.4210526315789473, "bleu1": 0.13223911057726925, "latency_s": 1.35, "context_items": 20}
+{"qid": 62, "category": "single_hop", "pred": "From her mother after she passed away.", "judge": 0, "f1": 0.25, "bleu1": 0.21470779802151024, "latency_s": 1.04, "context_items": 20}
+{"qid": 63, "category": "single_hop", "pred": "Max is 8, Luna is 5.", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 1.07, "context_items": 20}
+{"qid": 64, "category": "single_hop", "pred": "Yes, Deborah loves cats.", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 0.97, "context_items": 20}
+{"qid": 65, "category": "temporal", "pred": "Thailand", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.38, "context_items": 20}
+{"qid": 66, "category": "temporal", "pred": "2023-08-30", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 67, "category": "single_hop", "pred": "Yoga classes", "judge": 1, "f1": 0.19999999999999998, "bleu1": 0.00033546262790251185, "latency_s": 0.94, "context_items": 20}
+{"qid": 68, "category": "temporal", "pred": "August 30, 2020", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.16, "context_items": 20}
+{"qid": 69, "category": "single_hop", "pred": "Yes, both have visited Rio de Janeiro.", "judge": 1, "f1": 0.25, "bleu1": 0.14285714285714285, "latency_s": 1.06, "context_items": 20}
+{"qid": 70, "category": "open_domain", "pred": "Yes, the friend is no longer alive.", "judge": 1, "f1": 0.25, "bleu1": 0.16666666666666666, "latency_s": 1.43, "context_items": 20}
+{"qid": 71, "category": "temporal", "pred": "2023-08-25", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 72, "category": "single_hop", "pred": "When Jolene was 10 years old", "judge": 1, "f1": 0.6, "bleu1": 0.5, "latency_s": 1.22, "context_items": 20}
+{"qid": 73, "category": "multi_hop", "pred": "Yes, she learned on her own.", "judge": 1, "f1": 0.2857142857142857, "bleu1": 0.16666666666666666, "latency_s": 1.12, "context_items": 20}
+{"qid": 74, "category": "single_hop", "pred": "fresh pastries", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.0, "context_items": 20}
+{"qid": 75, "category": "open_domain", "pred": "A card game about cats", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 76, "category": "temporal", "pred": "Last Friday", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.11156508007421491, "latency_s": 0.94, "context_items": 20}
+{"qid": 77, "category": "multi_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 78, "category": "temporal", "pred": "At the beach", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 79, "category": "multi_hop", "pred": "Yes, she owns a surfboard.", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 1.02, "context_items": 20}
+{"qid": 80, "category": "multi_hop", "pred": "No, she has not gone surfing yet.", "judge": 1, "f1": 0.25, "bleu1": 0.14285714285714285, "latency_s": 1.05, "context_items": 20}
+{"qid": 81, "category": "temporal", "pred": "2023-10-17", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 82, "category": "multi_hop", "pred": "Beach, living room, park", "judge": 1, "f1": 0.30769230769230765, "bleu1": 0.14325239843009505, "latency_s": 1.38, "context_items": 20}
+{"qid": 83, "category": "multi_hop", "pred": "Internships and volunteer workshops", "judge": 1, "f1": 0.15384615384615383, "bleu1": 0.03232398928813502, "latency_s": 1.28, "context_items": 20}
+{"qid": 84, "category": "multi_hop", "pred": "Robotics, solar vehicle, aerial surveillance, clean water.", "judge": 1, "f1": 0.4444444444444444, "bleu1": 0.3226960697187196, "latency_s": 1.62, "context_items": 20}
+{"qid": 85, "category": "multi_hop", "pred": "Running group, cleanup, gardening class", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.2, "latency_s": 1.04, "context_items": 20}
+{"qid": 86, "category": "multi_hop", "pred": "A bouquet of flowers and a quote.", "judge": 1, "f1": 0.11111111111111112, "bleu1": 0.0205212496559747, "latency_s": 0.99, "context_items": 20}
+{"qid": 87, "category": "multi_hop", "pred": "Bali", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.94, "context_items": 20}
+{"qid": 88, "category": "multi_hop", "pred": "Organizing workshops and events", "judge": 1, "f1": 0.23529411764705882, "bleu1": 0.017041022137671596, "latency_s": 1.36, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "Susie and Seraphim", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.01, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "Avalanche, Sapiens", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.22313016014842982, "latency_s": 0.01, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "\"Savana\" and \"Sleep\"", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.01, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "No games recommended by Jolene.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.01, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "Clean water and renewable energy projects", "judge": 1, "f1": 0.4210526315789473, "bleu1": 0.13223911057726925, "latency_s": 0.01, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "From her mother after she passed away.", "judge": 0, "f1": 0.25, "bleu1": 0.21470779802151024, "latency_s": 0.01, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Max is 8, Luna is 5.", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 0.01, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Yoga classes", "judge": 1, "f1": 0.19999999999999998, "bleu1": 0.00033546262790251185, "latency_s": 0.02, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "Yes, both have visited Rio de Janeiro.", "judge": 1, "f1": 0.25, "bleu1": 0.14285714285714285, "latency_s": 0.01, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "When Jolene was 10 years old", "judge": 1, "f1": 0.6, "bleu1": 0.5, "latency_s": 0.01, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "fresh pastries", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 0.01, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "Engineering project", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.34, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "2021", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "A console game with her partner.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.44, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "At yoga in the park", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.75, "latency_s": 1.02, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "Play a console game together", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.16, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "Achieved a confidence boost", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "Sapiens", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "An amulet from her mom", "judge": 1, "f1": 0.4, "bleu1": 0.25, "latency_s": 1.15, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "Releasing expectations and judgments", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "No retreat occurred on that date.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "Volunteer program with engineers", "judge": 1, "f1": 0.46153846153846156, "bleu1": 0.21487859764514256, "latency_s": 1.33, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Invite them as guest speakers", "judge": 1, "f1": 0.6, "bleu1": 0.6, "latency_s": 1.35, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "The sound of the waves", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "To find comfort after losing a friend.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.22222222222222224, "bleu1": 0.19470019576785122, "latency_s": 0.98, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "Yoga and meditation", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "connected to her body", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.3, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "A photo of a snake on a branch with a book", "judge": 0, "f1": 0.15384615384615383, "bleu1": 0.14285714285714285, "latency_s": 1.24, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "Lasagna", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "No picture mentioned in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.47, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "Creating a schedule and prioritizing", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "No memory for that date.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "Eisenhower Matrix", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "No information about Anna in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.26, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "Go surfing with Deborah next month", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "A candle with rosemary", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.46, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "Instrumental tracks with mellow melodies", "judge": 1, "f1": 0.9090909090909091, "bleu1": 0.8187307530779819, "latency_s": 1.62, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "Nils Frahm and Olafur Arnalds", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.72, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "Sleep", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "Art show", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "It brings back powerful emotions.", "judge": 0, "f1": 0.11764705882352941, "bleu1": 0.0493193927883213, "latency_s": 1.29, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "Relaxing and calming", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.08, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Play video games", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.6666666666666666, "latency_s": 0.93, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "Interning at an engineering firm", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.7788007830714049, "latency_s": 1.25, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "Since 2022", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.18, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "Calming", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "Dancer Pose", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.08, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "Running group", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "Photos from the running group activity", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "Fascinated by reptiles and calming", "judge": 1, "f1": 0.5, "bleu1": 0.27590958087858175, "latency_s": 1.13, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "Monster Hunter: World", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "Running in the park", "judge": 1, "f1": 0.30769230769230765, "bleu1": 0.06464797857627004, "latency_s": 0.94, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "She found it snuggling under the bed.", "judge": 0, "f1": 0.28571428571428575, "bleu1": 0.2388437701912631, "latency_s": 1.25, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "Deborah takes her cats for a run.", "judge": 0, "f1": 0.16666666666666666, "bleu1": 0.16666666666666666, "latency_s": 1.26, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "Jolene bought her in 2021.", "judge": 0, "f1": 0.14285714285714285, "bleu1": 0.08986579282344431, "latency_s": 1.27, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "Yoga, meditation, and gaming", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "Mindful breathing", "judge": 1, "f1": 0.22222222222222224, "bleu1": 0.0410424993119494, "latency_s": 1.23, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "Notebooks with blue cover and white strip", "judge": 1, "f1": 0.2857142857142857, "bleu1": 0.16666666666666666, "latency_s": 1.3, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "bullet journal", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.19, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "Animal Crossing: New Horizons", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 150, "category": "single_hop", "pred": "Zelda BOTW", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 151, "category": "single_hop", "pred": "Video games", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 152, "category": "single_hop", "pred": "It holds special meaning to her.", "judge": 1, "f1": 0.5333333333333333, "bleu1": 0.40435377314175563, "latency_s": 1.25, "context_items": 20}
+{"qid": 153, "category": "single_hop", "pred": "dreams and life", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 154, "category": "single_hop", "pred": "Peace, gratitude, nostalgia, longing", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.28, "context_items": 20}
+{"qid": 155, "category": "single_hop", "pred": "Yoga, meditation, and beach walks", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.48, "context_items": 20}
+{"qid": 156, "category": "single_hop", "pred": "Savasana (corpse pose)", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.47, "context_items": 20}
+{"qid": 157, "category": "single_hop", "pred": "About 3 years", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.2, "context_items": 20}
+{"qid": 158, "category": "single_hop", "pred": "Jolene's internship", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 159, "category": "single_hop", "pred": "Joy and happiness", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.23, "context_items": 20}
+{"qid": 160, "category": "single_hop", "pred": "Virtual conference", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 161, "category": "single_hop", "pred": "helping others", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 162, "category": "single_hop", "pred": "Renewable energy and clean water projects", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 163, "category": "single_hop", "pred": "Memories do not state how she got Luna.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 164, "category": "single_hop", "pred": "8 years old", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 165, "category": "single_hop", "pred": "Yoga classes", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 166, "category": "single_hop", "pred": "nearby tranquil spot", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.26, "context_items": 20}
+{"qid": 167, "category": "single_hop", "pred": "Nurture herself and fresh starts", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.3, "context_items": 20}
+{"qid": 168, "category": "single_hop", "pred": "To nurture herself and embrace fresh starts.", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.7165313105737893, "latency_s": 1.47, "context_items": 20}
+{"qid": 169, "category": "single_hop", "pred": "Yoga and meditation", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.66, "context_items": 20}
+{"qid": 170, "category": "single_hop", "pred": "She was her biggest fan and source of motivation.", "judge": 0, "f1": 0.16666666666666666, "bleu1": 0.125, "latency_s": 1.28, "context_items": 20}
+{"qid": 171, "category": "single_hop", "pred": "Nintendo game console", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.05, "context_items": 20}
+{"qid": 172, "category": "single_hop", "pred": "Not mentioned in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 173, "category": "single_hop", "pred": "A meditation course", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.28, "context_items": 20}
+{"qid": 174, "category": "single_hop", "pred": "No specific reason provided in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 175, "category": "single_hop", "pred": "Phuket", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 176, "category": "single_hop", "pred": "Releasing expectations and judgments", "judge": 1, "f1": 0.7499999999999999, "bleu1": 0.513417119032592, "latency_s": 1.09, "context_items": 20}
+{"qid": 177, "category": "single_hop", "pred": "Grateful and positive", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.69, "context_items": 20}
+{"qid": 178, "category": "single_hop", "pred": "Releasing expectations and judgments", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 179, "category": "single_hop", "pred": "A card game about cats", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 180, "category": "single_hop", "pred": "Reconnected with them", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 181, "category": "single_hop", "pred": "at a specific beach", "judge": 1, "f1": 0.4, "bleu1": 0.3333333333333333, "latency_s": 0.82, "context_items": 20}
+{"qid": 182, "category": "single_hop", "pred": "peaceful and relaxing", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.13, "context_items": 20}
+{"qid": 183, "category": "single_hop", "pred": "Her favorite place to relax", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 184, "category": "single_hop", "pred": "Free gardening class", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 185, "category": "single_hop", "pred": "cooking and flowers", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.05, "context_items": 20}
+{"qid": 186, "category": "single_hop", "pred": "Pineapple birthday cakes", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.06, "context_items": 20}
+{"qid": 187, "category": "single_hop", "pred": "The memories do not specify the type.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.4, "context_items": 20}
+{"qid": 188, "category": "single_hop", "pred": "Surfing", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.95, "context_items": 20}
+{"qid": 189, "category": "single_hop", "pred": "Deborah attended the music festival.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 190, "category": "single_hop", "pred": "Music festival with friends", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.97, "context_items": 20}
