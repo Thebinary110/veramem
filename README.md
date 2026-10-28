@@ -137,10 +137,18 @@ follows the protocol of the paper it comes from. Method and raw outputs:
 | User's secret left on disk after deleting the user | ✅ none | ❌ in `history.db` |
 | Search latency, p50 | **4 ms** | 40 ms |
 
+**LoCoMo accuracy** (all 1,540 non-adversarial questions, local `qwen3.6:35b` answering
+and judging): **65.9%** LLM-judge accuracy, F1 39.7. By type: single-hop 68.8%, multi-hop
+67.0%, temporal 62.6%, open-domain 47.9%. That is in the range published for Mem0 (~67%)
+and Zep (~66%), and below the ~73–75% claimed by newer systems and by putting the whole
+conversation in the prompt. Those papers used GPT-4o-mini, so the comparison is
+approximate. [Per-question results](docs/results/locomo-2026-10-28/).
+
 What we haven't shown yet, stated plainly:
 
-- **Accuracy on LoCoMo and LongMemEval** is still being measured. It will be published
-  here, wins or losses.
+- **Higher accuracy than other memory systems.** We don't claim it. Open-domain and
+  temporal questions are the weak spots.
+- **LongMemEval** hasn't been run yet.
 - **Learning from feedback** transfers to unseen question types (+2.1 Hit@3 points on
   LoCoMo, 95% CI [1.1, 3.1]), but a hand-tuned static weighting does better (+3.4). On a
   synthetic test where source authority matters, it learns to prefer the user's word and

@@ -65,4 +65,22 @@ judges. Our judge is the local `qwen3.6:35b`, so absolute numbers aren't directl
 comparable with papers. The head-to-head numbers on this page are: same judge, same
 answerer, same data.
 
+### Results (2026-10-28, commit `223f72f`)
+
+| | Questions | LLM judge | F1 | BLEU-1 |
+|---|---:|---:|---:|---:|
+| **Overall** | 1,540 | **65.9%** | 39.7 | 34.7 |
+| Single-hop | 841 | 68.8% | 49.1 | |
+| Multi-hop | 282 | 67.0% | 38.0 | |
+| Temporal | 321 | 62.6% | 22.4 | |
+| Open-domain | 96 | 47.9% | 19.9 | |
+
+VeraMem only; no other system was run on this setup. The full run took 3.9 hours on one
+NVIDIA GB10 through Ollama, and the median search-plus-answer time was 1.1 s. Raw results,
+with question and gold text removed (LoCoMo is CC BY-NC 4.0 and is not redistributed):
+[`docs/results/locomo-2026-10-28/`](https://github.com/Thebinary110/veramem/tree/main/docs/results/locomo-2026-10-28).
+
+Known weaknesses: relative dates are sometimes stored unresolved ("last year"), which hurts
+temporal questions, and open-domain questions need inference beyond what was said.
+
 <!-- RESULTS -->

@@ -1,0 +1,156 @@
+{"qid": 0, "category": "multi_hop", "pred": "Prius", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 1, "category": "multi_hop", "pred": "Prius and knee", "judge": 0, "f1": 0.25, "bleu1": 0.06766764161830635, "latency_s": 1.05, "context_items": 20}
+{"qid": 2, "category": "multi_hop", "pred": "Jasper and the Rockies", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.02, "context_items": 20}
+{"qid": 3, "category": "multi_hop", "pred": "Two.", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.93, "context_items": 20}
+{"qid": 4, "category": "temporal", "pred": "None", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 5, "category": "open_domain", "pred": "No information available.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 6, "category": "multi_hop", "pred": "Zero", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 7, "category": "multi_hop", "pred": "Kayaking, watercolor painting, skiing", "judge": 0, "f1": 0.4444444444444445, "bleu1": 0.38940039153570244, "latency_s": 1.58, "context_items": 20}
+{"qid": 8, "category": "multi_hop", "pred": "Watercolor painting", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 9, "category": "temporal", "pred": "Last weekend of May 2023", "judge": 0, "f1": 0.6, "bleu1": 0.6, "latency_s": 1.1, "context_items": 20}
+{"qid": 10, "category": "open_domain", "pred": "Camping trip in the outdoors", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 11, "category": "multi_hop", "pred": "Severe stomachache diagnosed as gastritis", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.76, "context_items": 20}
+{"qid": 12, "category": "temporal", "pred": "Monday, 2023-10-02", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.79, "context_items": 20}
+{"qid": 13, "category": "temporal", "pred": "Week prior to 2023-06-06", "judge": 0, "f1": 0.22222222222222224, "bleu1": 0.19470019576785122, "latency_s": 1.37, "context_items": 20}
+{"qid": 14, "category": "multi_hop", "pred": "Ginger snaps", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 15, "category": "multi_hop", "pred": "Soda and candy", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.46, "context_items": 20}
+{"qid": 16, "category": "multi_hop", "pred": "Self-checkout machine issues", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.3333333333333333, "latency_s": 1.45, "context_items": 20}
+{"qid": 17, "category": "temporal", "pred": "Last Friday, 2023-07-20", "judge": 1, "f1": 0.25, "bleu1": 0.17113903967753066, "latency_s": 1.69, "context_items": 20}
+{"qid": 18, "category": "multi_hop", "pred": "Evan gave no healthy food suggestions.", "judge": 0, "f1": 0.06896551724137931, "bleu1": 0.009802745273738313, "latency_s": 1.58, "context_items": 20}
+{"qid": 19, "category": "open_domain", "pred": "Embrace change and seek support.", "judge": 1, "f1": 0.07142857142857142, "bleu1": 0.0016844867497713668, "latency_s": 1.38, "context_items": 20}
+{"qid": 20, "category": "open_domain", "pred": "Healthy snack recipes", "judge": 1, "f1": 0.28571428571428575, "bleu1": 0.04632230081520103, "latency_s": 1.49, "context_items": 20}
+{"qid": 21, "category": "multi_hop", "pred": "His wife; feels lucky to have found her.", "judge": 1, "f1": 0.2380952380952381, "bleu1": 0.024233879894826255, "latency_s": 1.14, "context_items": 20}
+{"qid": 22, "category": "temporal", "pred": "2023-12-26", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 23, "category": "temporal", "pred": "2023-07-28", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.55, "context_items": 20}
+{"qid": 24, "category": "temporal", "pred": "Sam started a new diet and exercise routine.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 25, "category": "temporal", "pred": "2021", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.44, "context_items": 20}
+{"qid": 26, "category": "multi_hop", "pred": "Family motivation and adventure thirst.", "judge": 1, "f1": 0.46153846153846156, "bleu1": 0.21487859764514256, "latency_s": 1.49, "context_items": 20}
+{"qid": 27, "category": "open_domain", "pred": "Fitness watch", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.42, "context_items": 20}
+{"qid": 28, "category": "multi_hop", "pred": "Creative writing and journaling", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.6666666666666666, "latency_s": 1.6, "context_items": 20}
+{"qid": 29, "category": "multi_hop", "pred": "A Canadian woman and his significant other", "judge": 1, "f1": 0.12500000000000003, "bleu1": 0.060238842382440407, "latency_s": 1.06, "context_items": 20}
+{"qid": 30, "category": "temporal", "pred": "2023-08-13", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 31, "category": "open_domain", "pred": "They prioritize health and use yoga for stress relief.", "judge": 1, "f1": 0.1764705882352941, "bleu1": 0.03952470921069912, "latency_s": 1.58, "context_items": 20}
+{"qid": 32, "category": "multi_hop", "pred": "Losing his keys every week.", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5362560368285114, "latency_s": 1.14, "context_items": 20}
+{"qid": 33, "category": "multi_hop", "pred": "Flying over skyscrapers", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.44, "context_items": 20}
+{"qid": 34, "category": "multi_hop", "pred": "Fell off bike and hurt ankle", "judge": 1, "f1": 0.4615384615384615, "bleu1": 0.3292869816564158, "latency_s": 1.06, "context_items": 20}
+{"qid": 35, "category": "temporal", "pred": "2023-08-12", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.08, "context_items": 20}
+{"qid": 36, "category": "multi_hop", "pred": "Roasted vegetable recipe", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.33, "context_items": 20}
+{"qid": 37, "category": "multi_hop", "pred": "Beef and vegetables with healthy choice", "judge": 0, "f1": 0.21052631578947364, "bleu1": 0.06611955528863463, "latency_s": 1.75, "context_items": 20}
+{"qid": 38, "category": "open_domain", "pred": "Nature brings peace, clarity, and relaxation.", "judge": 1, "f1": 0.06666666666666667, "bleu1": 0.0036631277777468356, "latency_s": 1.51, "context_items": 20}
+{"qid": 39, "category": "temporal", "pred": "12 months", "judge": 0, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.64, "context_items": 20}
+{"qid": 40, "category": "temporal", "pred": "A few days before 2023-08-19", "judge": 1, "f1": 0.6, "bleu1": 0.45489799478447507, "latency_s": 1.24, "context_items": 20}
+{"qid": 41, "category": "temporal", "pred": "Painting classes", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 42, "category": "multi_hop", "pred": "A friend gave him an inspiring painting.", "judge": 1, "f1": 0.2727272727272727, "bleu1": 0.054430771973647506, "latency_s": 1.1, "context_items": 20}
+{"qid": 43, "category": "open_domain", "pred": "Sam has not seen a doctor in a while.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.72, "context_items": 20}
+{"qid": 44, "category": "multi_hop", "pred": "Landscapes, sunsets, mountains, cactus", "judge": 1, "f1": 0.22222222222222224, "bleu1": 0.19470019576785122, "latency_s": 1.27, "context_items": 20}
+{"qid": 45, "category": "temporal", "pred": "Not specified in memories", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 46, "category": "open_domain", "pred": "Sam writes, Evan paints.", "judge": 1, "f1": 0.19047619047619047, "bleu1": 0.019387103915861004, "latency_s": 1.41, "context_items": 20}
+{"qid": 47, "category": "temporal", "pred": "2023-07-01", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.2, "context_items": 20}
+{"qid": 48, "category": "multi_hop", "pred": "Nutritious diet and regular exercise", "judge": 1, "f1": 0.2, "bleu1": 0.15163266492815836, "latency_s": 1.68, "context_items": 20}
+{"qid": 49, "category": "multi_hop", "pred": "Evan and his son", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.4776875403825262, "latency_s": 1.04, "context_items": 20}
+{"qid": 50, "category": "multi_hop", "pred": "Hiking, biking, skiing, painting", "judge": 1, "f1": 0.5, "bleu1": 0.1353352832366127, "latency_s": 1.26, "context_items": 20}
+{"qid": 51, "category": "open_domain", "pred": "Sam faces weight struggles and cravings, addressing them with diet and exercise.", "judge": 1, "f1": 0.18181818181818182, "bleu1": 0.0817595379102038, "latency_s": 1.81, "context_items": 20}
+{"qid": 52, "category": "temporal", "pred": "Painting together", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.19, "context_items": 20}
+{"qid": 53, "category": "temporal", "pred": "2023-09-11", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 54, "category": "multi_hop", "pred": "Health scare, knee injury, job loss.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.42, "context_items": 20}
+{"qid": 55, "category": "multi_hop", "pred": "Losing keys every week", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 56, "category": "multi_hop", "pred": "It has been giving them trouble.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.43, "context_items": 20}
+{"qid": 57, "category": "open_domain", "pred": "Nevada", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 58, "category": "temporal", "pred": "2021-10-08", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.06, "context_items": 20}
+{"qid": 59, "category": "temporal", "pred": "2023-10-14", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 60, "category": "temporal", "pred": "Learning how to draw", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.55, "context_items": 20}
+{"qid": 61, "category": "temporal", "pred": "Work stress", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.66, "context_items": 20}
+{"qid": 62, "category": "multi_hop", "pred": "Sam: gastritis. Evan: heart palpitations.", "judge": 1, "f1": 0.1481481481481481, "bleu1": 0.00012058646007638121, "latency_s": 1.47, "context_items": 20}
+{"qid": 63, "category": "temporal", "pred": "No information about ER visit.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 64, "category": "multi_hop", "pred": "Discomfort limiting movement", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.54, "context_items": 20}
+{"qid": 65, "category": "open_domain", "pred": "Evan lives close to a beach.", "judge": 1, "f1": 0.33333333333333337, "bleu1": 0.2, "latency_s": 1.18, "context_items": 20}
+{"qid": 66, "category": "temporal", "pred": "October 2023", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.36787944117144233, "latency_s": 1.08, "context_items": 20}
+{"qid": 67, "category": "temporal", "pred": "2024-02", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.16, "context_items": 20}
+{"qid": 68, "category": "temporal", "pred": "Attended a Weight Watchers meeting", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.31, "context_items": 20}
+{"qid": 69, "category": "multi_hop", "pred": "Partner pregnant, marriage announced", "judge": 1, "f1": 0.36363636363636365, "bleu1": 0.23618327637050734, "latency_s": 1.18, "context_items": 20}
+{"qid": 70, "category": "temporal", "pred": "Not mentioned in memories.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 71, "category": "open_domain", "pred": "Christmas", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.99, "context_items": 20}
+{"qid": 72, "category": "multi_hop", "pred": "Weight Watchers", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.71, "context_items": 20}
+{"qid": 73, "category": "temporal", "pred": "Next summer", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 0.95, "context_items": 20}
+{"qid": 74, "category": "temporal", "pred": "Tuesday prior to 2023-12-17", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 75, "category": "temporal", "pred": "2024-01-05", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 76, "category": "temporal", "pred": "2023-12-14", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 77, "category": "multi_hop", "pred": "Skiing in Canada", "judge": 1, "f1": 0.21052631578947367, "bleu1": 0.008749152491293979, "latency_s": 0.98, "context_items": 20}
+{"qid": 78, "category": "multi_hop", "pred": "His extended family", "judge": 0, "f1": 0.13333333333333333, "bleu1": 0.01659568945595465, "latency_s": 0.92, "context_items": 20}
+{"qid": 79, "category": "temporal", "pred": "Next month", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.92, "context_items": 20}
+{"qid": 80, "category": "temporal", "pred": "2024-01-09", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 81, "category": "multi_hop", "pred": "Painting", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.31, "context_items": 20}
+{"qid": 82, "category": "multi_hop", "pred": "Yoga", "judge": 1, "f1": 0.2222222222222222, "bleu1": 0.0009118819655545162, "latency_s": 1.37, "context_items": 20}
+{"qid": 83, "category": "single_hop", "pred": "A new Prius", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.15, "context_items": 20}
+{"qid": 84, "category": "single_hop", "pred": "A friend gave him an inspiring painting.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 85, "category": "single_hop", "pred": "Watercolor painting", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.21, "context_items": 20}
+{"qid": 86, "category": "single_hop", "pred": "Find a trainer for good form.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.36, "context_items": 20}
+{"qid": 87, "category": "single_hop", "pred": "Jasper", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 88, "category": "single_hop", "pred": "The scenery and nature.", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 89, "category": "single_hop", "pred": "Cutting down on sugary snacks", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.57, "context_items": 20}
+{"qid": 90, "category": "single_hop", "pred": "Swap soda for seltzer, eat dark chocolate.", "judge": 1, "f1": 0.3529411764705882, "bleu1": 0.27918816751330955, "latency_s": 1.69, "context_items": 20}
+{"qid": 91, "category": "single_hop", "pred": "Flavored seltzer water and dark chocolate", "judge": 1, "f1": 0.7142857142857143, "bleu1": 0.44932896411722156, "latency_s": 1.71, "context_items": 20}
+{"qid": 92, "category": "single_hop", "pred": "Issues with self-checkout machines", "judge": 1, "f1": 0.5714285714285715, "bleu1": 0.5, "latency_s": 1.44, "context_items": 20}
+{"qid": 93, "category": "single_hop", "pred": "The Great Gatsby", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 94, "category": "single_hop", "pred": "flavored seltzer water", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 95, "category": "single_hop", "pred": "Staying in shape", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.09, "context_items": 20}
+{"qid": 96, "category": "single_hop", "pred": "Strength and resilience", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.0, "context_items": 20}
+{"qid": 97, "category": "single_hop", "pred": "To help him get through tough times.", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.6191984998215584, "latency_s": 1.11, "context_items": 20}
+{"qid": 98, "category": "single_hop", "pred": "Progress", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.44, "context_items": 20}
+{"qid": 99, "category": "single_hop", "pred": "A dream interpretation book", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 100, "category": "single_hop", "pred": "His keys", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 0.98, "context_items": 20}
+{"qid": 101, "category": "single_hop", "pred": "Cooking class", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.5, "context_items": 20}
+{"qid": 102, "category": "single_hop", "pred": "Grilled salmon with veggies", "judge": 1, "f1": 0.6666666666666665, "bleu1": 0.5841005873035536, "latency_s": 1.63, "context_items": 20}
+{"qid": 103, "category": "single_hop", "pred": "roasted vegetable", "judge": 1, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.37, "context_items": 20}
+{"qid": 104, "category": "single_hop", "pred": "Grilled salmon and vegetables", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.34, "context_items": 20}
+{"qid": 105, "category": "single_hop", "pred": "painting classes", "judge": 0, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.0, "context_items": 20}
+{"qid": 106, "category": "single_hop", "pred": "Watercolor painting", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 107, "category": "single_hop", "pred": "Observing nature and painting what is seen", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 108, "category": "single_hop", "pred": "landscapes", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 109, "category": "single_hop", "pred": "Drove somewhere fun and took a photo", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.29, "context_items": 20}
+{"qid": 110, "category": "single_hop", "pred": "Twisted knee playing basketball", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.13, "context_items": 20}
+{"qid": 111, "category": "single_hop", "pred": "Swimming", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.24, "context_items": 20}
+{"qid": 112, "category": "single_hop", "pred": "Find a trainer for good form.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.3, "context_items": 20}
+{"qid": 113, "category": "single_hop", "pred": "Painting", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.27, "context_items": 20}
+{"qid": 114, "category": "single_hop", "pred": "Acrylic paints, brushes, canvas, and palette", "judge": 1, "f1": 0.8000000000000002, "bleu1": 0.8, "latency_s": 1.17, "context_items": 20}
+{"qid": 115, "category": "single_hop", "pred": "Swimming", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.04, "context_items": 20}
+{"qid": 116, "category": "single_hop", "pred": "A sunset over a body of water", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 117, "category": "single_hop", "pred": "Creative writing and journaling.", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 1.13, "context_items": 20}
+{"qid": 118, "category": "single_hop", "pred": "Phone trouble", "judge": 0, "f1": 0.25, "bleu1": 0.06766764161830635, "latency_s": 1.42, "context_items": 20}
+{"qid": 119, "category": "single_hop", "pred": "Lifting weights", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.22, "context_items": 20}
+{"qid": 120, "category": "single_hop", "pred": "Find a trainer for good form and technique.", "judge": 1, "f1": 0.5, "bleu1": 0.3333333333333333, "latency_s": 1.39, "context_items": 20}
+{"qid": 121, "category": "single_hop", "pred": "Lake Tahoe", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.12, "context_items": 20}
+{"qid": 122, "category": "single_hop", "pred": "No specific digestive issue mentioned.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.59, "context_items": 20}
+{"qid": 123, "category": "single_hop", "pred": "Hiking and outdoor activities", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.35, "context_items": 20}
+{"qid": 124, "category": "single_hop", "pred": "He mentions going to the gym on 2023-10-16.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.56, "context_items": 20}
+{"qid": 125, "category": "single_hop", "pred": "Changed diet and started walking.", "judge": 1, "f1": 0.8, "bleu1": 0.6065306597126334, "latency_s": 1.2, "context_items": 20}
+{"qid": 126, "category": "single_hop", "pred": "1968 Kustom K-200A vintage guitar", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.13, "context_items": 20}
+{"qid": 127, "category": "single_hop", "pred": "Health scare and hospital visit", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 128, "category": "single_hop", "pred": "His happy place", "judge": 1, "f1": 0.8, "bleu1": 0.6666666666666666, "latency_s": 0.97, "context_items": 20}
+{"qid": 129, "category": "single_hop", "pred": "It was his main mode of transport.", "judge": 1, "f1": 0.23529411764705882, "bleu1": 0.18612544500887301, "latency_s": 1.15, "context_items": 20}
+{"qid": 130, "category": "single_hop", "pred": "Setbacks lead to new opportunities", "judge": 1, "f1": 0.13333333333333333, "bleu1": 0.07357588823428847, "latency_s": 1.29, "context_items": 20}
+{"qid": 131, "category": "single_hop", "pred": "Yoga", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.28, "context_items": 20}
+{"qid": 132, "category": "single_hop", "pred": "Yoga tips", "judge": 1, "f1": 0.5, "bleu1": 0.5, "latency_s": 1.32, "context_items": 20}
+{"qid": 133, "category": "single_hop", "pred": "Evan has a new significant other who is pregnant.", "judge": 1, "f1": 0.36363636363636365, "bleu1": 0.25, "latency_s": 1.1, "context_items": 20}
+{"qid": 134, "category": "single_hop", "pred": "A big family reunion", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 135, "category": "single_hop", "pred": "Bring it on Home", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 136, "category": "single_hop", "pred": "His worth is not defined by his weight.", "judge": 1, "f1": 0.75, "bleu1": 0.75, "latency_s": 1.54, "context_items": 20}
+{"qid": 137, "category": "single_hop", "pred": "A close friend of Evan", "judge": 1, "f1": 0.6666666666666666, "bleu1": 0.5, "latency_s": 1.08, "context_items": 20}
+{"qid": 138, "category": "single_hop", "pred": "Hiking and spending time in nature", "judge": 0, "f1": 0.25, "bleu1": 0.2, "latency_s": 1.48, "context_items": 20}
+{"qid": 139, "category": "single_hop", "pred": "Put a GPS sensor on them", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.01, "context_items": 20}
+{"qid": 140, "category": "single_hop", "pred": "Sad, mad, and hopeful", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 141, "category": "single_hop", "pred": "Trying new things", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.7165313105737893, "latency_s": 1.05, "context_items": 20}
+{"qid": 142, "category": "single_hop", "pred": "No memory of a painting with a bird.", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.11, "context_items": 20}
+{"qid": 143, "category": "single_hop", "pred": "recipes for new cookies", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.96, "context_items": 20}
+{"qid": 144, "category": "single_hop", "pred": "cookie recipes", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.03, "context_items": 20}
+{"qid": 145, "category": "single_hop", "pred": "Healthy snack recipes", "judge": 1, "f1": 0.3333333333333333, "bleu1": 0.3333333333333333, "latency_s": 1.35, "context_items": 20}
+{"qid": 146, "category": "single_hop", "pred": "Their marriage", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.17, "context_items": 20}
+{"qid": 147, "category": "single_hop", "pred": "Two ginger snaps a day", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.7788007830714049, "latency_s": 1.77, "context_items": 20}
+{"qid": 148, "category": "single_hop", "pred": "Snowshoeing", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.07, "context_items": 20}
+{"qid": 149, "category": "single_hop", "pred": "balanced diet plan and low-impact exercises", "judge": 1, "f1": 0.888888888888889, "bleu1": 0.8, "latency_s": 1.45, "context_items": 20}
+{"qid": 150, "category": "single_hop", "pred": "Swimming, yoga, and walking", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.66, "context_items": 20}
+{"qid": 151, "category": "single_hop", "pred": "The Godfather", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.54, "context_items": 20}
+{"qid": 152, "category": "single_hop", "pred": "Yoga", "judge": 1, "f1": 1.0, "bleu1": 1.0, "latency_s": 1.14, "context_items": 20}
+{"qid": 153, "category": "single_hop", "pred": "A painting of a sunset over water", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 1.1, "context_items": 20}
+{"qid": 154, "category": "single_hop", "pred": "For a drunken night incident", "judge": 1, "f1": 0.8571428571428571, "bleu1": 0.75, "latency_s": 1.04, "context_items": 20}
+{"qid": 155, "category": "single_hop", "pred": "unforgettable", "judge": 0, "f1": 0.0, "bleu1": 0.0, "latency_s": 0.99, "context_items": 20}
